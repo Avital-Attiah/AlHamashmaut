@@ -1,18 +1,19 @@
 import {
   getAll,
-  addPost as addPostToDB,
-  updatePost as updatePostInDB,
-  deletePost as deletePostFromDB,
-  getPostById
-} from "../service/postData.js";
+  addEpisode as addEpisodesToDB,
+  updateEpisode as updateEpisodesInDB,
+  deleteEpisode as deleteEpisodesFromDB,
+  getEpisodesById
+} from "../service/episodesData.js";
+
 
 // פונקציית ולידציה לבדוק תקינות של פוסט
-const validatePost = (post, user) => {
+const validateEpisode = (episode, user) => {
   const errors = [];
-  if (!post.title || typeof post.title !== "string" || post.title.trim().length < 3) {
+  if (!episode.title || typeof episode.title !== "string" || episode.title.trim().length < 3) {
     errors.push("יש להזין כותרת תקינה (לפחות 3 תווים)");
   }
-  if (post.user_id !== user.id) {
+  if (episode.adminId !== user.id) {
     errors.push("אין הרשאה");
   }
 console.log(errors);
@@ -20,43 +21,43 @@ console.log(errors);
 };
 
 
-export   class post {
+export   class episode {
   // שליפת כל הפוסטים
   getAll = async (req, res) => {
     try {
       console.log('in get all');
 
-      const posts = await getAll();
-      console.log(posts);
-      res.status(200).json(posts);
+      const episodes = await getAll();
+      console.log(episodes);
+      res.status(200).json(episodes);
     } catch (error) {
       res.status(500).json({ message: "שגיאה בשליפת הפוסטים" });
     }
   };
 
   // הוספת פוסט חדש
-  addPost = async (req, res) => {
-    const post = req.body;
-    const errors = validatePost(post,req.user);
+  addEpisode = async (req, res) => {
+    const episode = req.body;
+    const errors = validateEpisode(episode,req.user);
 
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
 
     try {
-      const id = await addPostToDB(post);
-      const newPost = { ...post, id: id };
-      res.status(201).json([newPost]);
+      const id = await addEpisodesToDB(episode);
+      const newEpisode = { ...episode, id: id };
+      res.status(201).json([newEpisode]);
     } catch (error) {
       res.status(500).json({ message: "שגיאה בהוספת הפוסט" });
     }
   };
 
   // עדכון פוסט קיים לפי ID
-  updatePost = async (req, res) => {
+  updateEpisode = async (req, res) => {
     const { id } = req.params;
-    const updatedPost = req.body;
-    const errors = validatePost(updatedPost,req.user);
+    const updatedEpisode = req.body;
+    const errors = validateEpisode(updatedEpisode,req.user);
 console.log('inUpdate');
     if (errors.length > 0) {
       console.log("problem in valid");
@@ -64,7 +65,7 @@ console.log('inUpdate');
     }
 
     try {
-      const success = await updatePostInDB(id, updatedPost);
+      const success = await updateEpisodesInDB(id, updatedEpisode);
       if (success) {
         res.status(200).json("הפוסט עודכן בהצלחה");
       } else {
@@ -77,14 +78,14 @@ console.log('inUpdate');
   };
 
   // מחיקת פוסט לפי ID
-  deletePost = async (req, res) => {
+  deleteEpisode = async (req, res) => {
     const { id } = req.params;
-  const post = await getPostById(id);
-if (req.user.id !== post.user_id) {
+  const episode = await getEpisodesById(id);
+if (req.adminId !== episode.adminId) {
   return res.status(403).json("אין הרשאה");
 }
     try {
-      const success = await deletePostFromDB(id);
+      const success = await deleteEpisodesFromDB(id);
       if (success) {
         res.status(200).json("הפוסט נמחק בהצלחה");
       } else {
@@ -95,14 +96,14 @@ if (req.user.id !== post.user_id) {
     }
   };
 }
-const getPostByIdController = async (req, res) => {
+const getepisodesByIdController = async (req, res) => {
   const { id } = req.params;
   try {
-    const post = await getPostById(id);
-    res.status(200).json([post]);
+    const episode = await getEpisodesById(id);
+    res.status(200).json([episode]);
   } catch (error) {
     res.status(500).json("שגיאה בשליפת הפוסט");
   }
 };
 
-export { getPostByIdController };
+export { getepisodesByIdController };

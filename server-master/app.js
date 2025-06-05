@@ -1,7 +1,7 @@
 import express from 'express'
 import usersRout  from './routs/users.js'
 import episodesRout from './routs/episodes.js'
-import usertypesRout from './routs/usertypes.js'
+//import usertypesRout from './routs/usertypes.js'
 import commentsRout from './routs/comments.js'
 
 
@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/users',usersRout);
 app.use('/episodes',episodesRout);
-app.use('/usertypes',usertypesRout);
+//app.use('/usertypes',usertypesRout);
 app.use('/comments',commentsRout);
 
 app.listen(port, () => {

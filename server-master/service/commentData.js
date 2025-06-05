@@ -1,13 +1,13 @@
 import pool from './database.js';
 
 // שליפת תגובות
-export const getComments = async (post_id) => {
+export const getComments = async (episodeId) => {
   try {
-    console.log('Getting comments for post_id:', post_id);
+    console.log('Getting comments for episodeId:', episodeId);
     
     const [rows] = await pool.query(
-      'SELECT * FROM comments WHERE post_id = ?', 
-      [post_id]
+      'SELECT * FROM comments WHERE episodeId = ?', 
+      [episodeId]
     );
     
     return rows;
@@ -16,13 +16,14 @@ export const getComments = async (post_id) => {
     throw new Error('שגיאה בשאילתת תגובות');
   }
 };
+
 // הוספת תגובה
 export const addComment = async (comment) => {
-  const { body, post_id, name,email } = comment;
+  const { body, episodeId, connectedType, connectId } = comment;
   try {
     const [result] = await pool.query(
-      'INSERT INTO comments (body, post_id, name,email) VALUES (?, ?, ?,?)',
-      [body, post_id, name,email]
+      'INSERT INTO comments (body, episodeId, connectedType, connectId) VALUES (?, ?, ?, ?)',
+      [body, episodeId, connectedType, connectId]
     );
     return result.insertId;
   } catch (error) {
@@ -32,11 +33,11 @@ export const addComment = async (comment) => {
 
 // עדכון תגובה לפי ID
 export const updateComment = async (id, comment) => {
- const { body, name,email} = comment;
+  const { body } = comment;
   try {
     const [result] = await pool.query(
-      'UPDATE comments SET body = ?  ,name=?,email=? WHERE id = ?',
-       [body,  name,email,id]
+      'UPDATE comments SET body = ? WHERE id = ?',
+      [body, id]
     );
     return result;
   } catch (error) {
@@ -54,20 +55,36 @@ export const deleteComment = async (id) => {
   }
 };
 
-
-
+// שליפת תגובה לפי ID
 export const getCommentById = async (id) => {
   try {
-    console.log('Getting comments for id:', id);
-    
+    console.log('Getting comment for id:', id);
+
     const [rows] = await pool.query(
       'SELECT * FROM comments WHERE id = ?', 
       [id]
     );
-    
+
     return rows[0];
   } catch (error) {
     console.error('SQL Error:', error);
     throw new Error('שגיאה בשאילתת תגובות');
+  }
+};
+
+// שליפת תגובות לפי connectId (תגובות תשובות לתגובה)
+export const getCommentsByConnectId = async (connectId) => {
+  try {
+    console.log('Getting comments for connectId:', connectId);
+
+    const [rows] = await pool.query(
+      'SELECT * FROM comments WHERE connectId = ?',
+      [connectId]
+    );
+
+    return rows;
+  } catch (error) {
+    console.error('SQL Error:', error);
+    throw new Error('שגיאה בשאילתת תגובות לפי connectId');
   }
 };
