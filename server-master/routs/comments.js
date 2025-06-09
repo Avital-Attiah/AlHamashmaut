@@ -1,7 +1,7 @@
 
 import express from 'express'
 import {CommentController} from '../controller/comments.js'
-import authenticateToken from '../service/authMiddleware.js';
+import {authenticateToken} from '../service/authMiddleware.js';
 const commentsRout=express.Router();
 const commentController=new CommentController();
 commentsRout.get('/',authenticateToken,commentController.getAll);
