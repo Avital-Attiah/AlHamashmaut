@@ -4,7 +4,7 @@ import pool from './database.js';
 // פונקציה לשליפת כל הפוסטים
 export const getAll = async () => {
   try {
-   const baseQuery = 'SELECT * FROM posts';
+   const baseQuery = 'SELECT * FROM episodes';
     // const fullQuery = whereClause!='' ? `${baseQuery} ${whereClause}` : baseQuery;
     const [rows] = await pool.query(baseQuery);
     return rows;
@@ -12,22 +12,22 @@ export const getAll = async () => {
     throw new Error('שגיאה בשאילתת נתונים');
   }
 };
-export const getPostById = async (id) => {
+export const getEpisodesById = async (id) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM posts where id=?',[id]);
+    const [rows] = await pool.query('SELECT * FROM episodes where id=?',[id]);
     return rows[0];
   } catch (error) {
     throw new Error('שגיאה בשאילתת נתונים');
   }
 };
 // פונקציה להוספת פוסט חדש
-export const addPost = async (post) => {
-    console.log(post);
-  const { title , body , user_id} = post;
+export const addEpisode = async (episode) => {
+    console.log(episode);
+  const { title , body , adminId} = post;
   try {
     const [result] = await pool.query(
-      'INSERT INTO posts (title, body, user_id) VALUES (?, ?,?)',
-      [title, body, user_id]
+      'INSERT INTO episodes (title, body, adminId) VALUES (?, ?,?)',
+      [title, body, adminId]
     );
     console.log("תוצאה מהדאטהבייס", result);
     return result.insertId;
@@ -36,11 +36,11 @@ export const addPost = async (post) => {
   }
 };
 // פונקציה לעדכון פוסט לפי ID
-export const updatePost = async (id, post) => {
-  const { title , body } = post;
+export const updateEpisode = async (id, episode) => {
+  const { title , body } = episode;
   try {
     const [result] = await pool.query(
-      'UPDATE posts SET body=?, title = ?  WHERE id = ?',
+      'UPDATE episodes SET body=?, title = ?  WHERE id = ?',
       [body,title, id]
     );
     return result.affectedRows > 0;
@@ -49,9 +49,9 @@ export const updatePost = async (id, post) => {
   }
 };
 // פונקציה למחיקת פוסט לפי ID
-export const deletePost = async (id) => {
+export const deleteEpisode = async (id) => {
   try {
-    const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
+    const [result] = await pool.query('DELETE FROM episodes WHERE id = ?', [id]);
     return result.affectedRows > 0;
   } catch (error) {
     throw new Error('שגיאה במחיקת נתונים');

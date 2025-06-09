@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
+
 // פונקציה לשליפת כל המשתמשים
 // export const getAllUsers = async () => {
 //   try {
