@@ -5,7 +5,7 @@ import { useUser } from "../../UserContext";
 import '../../style/logInStyle.css';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [UserName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -16,13 +16,13 @@ const Login = () => {
     e.preventDefault();
 
     // קריאה לפונקציה שבודקת אם המשתמש קיים
-    var existUser = await userExist(username, password, setError);
+    var existUser = await userExist(UserName, password, setError);
     if (existUser) {
       // שמירת פרטי המשתמש בלוקאל סטורג'
       localStorage.setItem("user", JSON.stringify(existUser[0]));
       setUser(existUser[0]); // עדכון הקונטקסט עם פרטי המשתמש
       // ניווט לנתיב הדינמי על בסיס שם המשתמש וה-ID
-      navigate(`/${existUser[0].username}/${existUser[0].id}/home`);
+      navigate(`/${existUser[0].UserName}/${existUser[0].id}/home`);
 
     } else {
       // הודעת שגיאה אם המשתמש לא נמצא
@@ -40,9 +40,9 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="login-form">
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="UserName"
+          value={UserName}
+          onChange={(e) => setUserName(e.target.value)}
           className="input-field"
         />
         <input
