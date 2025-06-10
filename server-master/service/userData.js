@@ -33,23 +33,49 @@ export const getUsersPaged = async (page = 1, limit = 12) => {
 
  
 
+// export const getUserByEmail = async (email) => {
+//   try {
+//     const [rows] = await pool.query('SELECT * FROM users where email=?',[email]);
+//     console.log(rows)
+//     return rows[0];
+//   } catch (error) {
+//    return null;
+//   }
+// };
 export const getUserByEmail = async (email) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM users where email=?',[email]);
-    console.log(rows)
-    return rows[0];
+    const [rows] = await pool.query(
+      `
+      SELECT 
+        Users.id,
+        Users.userName,
+        Users.email,
+        UserTypes.type AS userType,
+        Passwords.passwordHash
+      FROM Users
+      JOIN UserTypes ON Users.userType = UserTypes.id
+      JOIN Passwords ON Users.id = Passwords.userId
+      WHERE Users.email = ?
+      `,
+      [email]
+    );
+    
+    console.log(rows);
+    return rows[0]; // אם אין תוצאה זה יחזיר undefined
   } catch (error) {
-   return null;
+    console.error(error);
+    return null;
   }
 };
+
 export const addUser = async (user) => {
-  const { username, email, password } = user;
+  const { username, email, passwordHash } = user;
   try {
     const [result] = await pool.query(
       'INSERT INTO users (username, email) VALUES (?, ?)',
       [username, email]
     );
-    let successfullyAdded = await addPassword(result.insertId, password); // קרא לפונקציה כמו שצריך
+    let successfullyAdded = await addPassword(result.insertId, passwordHash); // קרא לפונקציה כמו שצריך
     if (!successfullyAdded) {
       console.error(" הוספת סיסמה למשתמש נכשלה", result.insertId);
       await deleteUser(result.insertId);
@@ -148,22 +174,22 @@ export const deleteUser = async (id) => {
     throw new Error('שגיאה במחיקת נתוני המשתמש');
   }
 };
-//פונקציה בוליאנית לסיסמה משתמש
-// export const addPassword = async (user_id, plainPassword) => {
-//   try {
-//     const password_hash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
 
-//     const [result] = await pool.query(
-//       'INSERT INTO passwords (user_id, password_hash) VALUES (?, ?)',
-//       [user_id, password_hash]
-//     );
+export const addPassword = async (user_id, plainPassword) => {
+  try {
+    const password_hash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
 
-//     console.log(result);
-//     return true;
-//   } catch (error) {
-//     console.error("שגיאה בהוספת סיסמה:", error);
-//     return false;
-//   }}
+    const [result] = await pool.query(
+      'INSERT INTO passwords (user_id, password_hash) VALUES (?, ?)',
+      [user_id, password_hash]
+    );
+
+    console.log(result);
+    return true;
+  } catch (error) {
+    console.error("שגיאה בהוספת סיסמה:", error);
+    return false;
+  }}
 
 const deletePassword = async (id) => {
   try {

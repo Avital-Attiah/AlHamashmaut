@@ -30,49 +30,92 @@ export class user {
     res.status(500).json({ message: "שגיאה בשליפת המשתמשים" });
   }
 };
-    login = async (req, res) => {
-        console.log('in get user');
+    // login = async (req, res) => {
+    //     console.log('in get user');
 
-        const { email, password } = req.body; // שימו לב ל-query במקום params
-        console.log(email);
+    //     const { email, password } = req.body; // שימו לב ל-query במקום params
+    //     console.log(email);
 
-        if (!email || !password) {
-            return res.status(400).json('חסר מידע');
+    //     if (!email || !password) {
+    //         return res.status(400).json('חסר מידע');
+    //     }
+
+    //     try {
+    //         const user = await getUserByEmail(email);
+
+
+    //         if (!user) {
+    //             return res.status(401).json('המשתמש לא קיים');
+    //         }
+
+    //         // const realPassword = await getPassword(user.id);
+
+    //         const isMatch = await bcrypt.compare(password, user.passwordHash);
+
+    //         if (isMatch) {
+
+    //             const token = jwt.sign(
+    //                 { id: user.id, email: user.email, username: user.username, userType: user.userType },
+    //                 process.env.JWT_SECRET,
+    //                 { expiresIn: '2h' } //כמות הזמן
+    //             );
+    //             return res.status(200).json({ user, token });
+
+    //         }
+    //         else
+    //             return res.status(409).json('Conflict');
+
+
+    //     } catch (error) {
+    //         console.error('שגיאה ב-postuser:', error.message);
+
+    //         return res.status(500).json(error.message);
+    //     }
+    // };
+
+login = async (req, res) => {
+    console.log('in get user');
+
+    const { email, password } = req.body;
+    console.log(email);
+
+    if (!email || !password) {
+        return res.status(400).json('חסר מידע');
+    }
+
+    try {
+        const user = await getUserByEmail(email);
+
+        if (!user) {
+            return res.status(401).json('המשתמש לא קיים');
         }
 
-        try {
-            const user = await getUserByEmail(email);
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
 
+        if (isMatch) {
+            const { passwordHash, ...userWithoutPassword } = user;
 
-            if (!user) {
-                return res.status(401).json('המשתמש לא קיים');
-            }
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                    username: user.username,
+                    userType: user.userType
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '2h' }
+            );
 
-            // const realPassword = await getPassword(user.id);
-
-            const isMatch = await bcrypt.compare(password, user.password);
-
-            if (isMatch) {
-
-                const token = jwt.sign(
-                    { id: user.id, email: user.email, username: user.username, userType: user.userType },
-                    process.env.JWT_SECRET,
-                    { expiresIn: '1h' } //כמות הזמן
-                );
-                return res.status(200).json({ user, token });
-
-            }
-            else
-                return res.status(409).json('Conflict');
-
-
-        } catch (error) {
-            console.error('שגיאה ב-postuser:', error.message);
-
-            return res.status(500).json(error.message);
+            return res.status(200).json({ user: userWithoutPassword, token });
+        } else {
+            return res.status(409).json('סיסמה שגויה');
         }
-    };
 
+    } catch (error) {
+        console.error('שגיאה ב-login:', error.message);
+        return res.status(500).json(error.message);
+    }
+};
 
 
     // update = async (req, res) => {
