@@ -7,7 +7,7 @@ const TodoItem = ({ todo, index, setTodos, setFilteredTodos, currentUser }) => {
   // עדכון מטלה (עריכה או ✔)
   const handleUpdateTodo = (updated) => {
     const payload = { ...updated, user_id: currentUser.id };
-    fetch(`http://localhost:3001/todos/${updated.id}`, {
+    fetch(`http://localhost:8080/todos/${updated.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -40,7 +40,7 @@ const TodoItem = ({ todo, index, setTodos, setFilteredTodos, currentUser }) => {
 
   // מחיקה
   const handleDelete = () => {
-    fetch(`http://localhost:3001/todos/${todo.id}`, { method: 'DELETE' })
+    fetch(`http://localhost:8080/todos/${todo.id}`, { method: 'DELETE' })
       .then(() => {
         setTodos(prev => prev.filter(t => t.id !== todo.id));
         setFilteredTodos(prev => prev.filter(t => t.id !== todo.id));

@@ -18,7 +18,7 @@ const Posts = () => {
       return;
     }
 
-    fetch(`http://localhost:3001/posts?user_id=${currentUser.id}`)
+    fetch(`http://localhost:8080/posts?user_id=${currentUser.id}`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch posts");
         return res.json();
@@ -42,7 +42,7 @@ const Posts = () => {
       user_id: currentUser.id
     };
 
-    fetch("http://localhost:3001/posts", {
+    fetch("http://localhost:8080/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(post),

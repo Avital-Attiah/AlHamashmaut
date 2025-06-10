@@ -14,7 +14,7 @@ const Post = (data) => {
       title: newPost.title || data.selectedPost.title,
       content: newPost.content || data.selectedPost.content,
     };
-    fetch(`http://localhost:3001/posts/${data.selectedPost.id}`, {
+    fetch(`http://localhost:8080/posts/${data.selectedPost.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedPost),
@@ -32,7 +32,7 @@ const Post = (data) => {
 
   // טיפול במחק פוסט
   const handleDeletePost = () => {
-    fetch(`http://localhost:3001/posts/${data.selectedPost.id}`, { method: "DELETE" })
+    fetch(`http://localhost:8080/posts/${data.selectedPost.id}`, { method: "DELETE" })
       .then(() => {
         data.setPosts(data.posts.filter((p) => p.id !== data.selectedPost.id));
         data.setSelectedPost(null);

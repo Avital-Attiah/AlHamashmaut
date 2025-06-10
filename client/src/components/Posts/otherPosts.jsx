@@ -20,7 +20,7 @@ const OtherPosts = () => {
     }
 
     // משתמש בשדה user_id_ne כדי לסנן שונה ממשתמש נוכחי
-    fetch(`http://localhost:3001/posts?user_id_ne=${currentUser.id}`)
+    fetch(`http://localhost:8080/posts?user_id_ne=${currentUser.id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch other users' posts");
         return res.json();

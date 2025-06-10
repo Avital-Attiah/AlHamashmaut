@@ -3,22 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../../style/fullInfoStyle.css";
 import { useUser } from "../../UserContext";
 
-
-// if (!username || !password) {
-//   return (
-//     <div style={{ padding: "2rem", textAlign: "center", color: "red" }}>
-//       לא הועברו נתונים מההרשמה. נא לחזור לעמוד הרישום.
-//     </div>
-//   );
-// }
-
-
 function FullInfo() {
   const location = useLocation();
-  const { username, password } = location.state || {}; // Extract data from state
+  const { userName, password } = location.state || {};
 
-
-  if (!username || !password) {
+  if (!userName || !password) {
     return (
       <div style={{ padding: "2rem", textAlign: "center", color: "red" }}>
         לא הועברו נתונים מההרשמה. נא לחזור לעמוד הרישום.
@@ -26,14 +15,12 @@ function FullInfo() {
     );
   }
 
- 
-
   const [formData, setFormData] = useState({
-    username: username || "",
+    userName: userName || "",
     email: "",
     password: password || "",
   });
-  
+
   const { setUser } = useUser();
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -41,43 +28,10 @@ function FullInfo() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name.includes("address.geo.")) {
-      const [_, key] = name.split("geo.");
-      setFormData((prevData) => ({
-        ...prevData,
-        address: {
-          ...prevData.address,
-          geo: {
-            ...prevData.address.geo,
-            [key]: value,
-          },
-        },
-      }));
-    } else if (name.includes("address.")) {
-      const key = name.split("address.")[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        address: {
-          ...prevData.address,
-          [key]: value,
-        },
-      }));
-    } else if (name.includes("company.")) {
-      const key = name.split("company.")[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        company: {
-          ...prevData.company,
-          [key]: value,
-        },
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -85,70 +39,49 @@ function FullInfo() {
     setError("");
     setSuccess("");
 
-    console.log("נשלח לשרת:", {
-      id: formData.id,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-    });
-    
-
     try {
-      console.log("Sending data:", formData);
-
-   
-      const response = await fetch("http://localhost:3001/users/signUp", {
+      const response = await fetch("http://localhost:8080/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: formData.username,
+          userName: formData.userName,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         }),
       });
-      
 
       if (response.ok) {
-        const newUser = await response.json();
-        const existingUsers = JSON.parse(localStorage.getItem("user")) || [];
-        //localStorage.setItem("user", JSON.stringify([...existingUsers, newUser]));
+        const newUserArr = await response.json();
+        const newUser = newUserArr[0];
         setUser(newUser);
         localStorage.setItem("user", JSON.stringify(newUser));
-
-
         setSuccess("המשתמש נוסף בהצלחה!");
-       // navigate("/home");
-       navigate(`/${newUser.username}/${newUser.id}/home`);
-
+        navigate(`/${newUser.userName}/${newUser.id}/home`);
       } else {
-        throw new Error("שגיאה בהוספת המשתמש");
+        const msg = await response.text();
+        setError("שגיאה בהוספת המשתמש: " + msg);
       }
     } catch (error) {
       setError("שגיאה בהתחברות לשרת: " + error.message);
     }
   };
 
-  // return (
-  //   <div className="full-info-container">
-  //     {/* שאר הקוד */}
-  //   </div>
-  // );
-
   return (
     <div className="full-info-container">
-      <h2>השלמת הרשמה</h2>
+      <h2 className="full-info-title">השלמת הרשמה</h2>
       <form onSubmit={handleSubmit} className="full-info-form">
         <label>שם משתמש:</label>
         <input
           type="text"
-          name="username"
-          value={formData.username}
+          name="userName"
+          value={formData.userName}
           onChange={handleChange}
           required
+          className="full-info-input"
         />
-  
+
         <label>אימייל:</label>
         <input
           type="email"
@@ -156,16 +89,16 @@ function FullInfo() {
           value={formData.email}
           onChange={handleChange}
           required
+          className="full-info-input"
         />
-  
-        <button type="submit">שלח</button>
-  
-        {error && <p className="error-message">{error}</p>}
-        {success && <p className="success-message">{success}</p>}
+
+        <button type="submit" className="full-info-button">שלח</button>
+
+        {error && <p className="full-info-error">{error}</p>}
+        {success && <p className="full-info-success">{success}</p>}
       </form>
     </div>
   );
-  
 }
 
 export default FullInfo;

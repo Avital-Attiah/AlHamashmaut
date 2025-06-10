@@ -7,7 +7,7 @@ const Comments = ({ postId, currentUser }) => {
 
   // קריאה ראשונית של תגובות עבור פוסט מסוים
   useEffect(() => {
-    fetch(`http://localhost:3001/comments?post_id=${postId}`)
+    fetch(`http://localhost:8080/comments?post_id=${postId}`)
       .then(res => res.json())
       .then(data => setComments(data))
       .catch(err => console.error("Error fetching comments", err));
@@ -24,7 +24,7 @@ const Comments = ({ postId, currentUser }) => {
       content: text
     };
 
-    fetch("http://localhost:3001/comments", {
+    fetch("http://localhost:8080/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -42,7 +42,7 @@ const Comments = ({ postId, currentUser }) => {
 
   // מחיקת תגובה
   const handleDeleteComment = (commentId) => {
-    fetch(`http://localhost:3001/comments/${commentId}`, { method: "DELETE" })
+    fetch(`http://localhost:8080/comments/${commentId}`, { method: "DELETE" })
       .then(res => {
         if (!res.ok) throw new Error("Failed to delete comment");
         setComments(prev => prev.filter(c => c.id !== commentId));
@@ -63,7 +63,7 @@ const Comments = ({ postId, currentUser }) => {
       content: text
     };
 
-    fetch(`http://localhost:3001/comments/${comment.id}`, {
+    fetch(`http://localhost:8080/comments/${comment.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

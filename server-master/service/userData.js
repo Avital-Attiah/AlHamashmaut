@@ -69,23 +69,28 @@ export const getUserByEmail = async (email) => {
 };
 
 export const addUser = async (user) => {
-  const { username, email, passwordHash } = user;
+  const { userName, email, passwordHash } = user;
   try {
+    console.log("ניסיון להוסיף משתמש חדש:", user);
+
     const [result] = await pool.query(
-      'INSERT INTO users (username, email) VALUES (?, ?)',
-      [username, email]
+      'INSERT INTO Users (userName, email, userType) VALUES (?, ?, ?)',
+      [userName, email, user.userType || 1]
     );
-    let successfullyAdded = await addPassword(result.insertId, passwordHash); // קרא לפונקציה כמו שצריך
-    if (!successfullyAdded) {
-      console.error(" הוספת סיסמה למשתמש נכשלה", result.insertId);
+
+    let success = await addPassword(result.insertId, passwordHash);
+    if (!success) {
       await deleteUser(result.insertId);
       throw new Error("הוספת סיסמה נכשלה");
     }
+
     return result.insertId;
   } catch (error) {
+    console.error("שגיאה אמיתית ב־addUser:", error.message); // ← זה מה שחשוב
     throw new Error('שגיאה בהוספת נתונים');
   }
 };
+
 
 
 // פונקציה לעדכון משתמש לפי ID
@@ -113,7 +118,7 @@ export const updateUser = async (id, user) => {
 
   try {
     // טבלת Users
-    if (user.username) {
+    if (user.userName) {
       fields.push('userName = ?');
       values.push(user.username);
     }
@@ -175,13 +180,13 @@ export const deleteUser = async (id) => {
   }
 };
 
-export const addPassword = async (user_id, plainPassword) => {
+export const addPassword = async (userId, plainPassword) => {
   try {
-    const password_hash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
+    const passwordHash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
 
     const [result] = await pool.query(
-      'INSERT INTO passwords (user_id, password_hash) VALUES (?, ?)',
-      [user_id, password_hash]
+      'INSERT INTO passwords (userId, passwordHash) VALUES (?, ?)',
+      [userId, passwordHash]
     );
 
     console.log(result);
@@ -193,7 +198,7 @@ export const addPassword = async (user_id, plainPassword) => {
 
 const deletePassword = async (id) => {
   try {
-    const [result] = await pool.query('DELETE FROM passwords WHERE user_id  = ?', [id]);
+    const [result] = await pool.query('DELETE FROM passwords WHERE userId  = ?', [id]);
     console.log(result);
     return true;
   }
@@ -202,10 +207,10 @@ const deletePassword = async (id) => {
   }
 };
 
-const updatePassword = async (user_id, password_hash) => {
+const updatePassword = async (userId, passwordHash) => {
   try {
-    const [result] = await pool.query   ('UPDATE passwords SET password_hash = ? WHERE user_id = ?',
-      [password_hash,user_id]
+    const [result] = await pool.query   ('UPDATE passwords SET passwordHash = ? WHERE userId = ?',
+      [passwordHash,userId]
     );
     console.log(result);
     return true;
@@ -214,16 +219,20 @@ const updatePassword = async (user_id, password_hash) => {
     return false;
   }
 };
- export  const getPassword = async (user_id) => {
+ export  const getPassword = async (userId) => {
   try {
-    console.log(user_id);
-    const [result] = await pool.query('select password_hash from passwords WHERE user_id = ?',
-      [user_id]
+    console.log(userId);
+    const [result] = await pool.query('select passwordHash from passwords WHERE userId = ?',
+      [userId]
     );
     console.log(result);
-    return result[0].password_hash;
+    return result[0].passwordHash;
   }
   catch {
     throw new Error('משתמש עם סיסמה לא תיקנית');
   }
+};
+export const getUserByUserName = async (userName) => {
+  const [rows] = await pool.query('SELECT * FROM Users WHERE userName = ?', [userName]);
+  return rows[0];
 };
