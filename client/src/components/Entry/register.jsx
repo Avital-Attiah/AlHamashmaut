@@ -5,7 +5,7 @@ import { userNameExist } from "../../db-api";
 import "../../style/registerStyle.css";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +16,7 @@ const Register = () => {
 
     setError(""); // Reset any previous error messages
 
-    if (username.length < 3 || username.length > 20) {
+    if (userName.length < 3 || userName.length > 20) {
       setError("השם משתמש חייב להיות בין 3 ל-20 תווים");
       return;
     }
@@ -32,7 +32,7 @@ const Register = () => {
     }
 
     //const existuserName = await userExist(username, setError); // Check if user exists
-     const existuserName = await userNameExist(username, setError);
+     const existuserName = await userNameExist(userName, setError);
 
 
     if (existuserName) {
@@ -41,7 +41,8 @@ const Register = () => {
     }
 
     // Navigate to fullInfo page with user data as state
-    navigate("/fullInfo", { state: { username, password } });
+    // navigate("/fullInfo", { state: { username, password } });
+    navigate("/fullInfo", { state: { userName: userName, password } });
   };
 
   const handleLogInClick = () => {
@@ -54,9 +55,9 @@ const Register = () => {
       <form onSubmit={handleRegister} className="register-form">
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="userName"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           className="input-field"
         />
         <input

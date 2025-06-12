@@ -5,7 +5,7 @@ import { useUser } from "../../UserContext";
 import '../../style/logInStyle.css';
 
 const Login = () => {
-  const [UserName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -15,18 +15,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // קריאה לפונקציה שבודקת אם המשתמש קיים
-    var existUser = await userExist(UserName, password, setError);
+    // קריאה לפונקציה שבודקת אם המשתמש קיים לפי אימייל
+    var existUser = await userExist(email, password, setError);
     if (existUser) {
-      // שמירת פרטי המשתמש בלוקאל סטורג'
       localStorage.setItem("user", JSON.stringify(existUser[0]));
-      setUser(existUser[0]); // עדכון הקונטקסט עם פרטי המשתמש
-      // ניווט לנתיב הדינמי על בסיס שם המשתמש וה-ID
-      navigate(`/${existUser[0].UserName}/${existUser[0].id}/home`);
-
+      setUser(existUser[0]);
+      navigate(`/${existUser[0].userName}/${existUser[0].id}/home`);
     } else {
-      // הודעת שגיאה אם המשתמש לא נמצא
-      setError("שם משתמש או סיסמה שגויים!");
+      setError("אימייל או סיסמה שגויים!");
     }
   };
 
@@ -39,10 +35,10 @@ const Login = () => {
       <h1 className="login-title">התחברות</h1>
       <form onSubmit={handleSubmit} className="login-form">
         <input
-          type="text"
-          placeholder="UserName"
-          value={UserName}
-          onChange={(e) => setUserName(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="input-field"
         />
         <input

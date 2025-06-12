@@ -154,7 +154,9 @@ export const deleteUser = async (id) => {
 };
 
 export const addPassword = async (userId, plainPassword) => {
+export const addPassword = async (userId, plainPassword) => {
   try {
+    const passwordHash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
     const passwordHash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
 
     const [result] = await pool.query(
@@ -197,4 +199,8 @@ export const getPassword = async (userId) => {
 export const verifyPassword = async (userId, plainPassword) => {
   const currentHash = await getPassword(userId);
   return bcrypt.compare(plainPassword, currentHash);
+};
+export const getUserByUserName = async (userName) => {
+  const [rows] = await pool.query('SELECT * FROM Users WHERE userName = ?', [userName]);
+  return rows[0];
 };

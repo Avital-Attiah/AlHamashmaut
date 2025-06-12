@@ -7,6 +7,8 @@ const userController=new user();
   usersRout.get('/',authenticateToken&&isAdmin,userController.getAllUsers)
 usersRout.post('/new',userController.add);
 //חדש לחלוטין
-usersRout.delete('/:id',authenticateToken&&isAdmin,userController.delete);
-usersRout.put('/:id',authenticateToken&&isAdmin,userController.update);
+usersRout.delete('/:id', authenticateToken && isAdmin, userController.delete);
+usersRout.put('/:id', authenticateToken && isAdmin, userController.update);
+usersRout.post('/check', userController.checkUserName);
+
 export default usersRout;

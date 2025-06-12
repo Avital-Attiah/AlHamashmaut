@@ -18,7 +18,7 @@ const Todos = () => {
 
   // Fetch todos from server
   useEffect(() => {
-    fetch(`http://localhost:3001/todos/getTodosById/${userId}`)
+    fetch(`http://localhost:8080/todos/getTodosById/${userId}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch todos');
         return res.json();
@@ -69,7 +69,7 @@ const Todos = () => {
       return;
     }
     const payload = { user_id: userId, title: newTodo.title.trim(), completed: false };
-    fetch('http://localhost:3001/todos', {
+    fetch('http://localhost:8080/todos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
