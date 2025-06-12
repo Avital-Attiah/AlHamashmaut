@@ -1,0 +1,43 @@
+.episodes-page {
+  display: flex;
+  padding: 20px;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.episodes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 800px;
+}
+
+.episode-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.episode-card:hover {
+  background-color: #f0f0f0;
+}
+
+.episode-thumbnail {
+  width: 100%;
+  height: auto;
+}
+
+.episode-details {
+  max-width: 400px;
+  padding: 15px;
+  border: 1px solid #aaa;
+}
+
+.episode-details textarea {
+  width: 100%;
+  min-height: 60px;
+  margin-top: 10px;
+}

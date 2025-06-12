@@ -7,9 +7,10 @@ const Home = () => {
   const { user } = useUser();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+  localStorage.removeItem("user");
+  window.location.reload(); // רענון קל של הדף כדי לאפס את ה־context
+};
+
 
 return (
   <div className="main-container">
@@ -30,7 +31,7 @@ return (
       <div className="main-nav">
         <a href="#vision">חזון</a>|
         <a href={`/${user?.userName}/${user?.id}/contact`}>צור קשר</a>|
-        <a href={`/${user?.userName}/${user?.id}/supporters`}>תומכים מובילים</a>|
+        <a href="/supporters">תומכים מובילים</a>|
         <a href="#future-interviews">ראיונות עתידיים</a>|
         <a href="#podcasts">פודקאסטים שלנו</a>
       </div>
@@ -75,9 +76,6 @@ return (
     <img src="/icons/spotify.svg" alt="Spotify" />
   </a>
 </div>
-
-      
-     
 
       {/* כאן נטען תוכן דינמי לפי Route */}
       <Outlet />
