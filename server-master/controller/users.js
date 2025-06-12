@@ -1,105 +1,70 @@
+
 import { json } from 'express';
-import { getUsersPaged, addUser, deleteUser, updateUser, getPassword, getUserByEmail } from '../service/userData.js'
+import {
+    getUsersPaged,
+    addUser,
+    deleteUser,
+    updateUser,
+    getUserByEmail,
+    verifyPassword
+} from '../service/userData.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 export class user {
 
-// getAllUsers=async(req, res)=>{
-// try {
-//       console.log('in get all');
+    // 📥 req.query: { page?: number, limit?: number }
+    // 📤 res: JSON array of users, each: { id, userName, email, userType }
+    getAllUsers = async (req, res) => {
+        try {
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 12;
 
-//       const users = await getAllUsers();
-//       console.log(users);
-//       res.status(200).json(users);
-//     } catch (error) {
-//       res.status(500).json({ message: "  " });
-//     }
-// }
-  getAllUsers = async (req, res) => {
-  try {
-    console.log('in get all');
-
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
-
-    const users = await getUsersPaged(page, limit);
-
-    console.log(users);
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: "שגיאה בשליפת המשתמשים" });
-  }
-};
-    // login = async (req, res) => {
-    //     console.log('in get user');
-
-    //     const { email, password } = req.body; // שימו לב ל-query במקום params
-    //     console.log(email);
-
-    //     if (!email || !password) {
-    //         return res.status(400).json('חסר מידע');
-    //     }
-
-    //     try {
-    //         const user = await getUserByEmail(email);
+            const users = await getUsersPaged(page, limit);
+            res.status(200).json(users); // 🟩 200 OK
+        } catch (error) {
+            res.status(500).json({ message: "Failed to retrieve users" }); // ❌ 500 Internal Server Error
+        }
+    };
 
 
-    //         if (!user) {
-    //             return res.status(401).json('המשתמש לא קיים');
-    //         }
 
-    //         // const realPassword = await getPassword(user.id);
+    login = async (req, res) => {
+        console.log("in login ");
+        console.log(req.body);
 
-    //         const isMatch = await bcrypt.compare(password, user.passwordHash);
+        const { email, password } = req.body;
 
-    //         if (isMatch) {
-
-    //             const token = jwt.sign(
-    //                 { id: user.id, email: user.email, username: user.username, userType: user.userType },
-    //                 process.env.JWT_SECRET,
-    //                 { expiresIn: '2h' } //כמות הזמן
-    //             );
-    //             return res.status(200).json({ user, token });
-
-    //         }
-    //         else
-    //             return res.status(409).json('Conflict');
-
-
-    //     } catch (error) {
-    //         console.error('שגיאה ב-postuser:', error.message);
-
-    //         return res.status(500).json(error.message);
-    //     }
-    // };
-
-login = async (req, res) => {
-    console.log('in get user');
-
-    const { email, password } = req.body;
-    console.log(email);
-
-    if (!email || !password) {
-        return res.status(400).json('חסר מידע');
-    }
-
-    try {
-        const user = await getUserByEmail(email);
-
-        if (!user) {
-            return res.status(401).json('המשתמש לא קיים');
+        if (!email || !password) {
+            return res.status(400).json('Missing email or password');
         }
 
-        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        try {
+            const user = await getUserByEmail(email);
+            if (!user) {
+                console.log('User not found');
+                return res.status(404).json('not found');
+            }
 
-        if (isMatch) {
-            const { passwordHash, ...userWithoutPassword } = user;
+
+
+            console.log('password:', `"${password}"`);
+            console.log('hash:', `"${user.passwordHash}"`);
+            const isMatch = await bcrypt.compare(password, user.passwordHash);
+            console.log('bcrypt result:', isMatch);
+
+            if (!isMatch) {
+                console.log('Incorrect password');
+                return res.status(401).json('Unauthorized');
+            }
+
+           const { passwordHash, ...userWithoutPassword } = user;
 
             const token = jwt.sign(
                 {
                     id: user.id,
                     email: user.email,
-                    username: user.username,
+                    userName: user.userName,
                     userType: user.userType
                 },
                 process.env.JWT_SECRET,
@@ -107,75 +72,104 @@ login = async (req, res) => {
             );
 
             return res.status(200).json({ user: userWithoutPassword, token });
-        } else {
-            return res.status(409).json('סיסמה שגויה');
+
+        } catch (error) {
+            console.error('Login error:', error.message);
+            return res.status(500).json( error.message);
         }
+    };
 
-    } catch (error) {
-        console.error('שגיאה ב-login:', error.message);
-        return res.status(500).json(error.message);
-    }
-};
-
-
-    // update = async (req, res) => {
-    //     try {
-    //         const { email, username, password, lastPassword } = req.body;
-    //         let id = req.params.id;
-    //         let response = await updateUser(id, req.body);
-    //         console.log(' עודכן בהצלחה');
-    //         res.status(200).json('פרטי המשתמש עודכנו בהצלחה');
-
-    //     } catch (error) {
-    //         res.status(500).json(error.message);
-
-    //     }
-
+    // 📥 req.params: { id: string }
+    // 📥 req.body: {
+    //   userName?: string,
+    //   email?: string,
+    //   userType?: string,
+    //   password?: string,
+    //   lastPassword?: string
     // }
-
+    // 📤 res: string 'updated successfully'
     update = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await updateUser(id, req.body);
-    res.status(200).json('User details updated successfully');
-  } catch (error) {
-    console.error('Update error:', error.message);
-    res.status(500).json({ message: 'An error occurred while updating user' });
-  }
-};
+        try {
+            const id = req.params.id;
+            const { password, lastPassword } = req.body;
 
+            if (password || lastPassword) {
+                if (!password || !lastPassword) {
+                    return res.status(400).json({ message: 'Bad Request' }); // ❌ 400 Bad Request
+                }
+
+                if (!await verifyPassword(id, lastPassword)) {
+                    return res.status(401).json({ message: 'Unauthorized' }); // ❌ 401 Unauthorized
+                }
+            }
+
+            await updateUser(id, req.body);
+            res.status(200).json('updated successfully'); // 🟩 200 OK
+
+        } catch (error) {
+            console.error('Update error:', error.message);
+            res.status(422).json({ message: 'Unprocessable Entity' }); // ❌ 422 Unprocessable Entity
+        }
+    };
+
+    // 📥 req.body: {
+    //   userName: string,
+    //   email: string,
+    //   userType: string,
+    //   password: string
+    // }
+    // 📤 res: { id: number, userName, email, userType }
     add = async (req, res) => {
         try {
             let newUser = req.body;
-            if (newUser == null || !isValidEmail(newUser.email))
-                res.status(500).send('נתוני המשתמש בלתי אפשריים');
-            let userId = await addUser(newUser);
-            newUser = { ...newUser, id: userId }
-            console.log(newUser);
-            res.json([newUser]); // מגדיר גם את הסטטוס וגם התוכן כ־JSON
+
+            if (!newUser || !isValidEmail(newUser.email)) {
+                return res.status(400).send('Bad Request'); // ❌ 400 Bad Request
+            }
+
+            if (!newUser.password) {
+                return res.status(400).send('Bad Request'); // ❌ 400 Bad Request
+            }
+
+            const passwordHash = await bcrypt.hash(newUser.password, 10);
+            const userToSave = { ...newUser, passwordHash };
+
+            console.log("is ok");
+            const userId = await addUser(userToSave);
+            const createdUser = {
+                id: userId,
+                userName: newUser.userName,
+                email: newUser.email,
+                userType: newUser.userType
+            };
+
+            res.status(201).json(createdUser); // 🟩 201 Created
 
         } catch (error) {
-            res.status(500).json(error.message);
-
+            console.error('Add user error:', error.message);
+            res.status(500).json('Failed to create user'); // ❌ 500 Internal Server Error
         }
-    }
+    };
+
+    // 📥 req.params: { id: string }
+    // 📤 res: status 204 (no content) or 404 if not found
     delete = async (req, res) => {
         try {
-            let userToDelete = req.params.id;
-            let response = await deleteUser(userToDelete);
+            const userToDelete = req.params.id;
+            const response = await deleteUser(userToDelete);
 
             if (response) {
-                console.log('נמחק בהצלחה');
-                res.status(200).json("המשתמש נמחק בהצלחה");
+                res.status(204).send(); // 🟩 204 No Content
             } else {
-                res.status(404).json("משתמש לא נמצא");
+                res.status(404).json("User not found"); // ❌ 404 Not Found
             }
         } catch (error) {
-            res.status(500).json(error.message);
+            res.status(500).json('Failed to delete user'); // ❌ 500 Internal Server Error
         }
-    }
-
+    };
 }
+
+// 📥 email: string → מחזירה true/false לפי תקינות אימייל
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
