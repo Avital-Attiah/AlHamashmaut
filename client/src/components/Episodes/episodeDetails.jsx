@@ -34,7 +34,7 @@
 
 // export default EpisodeDetails;
 import React, { useEffect, useState } from 'react';
-import { getData, addData, getCurrentUser } from '.../db-api.jsx';
+import { getData, addData, getCurrentUser } from '../../db-api';
 import CommentItem from './comment.jsx';
 
 export default function EpisodeDetails({ episodeId }) {

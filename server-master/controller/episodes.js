@@ -26,8 +26,8 @@ export   class episode {
   getAll = async (req, res) => {
     try {
       console.log('in get all');
-
-      const episodes = await getAll();
+  const { isFutureInterview } = req.params;
+      const episodes = await getAll(isFutureInterview);
       console.log(episodes);
       res.status(200).json(episodes);
     } catch (error) {

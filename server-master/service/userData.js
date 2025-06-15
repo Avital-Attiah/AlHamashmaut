@@ -46,44 +46,61 @@ export const getUserByEmail = async (email) => {
     return null;
   }
 };
-
 export const addUser = async (user) => {
   const { userName, email, userType, passwordHash } = user;
 
   try {
-    const [typeRows] = await pool.query(
-      'SELECT id FROM UserTypes WHERE type = ?',
-      [userType]
+    // 1. בדיקת קיום מייל (רגישה לאותיות — באופן יעיל)
+    const [existing] = await pool.query(
+      'SELECT 1 FROM Users WHERE LOWER(email) = LOWER(?) LIMIT 1',
+      [email]
     );
-
-    if (typeRows.length === 0) {
-      console.log(`User type "${userType}" does not exis`)
-      throw new Error(`User type "${userType}" does not exist`); // שינוי משגיאה ספציפית
+    if (existing.length > 0) {
+      throw new Error('המשתמש כבר קיים במערכת');
     }
 
-    const userTypeId = typeRows[0].id;
-
-    const [result] = await pool.query(
-      'INSERT INTO Users (userName, email, userType) VALUES (?, ?, ?)',
-      [userName, email, userTypeId] // התאמה לשמות בטבלה
+    // 2. הוספת משתמש בטבלה Users + שאילתת השלמה שמחזירה את הנתונים המלאים כולל userType
+    const [insertResult] = await pool.query(
+      `
+      INSERT INTO Users (userName, email, userType)
+      VALUES (?, ?, ?)
+      `,
+      [userName, email, userType]
     );
+    const userId = insertResult.insertId;
 
-    const userId = result.insertId;
-
-    const success = await addPassword(userId, passwordHash);
-
-    if (!success) {
+    // 3. שמירת הסיסמה (אין צורך בעוד SELECT)
+    const passwordSaved = await addPassword(userId, passwordHash);
+    if (!passwordSaved) {
       await deleteUser(userId);
-      throw new Error("Failed to add user password"); // שינוי שגיאה
+      throw new Error("שמירת הסיסמה נכשלה");
     }
 
-    return userId;
+    // 4. החזרת נתוני המשתמש עם userType כשם תיאורי (JOIN חכם)
+    const [rows] = await pool.query(
+      `
+      SELECT 
+        U.id,
+        U.userName,
+        U.email,
+        T.type AS userType
+      FROM Users U
+      JOIN UserTypes T ON U.userType = T.id
+      WHERE U.id = ?
+      `,
+      [userId]
+    );
+
+    return rows[0]; // החזרת המשתמש המלא
 
   } catch (error) {
-    console.log("Add user error:", error.message);
-    throw new Error('Failed to add user'); // שינוי שגיאה
+    console.error("Add user error:", error.message);
+    throw error;
   }
 };
+
+
+
 
 export const updateUser = async (id, user) => {
   const fields = [];
@@ -153,15 +170,15 @@ export const deleteUser = async (id) => {
   }
 };
 
-export const addPassword = async (userId, plainPassword) => {
+
 export const addPassword = async (userId, plainPassword) => {
   try {
-    const passwordHash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
-    const passwordHash = await bcrypt.hash(plainPassword, SALT_ROUNDS);
+    
+  
 
     const [result] = await pool.query(
       'INSERT INTO Passwords (userId, passwordHash) VALUES (?, ?)', // התאמה לשמות בטבלה
-      [userId, passwordHash]
+      [userId, plainPassword]
     );
 
     return true;

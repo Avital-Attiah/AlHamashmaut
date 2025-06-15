@@ -1,4 +1,12 @@
 /* container */
+.error-message {
+  padding: 0;
+  margin-right: 0;
+  text-indent: 0;
+  white-space: nowrap;
+   color: red;
+}
+
 .register-container {
     width: 100%;
     max-width: 400px;
@@ -71,10 +79,5 @@
     background-color: #a61b3b;
   }
   
-  /* error message */
-  .error-message {
-    color: red;
-    margin-top: 15px;
-    text-align: center;
-  }
+
   

@@ -1,58 +1,5 @@
 
-// export async function userNameExist(userName, setError) {
-//     try {
-//          console.log("Trying to login with:", userName);
-//       const res = await fetch("http://localhost:8080/users/check", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ userName: userName }),
-//       });
-  
-//       const data = await res.json();
-//       return data.exists; // למשל true / false
-//     } catch (err) {
-//       console.error("Error checking userName", err);
-//       setError("שגיאה בשרת. נסה שוב.");
-//     }
-//   }
-  
 
-// export async function userExist(userName, password, setError) {
-//     try {
-//       const res = await fetch("http://localhost:8080/users/logIn", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ userName: userName, password }),
-//       });
-  
-//       if (res.ok) {
-//         const user = await res.json();
-//         return [user]; // כדי שישאר מבנה כמו בקוד הקיים שלך
-//       } else {
-//         return null;
-//       }
-//     } catch (err) {
-//       console.error("Error logging in", err);
-//       setError("שגיאה בשרת. נסה שוב.");
-//     }
-//   }
-  
-//   export async function fetchUserById(id, setError) {
-//     try {
-//       const res = await fetch(`http://localhost:8080/users/${id}`);
-//       if (!res.ok) throw new Error("משתמש לא נמצא");
-//       const user = await res.json();
-//       return user;
-//     } catch (err) {
-//       console.error("שגיאה בשליפת משתמש:", err);
-//       setError("שגיאה בקבלת נתוני המשתמש");
-//     }
-//   }
-  
 const baseUrl = "http://localhost:8080/";
 
 // פונקציה להוספת נתונים
@@ -155,18 +102,58 @@ function getCurrentUser() {
 function getToken() {
   return localStorage.getItem("token");
 }
-export const login = async (table, data) => {
-  console.log(JSON.stringify(data))
+
+export const login = async (table = "users/login", data) => {
+  console.log(JSON.stringify(data));
+
   const response = await fetch(`${baseUrl}${table}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: [JSON.stringify(data)],
+    body: JSON.stringify(data), // ✅ מחרוזת חוקית, לא מערך
   });
-  console.log(response);  
+
   if (!response.ok) {
-    throw new Error('לא נמצא משתשמש עם הנתונים שספקת'); 
+    throw new Error('לא נמצא משתמש עם הנתונים שסיפקת');
   }
-  return response;
+
+  const responseData = await response.json(); // ✅ קריאת גוף התשובה
+
+  localStorage.setItem("currentUser", JSON.stringify(responseData.user));
+  localStorage.setItem("token", responseData.token);
+
+  return true;
+};
+
+
+export const newUser = async (table, data) => {
+  console.log(JSON.stringify(data));
+
+  const response = await fetch(`${baseUrl}${table}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data), // ✅ תיקון — לא מערך
+  });
+
+  let responseData;
+  try {
+    responseData = await response.json();
+  } catch (e) {
+    throw new Error("לא התקבלה תשובה תקינה מהשרת");
+  }
+
+  if (!response.ok) {
+    // נניח שהשרת מחזיר { message: "משהו" }
+    throw new Error(responseData.message || 'שגיאה כללית');
+  }
+
+  if (!responseData.user || !responseData.token) {
+    throw new Error("פרטי המשתמש שהוחזרו אינם תקינים");
+  }
+
+  localStorage.setItem("currentUser", JSON.stringify(responseData.user));
+  localStorage.setItem("token", responseData.token);
+
+  return true;
 };
 
 export { addData, updateData, deleteData, getCurrentUser, getData };

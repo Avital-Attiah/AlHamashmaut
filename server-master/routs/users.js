@@ -9,6 +9,6 @@ usersRout.post('/new',userController.add);
 //חדש לחלוטין
 usersRout.delete('/:id', authenticateToken && isAdmin, userController.delete);
 usersRout.put('/:id', authenticateToken && isAdmin, userController.update);
-usersRout.post('/check', userController.checkUserName);
+// usersRout.post('/check', userController.checkUserName);
 
 export default usersRout;

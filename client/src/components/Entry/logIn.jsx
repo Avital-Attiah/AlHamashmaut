@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userExist } from "../../db-api";
-import { useUser } from "../../UserContext";
+import { login ,getCurrentUser} from "../../db-api";
+
 import '../../style/logInStyle.css';
 
 const Login = () => {
@@ -9,21 +9,26 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { setUser } = useUser();
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // קריאה לפונקציה שבודקת אם המשתמש קיים לפי אימייל
-    var existUser = await userExist(email, password, setError);
-    if (existUser) {
-      localStorage.setItem("user", JSON.stringify(existUser[0]));
-      setUser(existUser[0]);
-      navigate(`/${existUser[0].userName}/${existUser[0].id}/home`);
+    try{
+  var islogin = await login("users/login",{email:email, password:password});
+    if (islogin) {
+      const user=getCurrentUser();
+      navigate(`/${user.userName}/${user.id}/home`);
     } else {
       setError("אימייל או סיסמה שגויים!");
     }
+    }catch(error)
+    {
+      console.log(error); 
+    }
+   
   };
 
   const handleRegisterClick = () => {

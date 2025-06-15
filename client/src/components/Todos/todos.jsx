@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TodoItem from './todoItem';
 import '../../style/todoStyle.css';
-import { useUser } from '../../UserContext';
+import { getCurrentUser } from '../../db-api.jsx';
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
@@ -12,7 +12,7 @@ const Todos = () => {
   const [showForm, setShowForm] = useState(false);
   const [sortCriteria, setSortCriteria] = useState('');
 
-  const { user: currentUser } = useUser();
+  const { user: currentUser } = getCurrentUser();
   const userId = currentUser.id;
   const navigate = useNavigate();
 

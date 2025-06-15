@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getCurrentUser, updateData, deleteData } from '../service/api'; // או הנתיב הנכון אצלך
+import { getCurrentUser, updateData, deleteData } from '../../db-api'; // או הנתיב הנכון אצלך
 
 export default function comment({ comment, onUpdate, onDelete }) {
   const currentUser = getCurrentUser();

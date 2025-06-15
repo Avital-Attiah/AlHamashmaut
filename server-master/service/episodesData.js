@@ -2,11 +2,9 @@
 import pool from './database.js';
 
 // פונקציה לשליפת כל הפוסטים
-export const getAll = async () => {
+export const getAll = async (isFutureInterview) => {
   try {
-   const baseQuery = 'SELECT * FROM episodes';
-    // const fullQuery = whereClause!='' ? `${baseQuery} ${whereClause}` : baseQuery;
-    const [rows] = await pool.query(baseQuery);
+    const [rows] = await pool.query('SELECT * FROM episodes where isFutureInterview=?',[isFutureInterview]);
     return rows;
   } catch (error) {
     throw new Error('שגיאה בשאילתת נתונים');

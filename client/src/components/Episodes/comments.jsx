@@ -1,110 +1,75 @@
-import React, { useState, useEffect } from "react";
 
-// קומפוננטת תגובות עם חיבור לשרת
-const Comments = ({ postId, currentUser }) => {
+import React, { useState, useEffect } from "react";
+import { getCurrentUser, getData, addData, updateData, deleteData } from "../../db-api";
+import Comment from "./comment.jsx"; // הקומפוננטה הבודדת לכל תגובה
+
+export default function Comments({ postId }) {
+  const currentUser = getCurrentUser();
   const [comments, setComments] = useState([]);
   const [newContent, setNewContent] = useState("");
+  const [error, setError] = useState(null);
 
-  // קריאה ראשונית של תגובות עבור פוסט מסוים
   useEffect(() => {
-    fetch(`http://localhost:8080/comments?post_id=${postId}`)
-      .then(res => res.json())
-      .then(data => setComments(data))
-      .catch(err => console.error("Error fetching comments", err));
+    const fetchComments = async () => {
+      try {
+        const data = await getData(`comments?post_id=${postId}`);
+        setComments(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchComments();
   }, [postId]);
 
-  // הוספת תגובה חדשה
-  const handleAddComment = () => {
-    const text = newContent.trim();
-    if (!text) return;
+  const handleAddComment = async () => {
+    const content = newContent.trim();
+    if (!content) return;
 
     const payload = {
       post_id: postId,
       user_id: currentUser.id,
-      content: text
+      content
     };
 
-    fetch("http://localhost:8080/comments", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to add comment");
-        return res.json();
-      })
-      .then(comment => {
-        setComments(prev => [...prev, comment]);
-        setNewContent("");
-      })
-      .catch(err => console.error("Error adding comment", err));
+    try {
+      const added = await addData("comments", payload);
+      setComments(prev => [...prev, added]);
+      setNewContent("");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  // מחיקת תגובה
-  const handleDeleteComment = (commentId) => {
-    fetch(`http://localhost:8080/comments/${commentId}`, { method: "DELETE" })
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to delete comment");
-        setComments(prev => prev.filter(c => c.id !== commentId));
-      })
-      .catch(err => console.error("Error deleting comment", err));
+  const handleUpdate = (id, newBody) => {
+    setComments(prev => prev.map(c => c.id === id ? { ...c, body: newBody } : c));
   };
 
-  // עריכת תגובה קיימת
-  const handleEditComment = (comment) => {
-    const updatedText = prompt("ערוך את התגובה", comment.content);
-    if (updatedText == null) return; // ביטול
-    const text = updatedText.trim();
-    if (!text) return;
-
-    const payload = {
-      post_id: postId,
-      user_id: currentUser.id,
-      content: text
-    };
-
-    fetch(`http://localhost:8080/comments/${comment.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to update comment");
-        return res.json();
-      })
-      .then(updated => {
-        setComments(prev => prev.map(c => c.id === updated.id ? updated : c));
-      })
-      .catch(err => console.error("Error editing comment", err));
+  const handleDelete = (id) => {
+    setComments(prev => prev.filter(c => c.id !== id));
   };
 
   return (
-    <div className="comments-section">
+    <div>
       <h3>תגובות</h3>
-      <ul>
-        {comments.map(c => (
-          <li key={c.id}>
-            <span>{c.content}</span>
-            {/* אפשרות עריכה ומחיקה רק לבעל התגובה */}
-            {c.user_id === currentUser.id && (
-              <>  
-                <button onClick={() => handleEditComment(c)}>ערוך</button>
-                <button onClick={() => handleDeleteComment(c.id)}>מחק</button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
+
+      {comments.map(comment => (
+        <Comment
+          key={comment.id}
+          comment={comment}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
+      ))}
+
       <div className="add-comment">
         <textarea
           placeholder="הזן תגובה חדשה"
           value={newContent}
-          onChange={e => setNewContent(e.target.value)}
+          onChange={(e) => setNewContent(e.target.value)}
         />
         <button onClick={handleAddComment}>הוסף תגובה</button>
       </div>
     </div>
   );
-};
-
-export default Comments;
+}
