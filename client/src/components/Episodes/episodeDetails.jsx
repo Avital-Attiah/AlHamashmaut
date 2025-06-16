@@ -33,165 +33,79 @@
 // };
 
 // export default EpisodeDetails;
+import '../../style/episodeDetailsStyle.css';
+// episodeDetails.jsx
 import React, { useEffect, useState } from 'react';
-import { getData, addData, getCurrentUser } from '../../db-api';
-import CommentItem from './comment.jsx';
+import { useParams } from 'react-router-dom';
+import { getData } from '../../db-api';
+import Comments from './comments.jsx';
 
-export default function EpisodeDetails({ episodeId }) {
+export default function EpisodeDetails() {
+  const { id: episodeId } = useParams();
   const [episode, setEpisode] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
   const [allEpisodes, setAllEpisodes] = useState([]);
 
-  const user = getCurrentUser();
+  useEffect(() => {
+    loadAllEpisodes();
+  }, []);
 
   useEffect(() => {
-    if (!episodeId) return;
-    loadEpisode();
-    loadComments();
-    loadAllEpisodes();
-  }, [episodeId]);
-
-  const loadEpisode = async () => {
-    try {
-      const ep = await getData(`episodes/${episodeId}`);
-      setEpisode(ep);
-    } catch (err) {
-      console.error('Error loading episode:', err);
-    }
-  };
-
-  const loadComments = async () => {
-    try {
-      const data = await getData(`comments?episodeId=${episodeId}`);
-      setComments(data);
-    } catch (err) {
-      console.error('Error loading comments:', err);
-    }
-  };
+    if (!episodeId || allEpisodes.length === 0) return;
+    loadEpisodeFromList();
+  }, [episodeId, allEpisodes]);
 
   const loadAllEpisodes = async () => {
     try {
-      const episodes = await getData('episodes');
+      const episodes = await getData('episodes/false');
       setAllEpisodes(episodes);
     } catch (err) {
       console.error('Error loading episodes list:', err);
     }
   };
 
-  const handleAddComment = async () => {
-    try {
-      if (!newComment.trim()) return;
-      const created = await addData('comments', {
-        body: newComment,
-        userId: user?.id,
-        episodeId,
-      });
-      setComments(prev => [...prev, created]);
-      setNewComment('');
-    } catch (err) {
-      alert(err.message);
-    }
+  const loadEpisodeFromList = () => {
+    const found = allEpisodes.find(ep => String(ep.id) === String(episodeId));
+    console.log("Episode from list:", found);
+    setEpisode(found || null);
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.main}>
-        {episode && (
-          <>
-            <img src={episode.imageUrl} alt="Episode" style={styles.image} />
-            <h2>{episode.title}</h2>
-            <p>{episode.description}</p>
-            <div style={styles.platforms}>
-              <a href={episode.spotifyLink} target="_blank" rel="noreferrer">🎧 Spotify</a>
-              <a href={episode.appleLink} target="_blank" rel="noreferrer">🍏 Apple</a>
-              <a href={episode.soundcloudLink} target="_blank" rel="noreferrer">☁️ SoundCloud</a>
-            </div>
-
-            <div style={styles.commentSection}>
-              <h3>תגובות</h3>
-              <textarea
-                value={newComment}
-                onChange={e => setNewComment(e.target.value)}
-                placeholder="כתוב תגובה..."
-                style={styles.textarea}
-              />
-              <button onClick={handleAddComment}>הוסף תגובה</button>
-              <div>
-                {comments.map(c => (
-                  <CommentItem key={c.id} comment={c} />
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      <div style={styles.sidebar}>
+    <div className="episode-container">
+      <div className="episode-sidebar">
         <h4>פרקים נוספים</h4>
-        <ul style={styles.episodeList}>
+        <ul className="episode-list">
           {allEpisodes
-            .filter(ep => ep.id !== episodeId)
+            .filter(ep => String(ep.id) !== String(episodeId))
             .map(ep => (
-              <li key={ep.id} style={styles.episodeItem}>
-                <img
-                  src={ep.imageUrl}
-                  alt="thumb"
-                  style={styles.thumb}
-                  onClick={() => window.location.href = `/episode/${ep.id}`}
-                />
+              <li key={ep.id} className="episode-item" onClick={() => window.location.href = `/episodes/${ep.id}`}>
+                <img src={ep.picture} alt={ep.title} className="episode-thumb" />
                 <p>{ep.title}</p>
               </li>
             ))}
         </ul>
       </div>
+
+      <div className="episode-main">
+        {episode ? (
+          <>
+            <img src={episode.picture} alt={episode.title} className="episode-image" />
+            <h2>{episode.title}</h2>
+            <p>{episode.body}</p>
+
+            <div className="episode-platforms">
+              {episode.spotifyLink && <a href={episode.spotifyLink} target="_blank" rel="noreferrer">🎧 Spotify</a>}
+              {episode.appleLink && <a href={episode.appleLink} target="_blank" rel="noreferrer">🍏 Apple</a>}
+              {episode.soundcloudLink && <a href={episode.soundcloudLink} target="_blank" rel="noreferrer">☁️ SoundCloud</a>}
+            </div>
+
+            <div className="episode-comments">
+              <Comments postId={Number(episodeId)} />
+            </div>
+          </>
+        ) : (
+          <p>טוען פרק...</p>
+        )}
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    gap: '20px',
-    padding: '20px',
-  },
-  main: {
-    flex: 3,
-  },
-  sidebar: {
-    flex: 1,
-    borderLeft: '1px solid #ccc',
-    paddingLeft: '15px',
-  },
-  image: {
-    width: '100%',
-    height: 'auto',
-    borderRadius: '8px',
-  },
-  platforms: {
-    display: 'flex',
-    gap: '10px',
-    marginTop: '10px',
-  },
-  commentSection: {
-    marginTop: '30px',
-  },
-  textarea: {
-    width: '100%',
-    height: '60px',
-    marginBottom: '10px',
-  },
-  episodeList: {
-    listStyle: 'none',
-    padding: 0,
-  },
-  episodeItem: {
-    cursor: 'pointer',
-    marginBottom: '10px',
-  },
-  thumb: {
-    width: '100%',
-    height: 'auto',
-    borderRadius: '5px',
-  },
-};
