@@ -19,14 +19,15 @@ export const getComments = async (episodeId) => {
 
 // הוספת תגובה
 export const addComment = async (comment) => {
-  const { body, episodeId, connectedType, connectId } = comment;
+  const { body, episodeId, connectedType, connectId, userId } = comment; // ✅ הוספנו userId
   try {
     const [result] = await pool.query(
-      'INSERT INTO comments (body, episodeId, connectedType, connectId) VALUES (?, ?, ?, ?)',
-      [body, episodeId, connectedType, connectId]
+      'INSERT INTO comments (body, episodeId, connectedType, connectId, userId) VALUES (?, ?, ?, ?, ?)',
+      [body, episodeId, connectedType, connectId, userId] // ✅ הוספנו userId לבסיס הנתונים
     );
     return result.insertId;
   } catch (error) {
+    console.error("🔴 שגיאה בהוספת תגובה:", error.message); // להדפיס את השגיאה האמיתית!
     throw new Error('שגיאה בהוספת תגובה');
   }
 };

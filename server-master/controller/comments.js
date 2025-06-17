@@ -3,10 +3,12 @@ import {
   deleteComment,
   updateComment,
   getComments,
-  getCommentById
+  getCommentById,
+  getCommentsByConnectId
 } from '../service/commentData.js';
 
-import { getepisodesByIdController } from './episodes.js';
+import { getEpisodesById } from '../service/episodesData.js';
+
 
 export class CommentController {
 
@@ -15,7 +17,7 @@ export class CommentController {
    * 📤 Response: JSON array of comments for the given episode
    */
   getAll = async (req, res) => {
-    const  episodeId  =  req.params.episodeId;
+    const episodeId = req.params.episodeId;
     console.log('Request query getAll comments:', req.query);
     console.log('episodeId:', episodeId);
     if (!episodeId) {
@@ -33,6 +35,18 @@ export class CommentController {
     }
   }
 
+  getByConnectId = async (req, res) => {
+    try {
+      const connectId = req.params.id;
+      const replies = await getCommentsByConnectId(connectId); // ← from commentData.js
+      res.json(replies);
+    } catch (err) {
+      console.error("Error in getByConnectId:", err.message);
+      res.status(500).json("שגיאה בשליפת תגובות לתגובה");
+    }
+  };
+
+
   /**
    * 📥 Body: {
    *   body: string,
@@ -45,27 +59,31 @@ export class CommentController {
    */
   add = async (req, res) => {
     try {
-      const newComment = req.body;
-      console.log('Request body הוספת תגובה:', newComment);
+      const { episodeId, body, connectedType, connectId } = req.body;
+      const userId = req.user.id;
 
-      if (
-        !newComment ||
-        !newComment.episodeId ||
-        !newComment.body ||
-        !newComment.userId
-      ) {
+      if (!episodeId || !body) {
         return res.status(400).json('נתוני תגובה חסרים או שגויים');
       }
 
-      const commentId = await addComment(newComment);
-      const created = { ...newComment, id: commentId };
+      // מוסיפים למסד את התגובה
+      const commentId = await addComment({
+        body,
+        episodeId,
+        connectedType: connectedType || 'episode',
+        connectId: connectId ?? null,
+        userId
+      });
+
+      // מחזירים ללקוח את התגובה החדשה כולל userId ו-id
+      const created = { id: commentId, episodeId, body, connectedType, connectId, userId };
       return res.status(201).json(created);
 
     } catch (error) {
-      console.error('Error in add:', error);
+      console.error('Error in add:', error.message);
       return res.status(500).json(error.message);
     }
-  }
+  };
 
   /**
    * 📥 Params: { id: number }
@@ -81,9 +99,13 @@ export class CommentController {
         return res.status(400).json('נתוני תגובה חסרים או שגויים');
       }
 
+
       const existingComment = await getCommentControlById(id);
       if (!existingComment) {
         return res.status(404).json('התגובה לא נמצאה');
+      }
+      if (existingComment.userId !== req.user.id) {
+        return res.status(403).json('אין הרשאה לעדכן תגובה זו');
       }
 
       await updateComment(id, updateData);
@@ -111,14 +133,19 @@ export class CommentController {
         return res.status(404).json('התגובה לא נמצאה');
       }
 
-      const episode = await getepisodesByIdController(commentObj.episodeId);
-      if (!episode) {
-        console.log('בעיה בשליפת episode:', commentObj.episodeId);
-        return res.status(404).json('הפרק לא נמצא');
+      try {
+        const episode = await getEpisodesById(commentObj.episodeId);
+
+        if (!episode) {
+          console.log('❗ episode לא נמצא ל־episodeId:', commentObj.episodeId);
+          return res.status(404).json('הפרק לא נמצא');
+        }
+      } catch (e) {
+        console.error('❗ שגיאה בשליפת episode:', e.message);
+        return res.status(500).json('שגיאה בשליפת פרק');
       }
 
-      if (episode.adminId !== req.user.id) {
-        console.log('אין הרשאה למחוק תגובה. משתמש:', req.user.id, 'adminId בפרק:', episode.adminId);
+      if (episode.adminId !== req.user.id && commentObj.userId !== req.user.id) {
         return res.status(403).json('אין הרשאה למחוק תגובה זו');
       }
 
@@ -151,3 +178,5 @@ async function getCommentControlById(id) {
     throw error;
   }
 }
+
+

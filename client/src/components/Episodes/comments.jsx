@@ -26,13 +26,13 @@ export default function Comments({ episodeId }) {
     if (!content) return;
 
     const payload = {
-      episodeId: episodeId,
-      userId: currentUser.id,
-      user_id: currentUser.id,
-      connectedType: "episode", // או "comment" אם זה תגובה לתגובה
-      connectId: null, // אם זה תגובה לפרק, לא צריך connectId
-      body:content
+      episodeId,
+      body: content,
+      connectedType: "episode",
+      connectId: null
     };
+
+//
 
     try {
       const added = await addData("comments", payload);

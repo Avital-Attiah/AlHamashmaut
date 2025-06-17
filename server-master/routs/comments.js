@@ -5,7 +5,9 @@ import {authenticateToken} from '../service/authMiddleware.js';
 const commentsRout=express.Router();
 const commentController=new CommentController();
 //commentsRout.get('/',authenticateToken,commentController.getAll);
+commentsRout.get('/connect/:id', commentController.getByConnectId);
 commentsRout.get('/:episodeId',commentController.getAll);
+
 commentsRout.put('/:id',authenticateToken,commentController.update);
 commentsRout.delete('/:id',authenticateToken,commentController.delete);
 commentsRout.post('/',authenticateToken,commentController.add);
