@@ -25,8 +25,17 @@ export   class episode {
   // שליפת כל הפוסטים
   getAll = async (req, res) => {
     try {
-      console.log('in get all');
-  const { isFutureInterview } = req.params;
+      console.log('in get all ');
+      // לדוגמה: /api/episodes?future=false
+
+  // const  isFutureInterview  = req.query.isFutureInterview==true;
+  // לדוגמה: /api/episodes?future=false
+
+// const isFutureInterview = req.query.isFutureInterview ; // ← ממיר את הטקסט ל־true/false אמיתי
+const isFutureInterview = req.query.isFutureInterview=='true' ;
+    console.log(typeof isFutureInterview, isFutureInterview);
+
+console.log('isFutureInterview:',isFutureInterview)
       const episodes = await getAll(isFutureInterview);
       console.log(episodes);
       res.status(200).json(episodes);

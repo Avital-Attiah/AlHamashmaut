@@ -79,7 +79,7 @@ const getData = async (endpoint) => {
   console.log('in get data');
   try {
     console.log(endpoint);
-    const token = getToken();
+    const token = getToken()||null;
     const response = await fetch(`${baseUrl}${endpoint}`, {
       headers: {
         'Authorization': `Bearer ${token}`

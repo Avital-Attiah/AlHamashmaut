@@ -4,6 +4,7 @@ import pool from './database.js';
 // פונקציה לשליפת כל הפוסטים
 export const getAll = async (isFutureInterview) => {
   try {
+    console.log(typeof isFutureInterview, isFutureInterview);
     const [rows] = await pool.query('SELECT * FROM episodes where isFutureInterview=?',[isFutureInterview]);
     return rows;
   } catch (error) {
