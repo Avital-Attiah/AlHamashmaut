@@ -97,10 +97,12 @@ const getData = async (endpoint) => {
 
 // פונקציה להחזיר את המשתמש הנוכחי
 function getCurrentUser() {
-  return JSON.parse(localStorage.getItem("currentUser"));
+  return JSON.parse(localStorage.getItem("currentUser"))||null
+  
+  ;
 }
 function getToken() {
-  return localStorage.getItem("token");
+  return localStorage.getItem("token")||null;
 }
 
 export const login = async (table = "users/login", data) => {
