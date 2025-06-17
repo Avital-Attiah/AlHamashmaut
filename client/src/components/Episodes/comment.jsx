@@ -100,9 +100,10 @@
 
 
 // components/comment.jsx
+// components/comment.jsx
 import React, { useState } from 'react';
-import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api';
-import '../../style/commentStyle.css';
+import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api'; 
+import '../../style/commentStyle.css'; 
 
 export default function Comment({ comment, onUpdate, onDelete }) {
   const currentUser = getCurrentUser();
@@ -147,10 +148,11 @@ export default function Comment({ comment, onUpdate, onDelete }) {
     };
 
     try {
+      await addData("comments", payload);
       setReplyContent("");
       setReplyMode(false);
       setShowReplies(true);
-      loadReplies(); // טען מחדש
+      loadReplies();
     } catch (err) {
       setError(err.message);
     }
@@ -170,7 +172,9 @@ export default function Comment({ comment, onUpdate, onDelete }) {
     <div className="comment-box">
       <div className="comment-header">
         <strong>{comment.username}</strong>
-        <span className="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
+        <span className="comment-date">
+          {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ""}
+        </span>
       </div>
 
       {editMode ? (
@@ -221,13 +225,15 @@ export default function Comment({ comment, onUpdate, onDelete }) {
       {showReplies && replies.length > 0 && (
         <div className="reply-list">
           {replies.map(r => (
-            <div key={r.id} className="reply-item">
-              <strong>{r.username}</strong>: {r.body}
-            </div>
+            <Comment
+              key={r.id}
+              comment={r}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
           ))}
         </div>
       )}
     </div>
   );
 }
-
