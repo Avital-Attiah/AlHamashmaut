@@ -20,7 +20,7 @@ const Login = () => {
   var islogin = await login("users/login",{email:email, password:password});
     if (islogin) {
       const user=getCurrentUser();
-      navigate(`/${user.userName}/${user.id}/home`);
+      navigate(`/${user.userName}/${user.id}`);
     } else {
       setError("אימייל או סיסמה שגויים!");
     }

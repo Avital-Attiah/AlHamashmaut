@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getCurrentUser, getData, addData, updateData, deleteData } from "../../db-api";
 import Comment from "./comment.jsx"; // הקומפוננטה הבודדת לכל תגובה
 
-export default function Comments({ postId }) {
+export default function Comments({ episodeId }) {
   const currentUser = getCurrentUser();
   const [comments, setComments] = useState([]);
   const [newContent, setNewContent] = useState("");
@@ -12,23 +12,26 @@ export default function Comments({ postId }) {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const data = await getData(`comments?post_id=${postId}`);
+        const data = await getData(`comments/${episodeId}`);
         setComments(data);
       } catch (err) {
         setError(err.message);
       }
     };
     fetchComments();
-  }, [postId]);
+  }, [episodeId]);
 
   const handleAddComment = async () => {
     const content = newContent.trim();
     if (!content) return;
 
     const payload = {
-      post_id: postId,
+      episodeId: episodeId,
+      userId: currentUser.id,
       user_id: currentUser.id,
-      content
+      connectedType: "episode", // או "comment" אם זה תגובה לתגובה
+      connectId: null, // אם זה תגובה לפרק, לא צריך connectId
+      body:content
     };
 
     try {

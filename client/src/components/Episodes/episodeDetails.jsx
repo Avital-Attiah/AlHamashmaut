@@ -99,7 +99,7 @@ export default function EpisodeDetails() {
             </div>
 
             <div className="episode-comments">
-              <Comments postId={Number(episodeId)} />
+              <Comments episodeId={Number(episodeId)} />
             </div>
           </>
         ) : (

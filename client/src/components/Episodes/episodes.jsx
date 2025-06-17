@@ -70,7 +70,7 @@
 //   );
 // }
 // episodes.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Episode from './episode.jsx';
 import { getData } from '../../db-api';
 
