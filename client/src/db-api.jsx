@@ -3,22 +3,71 @@
 const baseUrl = "http://localhost:8080/";
 
 // פונקציה להוספת נתונים
-async function addData(endpoint, data) {
-  try {
+// async function addData(endpoint, data) {
+//   try {
 
+//     const token = getToken();
+//     const response = await fetch(`${baseUrl}${endpoint}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": `Bearer ${token}`
+//       },
+//       body: JSON.stringify(data),
+//     });
+//     if (!response.ok) {
+//       const errText = await response.json();
+//       throw new Error(errText || 'שגיאה כללית');
+
+//     }
+//     return await response.json();
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+// // פונקציה גנרית לעדכון נתונים
+// async function updateData(endpoint, data) {
+//   try {
+//     console.log(endpoint);
+//     const token = getToken();
+//     console.log(token);
+//     const response = await fetch(`${baseUrl}${endpoint}`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//         'Authorization': `Bearer ${token}`
+//       },
+//       body: JSON.stringify(data),
+//     });
+//     if (!response.ok) {
+//       const errText = await response.json();
+//       throw new Error(errText || 'שגיאה כללית');
+
+//     }
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error updating data:", error);
+//     throw error;
+//   }
+// }
+
+// פונקציה להוספת נתונים שתומכת גם ב-FormData
+async function addData(endpoint, data, isFormData = false) {
+  try {
     const token = getToken();
     const response = await fetch(`${baseUrl}${endpoint}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(data),
+      body: isFormData ? data : JSON.stringify(data),
     });
+
     if (!response.ok) {
       const errText = await response.json();
       throw new Error(errText || 'שגיאה כללית');
-
     }
     return await response.json();
   } catch (error) {
@@ -26,28 +75,26 @@ async function addData(endpoint, data) {
   }
 }
 
-// פונקציה גנרית לעדכון נתונים
-async function updateData(endpoint, data) {
+// אותו דבר ל-update
+async function updateData(endpoint, data, isFormData = false) {
   try {
-    console.log(endpoint);
     const token = getToken();
-    console.log(token);
     const response = await fetch(`${baseUrl}${endpoint}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": isFormData ? "multipart/form-data" :"application/json"  }),
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(data),
+      body: isFormData ? data : JSON.stringify(data),
     });
+
     if (!response.ok) {
       const errText = await response.json();
       throw new Error(errText || 'שגיאה כללית');
-
     }
+
     return await response.json();
   } catch (error) {
-    console.error("Error updating data:", error);
     throw error;
   }
 }

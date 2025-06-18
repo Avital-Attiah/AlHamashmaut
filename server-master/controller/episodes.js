@@ -13,9 +13,9 @@ const validateEpisode = (episode, user) => {
   if (!episode.title || typeof episode.title !== "string" || episode.title.trim().length < 3) {
     errors.push("יש להזין כותרת תקינה (לפחות 3 תווים)");
   }
-  if (episode.adminId !== user.id) {
-    errors.push("אין הרשאה");
-  }
+  // if (episode.adminId !== user.id) {
+  //   errors.push("אין הרשאה");
+  // }
 console.log(errors);
   return errors;
 };
@@ -26,12 +26,7 @@ export   class episode {
   getAll = async (req, res) => {
     try {
       console.log('in get all ');
-      // לדוגמה: /api/episodes?future=false
 
-  // const  isFutureInterview  = req.query.isFutureInterview==true;
-  // לדוגמה: /api/episodes?future=false
-
-// const isFutureInterview = req.query.isFutureInterview ; // ← ממיר את הטקסט ל־true/false אמיתי
 const isFutureInterview = req.query.isFutureInterview=='true' ;
     console.log(typeof isFutureInterview, isFutureInterview);
 
@@ -64,8 +59,10 @@ console.log('isFutureInterview:',isFutureInterview)
 
   // עדכון פוסט קיים לפי ID
   updateEpisode = async (req, res) => {
+    // console.log('in update episode req\:',req);
     const { id } = req.params;
     const updatedEpisode = req.body;
+    console.log(updatedEpisode);
     const errors = validateEpisode(updatedEpisode,req.user);
 console.log('inUpdate');
     if (errors.length > 0) {

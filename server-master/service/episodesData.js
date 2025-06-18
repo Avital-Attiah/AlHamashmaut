@@ -1,53 +1,55 @@
-
 import pool from './database.js';
 
-// פונקציה לשליפת כל הפוסטים
+// שליפת כל הפוסטים
 export const getAll = async (isFutureInterview) => {
   try {
-    console.log(typeof isFutureInterview, isFutureInterview);
-    const [rows] = await pool.query('SELECT * FROM episodes where isFutureInterview=?',[isFutureInterview]);
+    const [rows] = await pool.query('SELECT * FROM episodes WHERE isFutureInterview = ?', [isFutureInterview]);
     return rows;
   } catch (error) {
     throw new Error('שגיאה בשאילתת נתונים');
   }
 };
+
+// שליפת פרק לפי מזהה
 export const getEpisodesById = async (id) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM episodes where id=?',[id]);
+    const [rows] = await pool.query('SELECT * FROM episodes WHERE id = ?', [id]);
     return rows[0];
   } catch (error) {
-    throw new Error('שגיאה בשאילתת נתונים');
+    throw new Error('שגיאה בשליפת נתונים');
   }
 };
-// פונקציה להוספת פוסט חדש
+
+// הוספת פרק חדש
 export const addEpisode = async (episode) => {
-    console.log(episode);
-  const { title , body , adminId} = post;
+  const { title, body, adminId, picture } = episode;
   try {
     const [result] = await pool.query(
-      'INSERT INTO episodes (title, body, adminId) VALUES (?, ?,?)',
-      [title, body, adminId]
+      'INSERT INTO episodes (title, body, adminId, picture) VALUES (?, ?, ?, ?)',
+      [title, body, adminId, picture]
     );
-    console.log("תוצאה מהדאטהבייס", result);
     return result.insertId;
   } catch (error) {
+    console.error(error);
     throw new Error('שגיאה בהוספת נתונים');
   }
 };
-// פונקציה לעדכון פוסט לפי ID
+
+// עדכון פרק קיים
 export const updateEpisode = async (id, episode) => {
-  const { title , body } = episode;
+  const { title, body, picture } = episode;
   try {
     const [result] = await pool.query(
-      'UPDATE episodes SET body=?, title = ?  WHERE id = ?',
-      [body,title, id]
+      'UPDATE episodes SET title = ?, body = ?, picture = ? WHERE id = ?',
+      [title, body, picture, id]
     );
     return result.affectedRows > 0;
   } catch (error) {
     throw new Error('שגיאה בעדכון נתונים');
   }
 };
-// פונקציה למחיקת פוסט לפי ID
+
+// מחיקת פרק
 export const deleteEpisode = async (id) => {
   try {
     const [result] = await pool.query('DELETE FROM episodes WHERE id = ?', [id]);

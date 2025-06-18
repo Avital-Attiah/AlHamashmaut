@@ -39,8 +39,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getData } from '../../db-api';
 import Comments from './comments.jsx';
-
-export default function EpisodeDetails() {
+import Episode from './episode.jsx';
+export default function EpisodeDetails({showComments}) {
   const { id: episodeId } = useParams();
   const [episode, setEpisode] = useState(null);
   const [allEpisodes, setAllEpisodes] = useState([]);
@@ -56,7 +56,7 @@ export default function EpisodeDetails() {
 
   const loadAllEpisodes = async () => {
     try {
-      const episodes = await getData('episodes/false');
+      const episodes = await getData( `episodes?isFutureInterview=${!showComments}`);
       setAllEpisodes(episodes);
     } catch (err) {
       console.error('Error loading episodes list:', err);
@@ -71,7 +71,7 @@ export default function EpisodeDetails() {
 
   return (
     <div className="episode-container">
-      <div className="episode-sidebar">
+      {/* <div className="episode-sidebar">
         <h4>פרקים נוספים</h4>
         <ul className="episode-list">
           {allEpisodes
@@ -83,7 +83,17 @@ export default function EpisodeDetails() {
               </li>
             ))}
         </ul>
-      </div>
+      </div> */}
+      <div className="episode-sidebar">
+  <h4>פרקים נוספים</h4>
+  <div className="episode-list">
+    {allEpisodes
+      .filter(ep => String(ep.id) !== String(episodeId))
+      .map(ep => (
+        <Episode key={ep.id} episode={ep} />
+      ))}
+  </div>
+</div>
 
       <div className="episode-main">
         {episode ? (
