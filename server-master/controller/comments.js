@@ -16,24 +16,39 @@ export class CommentController {
    * 📥 Query: { episodeId: number }
    * 📤 Response: JSON array of comments for the given episode
    */
+  // getAll = async (req, res) => {
+  //   const episodeId = req.params.episodeId;
+  //   console.log('Request query getAll comments:', req.query);
+  //   console.log('episodeId:', episodeId);
+  //   if (!episodeId) {
+  //     console.log('episodeId is missing in query');
+  //   }
+  //   try {
+  //     if (!episodeId) {
+  //       return res.status(400).json('חסר episodeId בשאילתא');
+  //     }
+  //     const response = await getComments(episodeId);
+  //     return res.json(response);
+  //   } catch (err) {
+  //     console.error('Error in getAll:', err);
+  //     return res.status(500).json(err.message);
+  //   }
+  // }
+
   getAll = async (req, res) => {
-    const episodeId = req.params.episodeId;
-    console.log('Request query getAll comments:', req.query);
-    console.log('episodeId:', episodeId);
+  const episodeId = req.params.episodeId;
+  try {
     if (!episodeId) {
-      console.log('episodeId is missing in query');
+      return res.status(400).json('חסר episodeId בשאילתא');
     }
-    try {
-      if (!episodeId) {
-        return res.status(400).json('חסר episodeId בשאילתא');
-      }
-      const response = await getComments(episodeId);
-      return res.json(response);
-    } catch (err) {
-      console.error('Error in getAll:', err);
-      return res.status(500).json(err.message);
-    }
+    const response = await getComments(episodeId);
+    return res.json(response);
+  } catch (err) {
+    console.error('Error in getAll:', err);
+    return res.status(500).json(err.message);
   }
+}
+
 
   getByConnectId = async (req, res) => {
     try {

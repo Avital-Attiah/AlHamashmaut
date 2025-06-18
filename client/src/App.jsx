@@ -8,6 +8,7 @@ import EpisodeDetails from "./components/Episodes/episodeDetails.jsx";
 import Supporters from "./components/supporters.jsx";
 import Framework from "./components/framework.jsx"; // ✅ חדש
 import EpisodeForm from "./components/Episodes/EpisodeForm.jsx";
+import Contact from "./components/contact.jsx"; // ✅ חדש
 
 
 function App() {
@@ -22,19 +23,20 @@ function App() {
         {/* דפים עם פריסת Framework */}
         <Route path="/:user?/:id?" element={<Framework />}>
           <Route index element={<Home />} />
-          
-          <Route path="episodes" element={<Episodes  showFuture={false}/>} />
+
+          <Route path="episodes" element={<Episodes showFuture={false} />} />
           {/* <Route path="episode/:id/update" element={<EpisodeForm initialData={episode} onSuccess={() => navigate( `/episodes/${id}`)} />} /> */}
           {/* <Route path="episodes/:id" element={<EpisodeDetails />} /> */}
-         
-<Route path="episode/:id/update" element={
-  <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
-} />
 
-           <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false}  />} />
+          <Route path="episode/:id/update" element={
+            <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
+          } />
+
+          <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
           <Route path="episode/:id/comment" element={<EpisodeDetails showComments={true} />} />
           <Route path="interviews" element={<Episodes showFuture={true} />} />
           <Route path="supporters" element={<Supporters />} />
+          <Route path="contact" element={<Contact />} />
           {/* אפשר להוסיף כאן גם contact בעתיד */}
         </Route>
 

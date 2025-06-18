@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getCurrentUser, getData, addData, updateData, deleteData } from "../../db-api";
 import Comment from "./comment.jsx"; // הקומפוננטה הבודדת לכל תגובה
 
-export default function Comments({ episodeId }) {
+export default function Comments({ episodeId, isInterview = false }) {
   const currentUser = getCurrentUser();
   const [comments, setComments] = useState([]);
   const [newContent, setNewContent] = useState("");
@@ -29,10 +29,12 @@ export default function Comments({ episodeId }) {
       episodeId,
       body: content,
       connectedType: "episode",
-      connectId: null
+      connectId: null,
+      isQuestion: isInterview // ✅ מוסיף שדה לשמירה במסד
     };
 
-//
+
+    //
 
     try {
       const added = await addData("comments", payload);
@@ -53,25 +55,33 @@ export default function Comments({ episodeId }) {
 
   return (
     <div>
-      <h3>תגובות</h3>
+      <h3>{isInterview ? "שאלות" : "תגובות"}</h3>
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
-      {comments.map(comment => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-        />
-      ))}
+      {comments
+        .filter(comment =>
+          comment.connectedType === 'episode' &&
+          !comment.connectId &&
+          (isInterview ? comment.isQuestion : true))
+        .map(comment => (
+
+          <Comment
+            key={comment.id}
+            comment={comment}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+          />
+        ))}
 
       <div className="add-comment">
         <textarea
-          placeholder="הזן תגובה חדשה"
+          placeholder={isInterview ? "הזן שאלה חדשה" : "הזן תגובה חדשה"}
+
           value={newContent}
           onChange={(e) => setNewContent(e.target.value)}
         />
-        <button onClick={handleAddComment}>הוסף תגובה</button>
+        <button onClick={handleAddComment}>{isInterview ? "הוסף שאלה" : "הוסף תגובה"}</button>
+
       </div>
     </div>
   );

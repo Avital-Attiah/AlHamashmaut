@@ -35,7 +35,7 @@ export const authenticateToken = (req, res, next) => {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json('טוקן לא חוקי');
+      return res.status(403).json('יש להכנס לאתר מחדש');
     }
     req.user = user;
     next();

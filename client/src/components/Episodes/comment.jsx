@@ -101,11 +101,12 @@
 
 // components/comment.jsx
 // components/comment.jsx
+// components/comment.jsx
 import React, { useState } from 'react';
 import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api'; 
 import '../../style/commentStyle.css'; 
 
-export default function Comment({ comment, onUpdate, onDelete }) {
+export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   const currentUser = getCurrentUser();
   const isOwner = currentUser?.id === comment.userId;
 
@@ -145,6 +146,7 @@ export default function Comment({ comment, onUpdate, onDelete }) {
       body,
       connectedType: "comment",
       connectId: comment.id,
+      isQuestion: !!isInterview
     };
 
     try {
@@ -204,7 +206,7 @@ export default function Comment({ comment, onUpdate, onDelete }) {
           )
         )}
         <button onClick={() => setReplyMode(!replyMode)}>
-          {replyMode ? "בטל תגובה" : "השב"}
+          {replyMode ? "בטל" : isInterview ? "השב לשאלה" : "השב"}
         </button>
         <button onClick={loadReplies}>
           {showReplies ? "הסתר תגובות" : "הצג תגובות"}
@@ -214,11 +216,11 @@ export default function Comment({ comment, onUpdate, onDelete }) {
       {replyMode && (
         <div className="reply-box">
           <textarea
-            placeholder="כתוב תגובה..."
+            placeholder={isInterview ? "הזן שאלה חדשה" : "הזן תגובה חדשה"}
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
           />
-          <button onClick={handleAddReply}>שלח</button>
+          <button onClick={handleAddReply}>{isInterview ? "הוסף שאלה" : "הוסף תגובה"}</button>
         </div>
       )}
 
@@ -230,6 +232,7 @@ export default function Comment({ comment, onUpdate, onDelete }) {
               comment={r}
               onUpdate={onUpdate}
               onDelete={onDelete}
+              isInterview={isInterview}
             />
           ))}
         </div>
@@ -237,3 +240,4 @@ export default function Comment({ comment, onUpdate, onDelete }) {
     </div>
   );
 }
+
