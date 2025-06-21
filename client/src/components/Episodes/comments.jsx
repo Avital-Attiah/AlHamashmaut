@@ -38,11 +38,12 @@ export default function Comments({ episodeId, isInterview = false }) {
 
     try {
       const added = await addData("comments", payload);
-      setComments(prev => [...prev, added]);
+      setComments(prev => [...prev, { ...added, userName: currentUser.userName }]);
       setNewContent("");
     } catch (err) {
       setError(err.message);
     }
+
   };
 
   const handleUpdate = (id, newBody) => {

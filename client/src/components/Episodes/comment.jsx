@@ -67,44 +67,9 @@
 //   );
 // }
 
-// const styles = {
-//   commentBox: {
-//     borderBottom: '1px solid #ccc',
-//     padding: '10px',
-//     marginBottom: '10px',
-//   },
-//   header: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//   },
-//   date: {
-//     fontSize: '0.8em',
-//     color: '#999',
-//   },
-//   body: {
-//     margin: '10px 0',
-//   },
-//   textArea: {
-//     width: '100%',
-//     height: '60px',
-//   },
-//   actions: {
-//     display: 'flex',
-//     gap: '10px',
-//   },
-//   error: {
-//     color: 'red',
-//     fontSize: '0.9em',
-//   },
-// };
-
-
-// components/comment.jsx
-// components/comment.jsx
-// components/comment.jsx
 import React, { useState } from 'react';
-import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api'; 
-import '../../style/commentStyle.css'; 
+import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api';
+import '../../style/commentStyle.css';
 
 export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   const currentUser = getCurrentUser();
@@ -138,6 +103,7 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   };
 
   const handleAddReply = async () => {
+
     const body = replyContent.trim();
     if (!body) return;
 
@@ -146,15 +112,17 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
       body,
       connectedType: "comment",
       connectId: comment.id,
-      isQuestion: !!isInterview
+      isQuestion: !!isInterview,
+      userId: currentUser.id
     };
 
+
     try {
-      await addData("comments", payload);
+      const added = await addData("comments", payload);
+      setReplies(prev => [...prev, { ...added, userName: currentUser.userName }]);
       setReplyContent("");
       setReplyMode(false);
       setShowReplies(true);
-      loadReplies();
     } catch (err) {
       setError(err.message);
     }
@@ -173,7 +141,7 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   return (
     <div className="comment-box">
       <div className="comment-header">
-        <strong>{comment.username}</strong>
+        <strong>{comment.userName}</strong>
         <span className="comment-date">
           {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ""}
         </span>

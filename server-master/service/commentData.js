@@ -2,14 +2,17 @@ import pool from './database.js';
 
 // שליפת תגובות
 export const getComments = async (episodeId) => {
-  try {
+   try {
     console.log('Getting comments for episodeId:', episodeId);
-    
+
     const [rows] = await pool.query(
-      'SELECT * FROM comments WHERE episodeId = ?', 
+      `SELECT c.*, u.userName 
+       FROM comments c
+       JOIN Users u ON c.userId = u.id
+       WHERE c.episodeId = ?`,
       [episodeId]
     );
-    
+
     return rows;
   } catch (error) {
     console.error('SQL Error:', error);
@@ -75,11 +78,14 @@ export const getCommentById = async (id) => {
 
 // שליפת תגובות לפי connectId (תגובות תשובות לתגובה)
 export const getCommentsByConnectId = async (connectId) => {
-  try {
+   try {
     console.log('Getting comments for connectId:', connectId);
 
     const [rows] = await pool.query(
-      'SELECT * FROM comments WHERE connectId = ?',
+      `SELECT c.*, u.userName
+       FROM comments c
+       JOIN Users u ON c.userId = u.id
+       WHERE c.connectId = ?`,
       [connectId]
     );
 
