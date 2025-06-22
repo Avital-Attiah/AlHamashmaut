@@ -36,6 +36,8 @@ export default function Framework() {
           <button onClick={() => navigate("supporters")}>תומכים מובילים</button>
           <button onClick={() => navigate("interviews")}>ראיונות עתידיים</button>
           <button onClick={() => navigate("episodes")}>פרקי הפודקאסט</button>
+          <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+
         </nav>
       </div>
 

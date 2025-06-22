@@ -22,11 +22,11 @@ export const getEpisodesById = async (id) => {
 
 // הוספת פרק חדש
 export const addEpisode = async (episode) => {
-  const { title, body, adminId, picture } = episode;
+  const { title, body, adminId, picture, isFutureInterview } = episode;
   try {
     const [result] = await pool.query(
-      'INSERT INTO episodes (title, body, adminId, picture) VALUES (?, ?, ?, ?)',
-      [title, body, adminId, picture]
+      'INSERT INTO episodes (title, body, adminId, picture, isFutureInterview) VALUES (?, ?, ?, ?, ?)',
+      [title, body, adminId, picture, isFutureInterview]
     );
     return result.insertId;
   } catch (error) {
@@ -34,6 +34,7 @@ export const addEpisode = async (episode) => {
     throw new Error('שגיאה בהוספת נתונים');
   }
 };
+
 
 // עדכון פרק קיים
 export const updateEpisode = async (id, episode) => {
