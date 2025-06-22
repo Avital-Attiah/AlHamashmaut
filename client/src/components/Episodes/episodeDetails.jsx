@@ -98,7 +98,7 @@ export default function EpisodeDetails({showComments}) {
       <div className="episode-main">
         {episode ? (
           <>
-            <img src={episode.picture} alt={episode.title} className="episode-image" />
+            <img src={`http://localhost:8080/episodes/image/${episode.picture}`} alt={episode.title} className="episode-image" />
             <h2>{episode.title}</h2>
             <p>{episode.body}</p>
 

@@ -5,6 +5,13 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+.episode-thumbnail {
+  width: 20vw;         /* 20% מרוחב המסך */
+  height: 20vw;        /* כדי לשמור על ריבוע */
+  max-width: 150px;    /* לא לחרוג מגודל */
+  max-height: 150px;
+  object-fit: cover;
+}
 
 .episodes-list {
   display: flex;
@@ -25,10 +32,7 @@
   background-color: #f0f0f0;
 }
 
-.episode-thumbnail {
-  width: 100%;
-  height: auto;
-}
+
 
 .episode-details {
   max-width: 400px;

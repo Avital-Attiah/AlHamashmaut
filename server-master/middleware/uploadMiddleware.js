@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import multer from 'multer'; // מייבא את הספרייה multer שמנהלת העלאת קבצים
 import path from 'path';     // מייבא את path לצורך טיפול בשמות נתיבים (לא חובה כאן אבל טוב שיהיה)
 
@@ -9,8 +10,10 @@ const storage = multer.diskStorage({
   },
   // מגדיר את שם הקובץ שישמר
   filename: function (req, file, cb) {
-    const uniqueName = Date.now() + '-' + file.originalname; // מוסיף timestamp כדי למנוע כפילויות
-    cb(null, uniqueName); // שולח את השם החדש
+    const filename = Date.now() + '-' + file.originalname; // מוסיף timestamp כדי למנוע כפילויות
+    cb(null, filename); // שולח את השם החדש
+    console.log("in file name");
+    console.log(filename);
   }
 });
 

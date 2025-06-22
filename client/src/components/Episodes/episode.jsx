@@ -29,7 +29,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../db-api.jsx"; // עדכן לפי מיקום הקובץ שלך
-
+import '../../style/episodeStyle.css'
 const Episode = ({ episode }) => {
   const navigate = useNavigate();
   const user = getCurrentUser();
@@ -52,7 +52,7 @@ const Episode = ({ episode }) => {
 
   return (
     <div className="episode-card" onClick={handleCardClick}>
-      {picture && <img src={picture} alt={title} className="episode-thumbnail" />}
+      {picture && <img src={`http://localhost:8080/episodes/image/${episode.picture}`} alt={title} className="episode-thumbnail" />}
       <h3>{title}</h3>
       <p>{body.slice(0, 100)}...</p>
 
