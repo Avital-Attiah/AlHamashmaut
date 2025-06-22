@@ -33,17 +33,22 @@
 // };
 
 // export default EpisodeDetails;
-import '../../style/episodeDetailsStyle.css';
 // episodeDetails.jsx
+// episodeDetails.jsx
+import '../../style/episodeDetailsStyle.css';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getData } from '../../db-api';
 import Comments from './comments.jsx';
 import Episode from './episode.jsx';
-export default function EpisodeDetails({showComments}) {
-  const { id: episodeId } = useParams();
+
+export default function EpisodeDetails({ id, showComments }) {
+  const episodeId = id ?? useParams().id;
   const [episode, setEpisode] = useState(null);
   const [allEpisodes, setAllEpisodes] = useState([]);
+  const navigate = useNavigate();
+
+  const isAdminPage = window.location.pathname.includes('/admin');
 
   useEffect(() => {
     loadAllEpisodes();
@@ -56,7 +61,7 @@ export default function EpisodeDetails({showComments}) {
 
   const loadAllEpisodes = async () => {
     try {
-      const episodes = await getData( `episodes?isFutureInterview=${!showComments}`);
+      const episodes = await getData(`episodes?isFutureInterview=${!showComments}`);
       setAllEpisodes(episodes);
     } catch (err) {
       console.error('Error loading episodes list:', err);
@@ -65,35 +70,23 @@ export default function EpisodeDetails({showComments}) {
 
   const loadEpisodeFromList = () => {
     const found = allEpisodes.find(ep => String(ep.id) === String(episodeId));
-    console.log("Episode from list:", found);
     setEpisode(found || null);
   };
 
   return (
     <div className="episode-container">
-      {/* <div className="episode-sidebar">
-        <h4>פרקים נוספים</h4>
-        <ul className="episode-list">
-          {allEpisodes
-            .filter(ep => String(ep.id) !== String(episodeId))
-            .map(ep => (
-              <li key={ep.id} className="episode-item" onClick={() => window.location.href = `/episodes/${ep.id}`}>
-                <img src={ep.picture} alt={ep.title} className="episode-thumb" />
-                <p>{ep.title}</p>
-              </li>
-            ))}
-        </ul>
-      </div> */}
-      <div className="episode-sidebar">
-  <h4>פרקים נוספים</h4>
-  <div className="episode-list">
-    {allEpisodes
-      .filter(ep => String(ep.id) !== String(episodeId))
-      .map(ep => (
-        <Episode key={ep.id} episode={ep} />
-      ))}
-  </div>
-</div>
+      {!isAdminPage && (
+        <div className="episode-sidebar">
+          <h4>{episode && episode.isFutureInterview ? "ראיונות עתידיים נוספים" : "פרקים נוספים"}</h4>
+          <div className="episode-list">
+            {allEpisodes
+              .filter(ep => String(ep.id) !== String(episodeId))
+              .map(ep => (
+                <Episode key={ep.id} episode={ep} />
+              ))}
+          </div>
+        </div>
+      )}
 
       <div className="episode-main">
         {episode ? (
@@ -109,8 +102,14 @@ export default function EpisodeDetails({showComments}) {
             </div>
 
             <div className="episode-comments">
-              <Comments episodeId={Number(episodeId)} />
+              <Comments episodeId={Number(episodeId)} isInterview={episode.isFutureInterview} />
             </div>
+
+            {isAdminPage && (
+              <div style={{ marginTop: '1rem' }}>
+                <button onClick={() => navigate(`/episode/form/${episode.id}`)}>עדכן פרק</button>
+              </div>
+            )}
           </>
         ) : (
           <p>טוען פרק...</p>

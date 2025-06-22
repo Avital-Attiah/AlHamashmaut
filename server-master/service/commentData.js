@@ -2,14 +2,17 @@ import pool from './database.js';
 
 // שליפת תגובות
 export const getComments = async (episodeId) => {
-  try {
+   try {
     console.log('Getting comments for episodeId:', episodeId);
-    
+
     const [rows] = await pool.query(
-      'SELECT * FROM comments WHERE episodeId = ?', 
+      `SELECT c.*, u.userName 
+       FROM comments c
+       JOIN Users u ON c.userId = u.id
+       WHERE c.episodeId = ?`,
       [episodeId]
     );
-    
+
     return rows;
   } catch (error) {
     console.error('SQL Error:', error);
@@ -19,15 +22,15 @@ export const getComments = async (episodeId) => {
 
 // הוספת תגובה
 export const addComment = async (comment) => {
-  const { body, episodeId, connectedType, connectId, userId } = comment; // ✅ הוספנו userId
+  const { body, episodeId, connectedType, connectId, userId, isQuestion = false } = comment;
   try {
     const [result] = await pool.query(
-      'INSERT INTO comments (body, episodeId, connectedType, connectId, userId) VALUES (?, ?, ?, ?, ?)',
-      [body, episodeId, connectedType, connectId, userId] // ✅ הוספנו userId לבסיס הנתונים
+      'INSERT INTO comments (body, episodeId, connectedType, connectId, userId, isQuestion) VALUES (?, ?, ?, ?, ?, ?)',
+      [body, episodeId, connectedType, connectId, userId, isQuestion]
     );
     return result.insertId;
   } catch (error) {
-    console.error("🔴 שגיאה בהוספת תגובה:", error.message); // להדפיס את השגיאה האמיתית!
+    console.error("🔴 שגיאה בהוספת תגובה:", error.message);
     throw new Error('שגיאה בהוספת תגובה');
   }
 };
@@ -75,11 +78,14 @@ export const getCommentById = async (id) => {
 
 // שליפת תגובות לפי connectId (תגובות תשובות לתגובה)
 export const getCommentsByConnectId = async (connectId) => {
-  try {
+   try {
     console.log('Getting comments for connectId:', connectId);
 
     const [rows] = await pool.query(
-      'SELECT * FROM comments WHERE connectId = ?',
+      `SELECT c.*, u.userName
+       FROM comments c
+       JOIN Users u ON c.userId = u.id
+       WHERE c.connectId = ?`,
       [connectId]
     );
 

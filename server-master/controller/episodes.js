@@ -311,7 +311,7 @@ export const getepisodesByIdController = async (req, res) => {
   const { id } = req.params;
   try {
     const episode = await getEpisodesById(id);
-    res.status(200).json([episode]);
+    res.status(200).json(episode);
   } catch (error) {
     res.status(500).json("שגיאה בשליפת הפוסט");
   }
