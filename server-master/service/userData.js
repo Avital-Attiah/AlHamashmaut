@@ -31,7 +31,8 @@ export const getUserByEmail = async (email) => {
         Users.userName,
         Users.email,
         UserTypes.type AS userType,
-        Passwords.passwordHash
+        Passwords.passwordHash AS passwordHash
+
       FROM Users
       JOIN UserTypes ON Users.userType = UserTypes.id
       JOIN Passwords ON Users.id = Passwords.userId
@@ -173,8 +174,8 @@ export const deleteUser = async (id) => {
 
 export const addPassword = async (userId, plainPassword) => {
   try {
-    
-  
+
+
 
     const [result] = await pool.query(
       'INSERT INTO Passwords (userId, passwordHash) VALUES (?, ?)', // התאמה לשמות בטבלה

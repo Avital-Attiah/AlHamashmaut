@@ -52,9 +52,10 @@ export default function AllUsersPage() {
             <tr key={u.id}>
               <td>{u.userName}</td>
               <td>{u.email}</td>
-              <td>{u.userType === 1 ? "מנהל" : "מנוי"}</td>
+              <td><td>{u.userType === "מנהל" ? "מנהל" : "מנוי"}</td></td>
               <td>
-                {u.userType !== 1 && <button onClick={() => promoteToAdmin(u.id)}>הפוך למנהל</button>}
+                {u.userType !== "מנהל" && <button onClick={() => promoteToAdmin(u.id)}>הפוך למנהל</button>}
+
                 <button onClick={() => removeUser(u.id)}>מחק</button>
               </td>
             </tr>

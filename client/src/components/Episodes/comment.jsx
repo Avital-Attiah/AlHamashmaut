@@ -119,7 +119,15 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
 
     try {
       const added = await addData("comments", payload);
-      setReplies(prev => [...prev, { ...added, userName: currentUser.userName }]);
+      setReplies(prev => [
+        ...prev,
+        {
+          ...added,
+          userName: currentUser.userName,
+          userType: currentUser.userType // ✨ מוסיף את הסוג של המשתמש
+        }
+      ]);
+
       setReplyContent("");
       setReplyMode(false);
       setShowReplies(true);
@@ -141,7 +149,10 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   return (
     <div className="comment-box">
       <div className="comment-header">
-        <strong>{comment.userName}</strong>
+        <strong>
+          {comment.userType === "מנהל" ? "🤴🏼 " : ""}
+          {comment.userName}
+        </strong>
         <span className="comment-date">
           {comment.createdAt ? new Date(comment.createdAt).toLocaleString() : ""}
         </span>
@@ -173,15 +184,17 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
             </>
           )
         )}
-        <button onClick={() => setReplyMode(!replyMode)}>
-          {replyMode ? "בטל" : isInterview ? "השב לשאלה" : "השב"}
-        </button>
+        {currentUser && (
+          <button onClick={() => setReplyMode(!replyMode)}>
+            {replyMode ? "בטל" : isInterview ? "השב לשאלה" : "השב"}
+          </button>
+        )}
         <button onClick={loadReplies}>
           {showReplies ? "הסתר תגובות" : "הצג תגובות"}
         </button>
       </div>
 
-      {replyMode && (
+      {replyMode && currentUser && (
         <div className="reply-box">
           <textarea
             placeholder={isInterview ? "הזן שאלה חדשה" : "הזן תגובה חדשה"}
@@ -191,6 +204,12 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
           <button onClick={handleAddReply}>{isInterview ? "הוסף שאלה" : "הוסף תגובה"}</button>
         </div>
       )}
+      {replyMode && !currentUser && (
+        <p className="comment-warning">
+          🛈 התחברות נדרשת כדי להשיב לתגובה זו.
+        </p>
+      )}
+
 
       {showReplies && replies.length > 0 && (
         <div className="reply-list">

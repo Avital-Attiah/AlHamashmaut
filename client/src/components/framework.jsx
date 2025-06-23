@@ -17,7 +17,7 @@ export default function Framework() {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("token");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -32,11 +32,30 @@ export default function Framework() {
 
       <div className="main-nav">
         <nav className="home-nav">
+          <button onClick={() => {
+            navigate("/");
+            setTimeout(() => {
+              const section = document.getElementById("about");
+              section?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+          }}>אודות</button>
+
+          <button onClick={() => {
+            navigate("/"); // ודאי שאת בדף הבית
+            setTimeout(() => {
+              const section = document.getElementById("vision");
+              section?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+          }}>חזון</button>
+
           <button onClick={() => navigate("contact")}>צור קשר</button>
           <button onClick={() => navigate("supporters")}>תומכים מובילים</button>
           <button onClick={() => navigate("interviews")}>ראיונות עתידיים</button>
           <button onClick={() => navigate("episodes")}>פרקי הפודקאסט</button>
-          <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+          {user?.userType === "מנהל" && (
+            <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+          )}
+
 
         </nav>
       </div>
@@ -45,16 +64,16 @@ export default function Framework() {
 
       <div className="social-links">
         <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
-          <img src="/icons/x.svg" alt="X" />
+          <img src="/icons/x.png" alt="X" />
         </a>
         <a href="https://www.instagram.com/tamirdortal/" target="_blank" rel="noreferrer">
-          <img src="/icons/instagram.svg" alt="Instagram" />
+          <img src="/icons/instagram.png" alt="Instagram" />
         </a>
         <a href="https://www.youtube.com/@alhamashmaut" target="_blank" rel="noreferrer">
-          <img src="/icons/youtube.svg" alt="YouTube" />
+          <img src="/icons/youtube.png" alt="YouTube" />
         </a>
         <a href="#" title="ספוטיפיי (בקרוב)">
-          <img src="/icons/spotify.svg" alt="Spotify" />
+          <img src="/icons/spotify.png" alt="Spotify" />
         </a>
       </div>
     </div>
