@@ -29,14 +29,18 @@ function App() {
         <Route path="/admin/allUsers" element={<AllUsers />} />
         <Route path="/admin/allEpisodes" element={<AllEpisodes />} />
         <Route path="/admin/allFutureInterviews" element={<AllFutureInterviews />} />
-        <Route path="/episode/new" element={<AddEditEpisode />} />
+        {/* <Route path="/episode/new" element={<AddEditEpisode />} />
         <Route path="/episode/form" element={<AddEditEpisode />} />
         <Route path="/episode/form/future" element={<AddEditEpisode />} />
-        <Route path="/episode/form/:id" element={<AddEditEpisode />} />
+        <Route path="/episode/form/:id" element={<AddEditEpisode />} /> */}
 
+    <Route path="/admin/episode/new" element={
+            <EpisodeForm newInterview={false}  />
+          } />
 
-
-
+ <Route path="/admin/interview/new" element={
+            <EpisodeForm newInterview={true}/>
+          } />
         {/* דפים עם פריסת Framework */}
         <Route path="/:user?/:id?" element={<Framework />}>
           <Route index element={<Home />} />
@@ -57,9 +61,7 @@ function App() {
           <Route path="episode/:id/update" element={
             <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
           } />
-          <Route path="episode/new" element={
-            <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
-          } />
+      
           <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
           <Route path="episode/:id/comment" element={<EpisodeDetails showComments={true} />} />
           <Route path="interviews" element={<Episodes showFuture={true} />} />

@@ -63,15 +63,15 @@ export default function Episodes({ showFuture }) {
     fetchEpisodes();
   }, [showFuture]);
 
-  const handleAddEpisode = () => {
-   navigate(`/episode/new`, { state: {  } });// הנתיב שאליו מוביל כפתור ההוספה
-  };
+  // const handleAddEpisode = () => {
+  //  navigate(`/episode/new`, { state: {  } });// הנתיב שאליו מוביל כפתור ההוספה
+  // };
 
   return (
     <div className="podcasts-page" dir="rtl" style={{ padding: '1rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
-        <button
+        {/* <button
           onClick={handleAddEpisode}
           style={{
             padding: '0.5rem 1rem',
@@ -83,7 +83,7 @@ export default function Episodes({ showFuture }) {
           }}
         >
           ➕ הוסף פרק
-        </button>
+        </button> */}
       </div>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}

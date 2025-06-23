@@ -107,7 +107,7 @@ export default function EpisodeDetails({ id, showComments }) {
 
             {isAdminPage && (
               <div style={{ marginTop: '1rem' }}>
-                <button onClick={() => navigate(`/episode/form/${episode.id}`)}>עדכן פרק</button>
+                <button onClick={() => {navigate(`/episode/${id}/update`, { state: { episode } });}}>עדכן פרק</button>
               </div>
             )}
           </>

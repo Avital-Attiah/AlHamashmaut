@@ -26,7 +26,7 @@ export default function AllFutureInterviews() {
   return (
     <div className="admin-section">
       <h2>ראיונות עתידיים</h2>
-      <button onClick={() => navigate("/episode/new/future")}>➕ הוסף ראיון עתידי</button>
+      <button onClick={() => navigate("/admin/interview/new")}>➕ הוסף ראיון עתידי</button>
       {error && <p className="error">{error}</p>}
 
       <div style={{ display: "flex" }}>

@@ -43,12 +43,12 @@ const Episode = ({ episode }) => {
       navigate(`/episode/${id}/comment`);
   };
 
-  const handleUpdateClick = (e) => {
-    e.stopPropagation(); // מונע מעבר לדף הצפייה בפרק
-    // navigate(`/episode/${id}/update`);
-    navigate(`/episode/${id}/update`, { state: { episode } });
+  // const handleUpdateClick = (e) => {
+  //   e.stopPropagation(); // מונע מעבר לדף הצפייה בפרק
+  //   // navigate(`/episode/${id}/update`);
+  //   navigate(`/episode/${id}/update`, { state: { episode } });
 
-  };
+  // };
 
   return (
     <div className="episode-card" onClick={handleCardClick}>
@@ -57,7 +57,7 @@ const Episode = ({ episode }) => {
       <p>{body.slice(0, 100)}...</p>
 
       {/* {user?.userType === "admin" && ( */}
-        <button
+        {/* <button
           onClick={handleUpdateClick}
           className="update-button"
           style={{
@@ -71,7 +71,7 @@ const Episode = ({ episode }) => {
           }}
         >
           עדכן
-        </button>
+        </button> */}
       {/* )} */}
     </div>
   );

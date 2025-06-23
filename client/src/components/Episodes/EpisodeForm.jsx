@@ -2,19 +2,21 @@
 // import { useState } from "react";
 // import { addData, updateData, getCurrentUser } from "../../db-api";
 // import { useLocation } from "react-router-dom";
-// import "../../style/episodeForm.css"; // חשוב! לוודא שהקובץ נמצא באותה תיקייה
+// import "../../style/episodeForm.css";
 
-
-
-// export default function EpisodeForm({ onSuccess }) {
+// export default function EpisodeForm({ onSuccess  , newInterview}) {
 //   const location = useLocation();
-//   const episode = location?.state?.episode||null;
+//   const episode = location?.state?.episode || null;
+  
 //   const id = episode?.id;
 
 //   const [title, setTitle] = useState(episode?.title || "");
 //   const [body, setBody] = useState(episode?.body || "");
 //   const [picture, setPicture] = useState(null);
 //   const [previewUrl, setPreviewUrl] = useState(null);
+//   const [isFutureInterview, setIsFutureInterview] = useState(
+//     episode?.isFutureInterview || false
+//   );
 //   const [error, setError] = useState(null);
 
 //   const isEditMode = Boolean(episode);
@@ -27,6 +29,7 @@
 //     formData.append("title", title.trim());
 //     formData.append("body", body.trim());
 //     formData.append("adminId", getCurrentUser()?.id || episode?.adminId || 1);
+//     formData.append("isFutureInterview", isFutureInterview);
 
 //     if (picture) {
 //       formData.append("picture", picture);
@@ -79,9 +82,10 @@
 //         required
 //       />
 
-//       <label>בחרי תמונה:</label>
+//       <label>תמונה:</label>
 //       <input type="file" accept="image/*" onChange={handlePictureChange} />
 
+//       {/* תצוגת תמונה */}
 //       {previewUrl && (
 //         <>
 //           <label>תצוגה מקדימה:</label>
@@ -99,6 +103,17 @@
 //         </>
 //       )}
 
+//       {/* שדה isFutureInterview */}
+//       <label>
+//         <input
+//           type="checkbox"
+//           checked={isFutureInterview}
+//           onChange={(e) => setIsFutureInterview(e.target.checked)}
+//           disabled={isEditMode} // רק בהוספה אפשר לשנות
+//         />{" "}
+//         האם מדובר בראיון עתידי?
+//       </label>
+
 //       {error && <div className="error">{error}</div>}
 
 //       <button type="submit">{isEditMode ? "עדכן" : "שמור"}</button>
@@ -108,23 +123,26 @@
 import { useState } from "react";
 import { addData, updateData, getCurrentUser } from "../../db-api";
 import { useLocation } from "react-router-dom";
+import {  useNavigate } from 'react-router-dom';
+
 import "../../style/episodeForm.css";
 
-export default function EpisodeForm({ onSuccess }) {
+export default function EpisodeForm({ onSuccess, newInterview }) {
   const location = useLocation();
   const episode = location?.state?.episode || null;
   const id = episode?.id;
+  const navigate=useNavigate();
 
+  const isEditMode = Boolean(episode);
   const [title, setTitle] = useState(episode?.title || "");
   const [body, setBody] = useState(episode?.body || "");
   const [picture, setPicture] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [isFutureInterview, setIsFutureInterview] = useState(
-    episode?.isFutureInterview || false
-  );
   const [error, setError] = useState(null);
 
-  const isEditMode = Boolean(episode);
+  const [isFutureInterview, setIsFutureInterview] = useState(
+    isEditMode ? episode?.isFutureInterview || false : newInterview || false
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -148,7 +166,7 @@ export default function EpisodeForm({ onSuccess }) {
       } else {
         await addData("episodes", formData, true);
       }
-      if (onSuccess) onSuccess();
+      if (onSuccess) navigate(-1);
     } catch (err) {
       setError(err.message || "שגיאה");
     }
@@ -190,7 +208,6 @@ export default function EpisodeForm({ onSuccess }) {
       <label>תמונה:</label>
       <input type="file" accept="image/*" onChange={handlePictureChange} />
 
-      {/* תצוגת תמונה */}
       {previewUrl && (
         <>
           <label>תצוגה מקדימה:</label>
@@ -208,16 +225,17 @@ export default function EpisodeForm({ onSuccess }) {
         </>
       )}
 
-      {/* שדה isFutureInterview */}
-      <label>
-        <input
-          type="checkbox"
-          checked={isFutureInterview}
-          onChange={(e) => setIsFutureInterview(e.target.checked)}
-          disabled={isEditMode} // רק בהוספה אפשר לשנות
-        />{" "}
-        האם מדובר בראיון עתידי?
-      </label>
+      {/* ✅ הצגת צ'קבוקס רק אם מדובר בפרק עתידי בעדכון */}
+      {isEditMode && episode?.isFutureInterview && (
+        <label>
+          <input
+            type="checkbox"
+            checked={isFutureInterview}
+            onChange={(e) => setIsFutureInterview(e.target.checked)}
+          />{" "}
+          האם מדובר בראיון עתידי?
+        </label>
+      )}
 
       {error && <div className="error">{error}</div>}
 
