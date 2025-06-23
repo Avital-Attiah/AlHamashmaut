@@ -25,10 +25,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/admin" element={<AdminPage />} />
+        {/* <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/allUsers" element={<AllUsers />} />
         <Route path="/admin/allEpisodes" element={<AllEpisodes />} />
-        <Route path="/admin/allFutureInterviews" element={<AllFutureInterviews />} />
+        <Route path="/admin/allFutureInterviews" element={<AllFutureInterviews />} /> */}
         {/* <Route path="/episode/new" element={<AddEditEpisode />} />
         <Route path="/episode/form" element={<AddEditEpisode />} />
         <Route path="/episode/form/future" element={<AddEditEpisode />} />
@@ -41,17 +41,27 @@ function App() {
  <Route path="/admin/interview/new" element={
             <EpisodeForm newInterview={true}/>
           } />
+
         {/* דפים עם פריסת Framework */}
         <Route path="/:user?/:id?" element={<Framework />}>
           <Route index element={<Home />} />
 
           <Route path="episodes" element={<Episodes showFuture={false} />} />
           <Route path="home" index element={<Home />} />
+  <Route path="admin" element={<AdminPage />} >
+   <Route path="allUsers" element={<AllUsers />} />
+        <Route path="allEpisodes" element={<AllEpisodes />} />
+        <Route path="allFutureInterviews" element={<AllFutureInterviews />} />
+        <Route path="allEpisodes/episode/new" element={
+            <EpisodeForm newInterview={false}  />
+          } />
 
+ <Route path="allFutureInterviews/interview/new" element={
+            <EpisodeForm newInterview={true}/>
+          } />
+          </Route>
           <Route path="episodes" element={<Episodes showFuture={false} />} />
-          {/* <Route path="episode/:id/update" element={<EpisodeForm initialData={episode} onSuccess={() => navigate( `/episodes/${id}`)} />} /> */}
-          {/* <Route path="episodes/:id" element={<EpisodeDetails />} /> */}
-
+    
           <Route path="episode/:id/update" element={
             <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
           } />

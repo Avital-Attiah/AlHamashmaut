@@ -27,7 +27,7 @@ export default function AllEpisodes() {
   return (
     <div className="admin-section">
       <h2>כל הפרקים</h2>
-      <button onClick={() => navigate("/admin/episode/new")}>➕הוסף פרק</button>
+      <button onClick={() => navigate("episode/new")}>➕הוסף פרק</button>
       {error && <p className="error">{error}</p>}
 
       <div style={{ display: "flex" }}>

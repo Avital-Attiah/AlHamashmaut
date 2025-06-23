@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import {Outlet, useNavigate } from "react-router-dom";
 
 
 export default function AdminPage() {
@@ -10,11 +10,13 @@ export default function AdminPage() {
             <h1>ברוך הבא לממשק הניהול</h1>
 
             <div className="admin-buttons">
-                <button onClick={() => navigate("/admin/allUsers")}>הצגת כל המשתמשים</button>
-                <button onClick={() => navigate("/admin/allEpisodes")}>פרקים</button>
-                <button onClick={() => navigate("/admin/allFutureInterviews")}>ראיונות עתידיים</button>
+                <button onClick={() => navigate("allUsers")}>הצגת כל המשתמשים</button>
+                <button onClick={() => navigate("allEpisodes")}>פרקים</button>
+                <button onClick={() => navigate("allFutureInterviews")}>ראיונות עתידיים</button>
 
             </div>
+               <Outlet />
         </div>
+        
     );
 }
