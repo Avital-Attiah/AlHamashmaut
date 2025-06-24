@@ -13,6 +13,8 @@ import AdminPage from "./components/Admin/adminPage.jsx";
 import AllUsers from "./components/Admin/allUsers.jsx";
 import AllEpisodes from "./components/Admin/allEpisodes.jsx";
 import AllFutureInterviews from "./components/Admin/allFutureInterviews.jsx"; // ✅ חדש
+import ProfilePage from "./components/Personal/ProfilePage.jsx";
+import MessagesPage from "./components/Personal/MessagesPage.jsx";
 import AddEditEpisode from "./components/Admin/addEditEpisode.jsx"; // ✅ חדש
 
 
@@ -78,6 +80,8 @@ function App() {
           <Route path="supporters" element={<Supporters />} />
           <Route path="contact" element={<Contact />} />
           {/* אפשר להוסיף כאן גם contact בעתיד */}
+           <Route path="profile" element={<ProfilePage />} />
+  <Route path="messages" element={<MessagesPage />} />
         </Route>
 
         {/* דף שגיאה */}

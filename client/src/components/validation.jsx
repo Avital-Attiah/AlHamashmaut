@@ -1,4 +1,4 @@
-function isAdmin (){
-    if()
-}
-const onlyManger
+// function isAdmin (){
+//     if()
+// }
+// const onlyManger

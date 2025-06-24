@@ -5,7 +5,8 @@ import {
   deleteUser,
   updateUser,
   getUserByEmail,
-  verifyPassword
+  verifyPassword,
+  getUserById
 } from '../service/userData.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -59,7 +60,18 @@ export class user {
       res.status(500).json({ message: "שגיאה בעת שליפת המשתמשים" });
     }
   };
+getUserDetailes=async (req,res)=>{
+  const { id } = req.params;
+  console.log('in getUserDetailes id is:',id)
 
+    try {
+      const user = await getUserById(id);
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json("שגיאה בשליפת פרטי המשתמש");
+    }
+}
+  
   login = async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -109,6 +121,9 @@ export class user {
         const authorized = await verifyPassword(id, lastPassword);
         if (!authorized) return res.status(401).json({ message: 'סיסמה נוכחית שגויה' });
       }
+      if (req.file) {
+        req.body.profilePic = `${req.file.filename}`;
+      }
 
       await updateUser(id, req.body);
       res.status(200).json({ message: 'המשתמש עודכן בהצלחה' });
@@ -136,6 +151,7 @@ export class user {
       const passwordHash = await bcrypt.hash(newUser.password, 10);
       const userToSave = {
         ...newUser,
+        profilePic: req.file ? req.file.filename : null,
         passwordHash,
         userType: 2
       };

@@ -40,6 +40,12 @@ export default function Framework() {
 
         </nav>
       </div>
+{user &&
+  <div className="user-menu">
+    <button onClick={() => navigate("profile")}>🧍 פרופיל אישי</button>
+    <button onClick={() => navigate("messages")}>🔔 התראות</button>
+  </div>
+}
 
       <Outlet />
 
