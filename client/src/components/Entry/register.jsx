@@ -75,7 +75,7 @@ const Register = () => {
       await newUser("users/new", { userName, email, password });
       const user = getCurrentUser();
       if (user) {
-        navigate(`/${user.userName}/${user.id}/home`);
+        navigate(`/`);
       } else {
         setGeneralError("שגיאה באימות המשתמש לאחר הרישום");
       }
