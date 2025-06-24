@@ -255,7 +255,8 @@ export const getUserByEmail = async (email) => {
         Users.email,
         Users.profilePic,
         UserTypes.type AS userType,
-        Passwords.passwordHash
+        Passwords.passwordHash AS passwordHash
+
       FROM Users
       JOIN UserTypes ON Users.userType = UserTypes.id
       JOIN Passwords ON Users.id = Passwords.userId

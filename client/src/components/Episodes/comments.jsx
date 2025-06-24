@@ -38,7 +38,15 @@ export default function Comments({ episodeId, isInterview = false }) {
 
     try {
       const added = await addData("comments", payload);
-      setComments(prev => [...prev, { ...added, userName: currentUser.userName }]);
+      setComments(prev => [
+        ...prev,
+        {
+          ...added,
+          userName: currentUser.userName,
+          userType: currentUser.userType // מוסיף את הסוג - "מנהל" או "מנוי"
+        }
+      ]);
+
       setNewContent("");
     } catch (err) {
       setError(err.message);
@@ -74,16 +82,26 @@ export default function Comments({ episodeId, isInterview = false }) {
           />
         ))}
 
-      <div className="add-comment">
-        <textarea
-          placeholder={isInterview ? "הזן שאלה חדשה" : "הזן תגובה חדשה"}
+      {currentUser ? (
+        <div className="add-comment">
+          <textarea
+            placeholder={isInterview ? "הזן שאלה חדשה" : "כתוב תגובה"}
+            value={newContent}
+            onChange={(e) => setNewContent(e.target.value)}
+          />
 
-          value={newContent}
-          onChange={(e) => setNewContent(e.target.value)}
-        />
-        <button onClick={handleAddComment}>{isInterview ? "הוסף שאלה" : "הוסף תגובה"}</button>
+          <button onClick={handleAddComment}>
+            {isInterview ? "הוסף שאלה" : "הוסף תגובה"}
+          </button>
+        </div>
+      ) : (
+        <p className="comment-warning">
+          🛈 רק משתמשים מחוברים יכולים להוסיף {isInterview ? "שאלות" : "תגובות"}.
+          <br />
+          <strong>התחבר כדי להשתתף בדיון!</strong>
+        </p>
+      )}
 
-      </div>
     </div>
   );
 }

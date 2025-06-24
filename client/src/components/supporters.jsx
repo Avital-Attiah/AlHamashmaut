@@ -4,10 +4,10 @@ import "../style/supportersStyle.css"; // Assuming you have a CSS file for styli
 import React from "react";
 
 const supportersData = [
-  { id: 1, name: "אהרון דייזמן", text: "אהרון הוא..." },
-  { id: 2, name: "תפארת סלומון-סדן", text: "תפארת היא..." },
-  { id: 3, name: "אסף לכט", text: "אסף הוא..." },
-  { id: 4, name: "יונתן קרמר", text: "יונתן הוא..." },
+  { id: 1, name: "אהרון דייזמן", text: "אהרון הוא מנהל קהילות אזורי באחוות תורה, עבד כמרכז פרוייקטים באגודה אחת ובעמותת עלם", Image: "/images/support1.png" },
+  { id: 2, name: "תפארת סלומון-סדן", text: "תפארת היא מנהלת קהילות אזורית באחוות תורה, עוסקת בהדרכת נוער ומובילה פרויקטים חברתיים", Image: "/images/support2.png" },
+  { id: 3, name: "אסף לכט", text: "אסף הוא תורם ומוביל דעת קהל", Image: "/images/support3.png" },
+  { id: 4, name: "יונתן קרמר", text: " יונתן תורם לפודקאסט, אחראי על פיתוח ותחזוקת האתר והרשתות החברתיות ", Image: "/images/support4.png" },
 ];
 
 const Supporters = () => {
@@ -22,31 +22,19 @@ const Supporters = () => {
     <div className="supporters-container">
       <h1 className="title">תומכים מובילים</h1>
 
-      {/* סרגל ניווט מתחת לכותרת */}
-      <div className="top-nav">
-        <a href="/#vision">חזון</a>|
-        <a href="/#contact">צור קשר</a>|
-        <a href="/supporters">תומכים מובילים</a>|
-        <a href="/#future-interviews">ראיונות עתידיים</a>|
-        <a href="/#podcasts">פודקאסטים שלנו</a>
-      </div>
-
-      {/* כפתור חזרה לעמוד הבית */}
-      <div className="back-button">
-        <button onClick={() => navigate("/")}>חזרה לעמוד הבית</button>
-      </div>
 
       {/* תצוגת תומכים */}
       <div className="supporters-list">
         {supportersData.map((s) => (
           <div key={s.id} className="supporter-card" onClick={() => toggleSupporter(s.id)}>
-            <div className="supporter-image">תמונה</div>
+            <img className="supporter-image" src={s.Image} alt={s.name} />
             <div className="supporter-name">{s.name}</div>
             {openSupporterId === s.id && (
               <div className="supporter-text">{s.text}</div>
             )}
           </div>
         ))}
+
       </div>
 
       {/* תיאור המסלולים */}
@@ -74,7 +62,7 @@ const Supporters = () => {
               <li>הזמנת מרואיינים ופודקאסטים מיוחדים</li>
               <li>השפעה על אילו פרקים יצאו קודם</li>
               <li>כניסה לקבוצת המתחזקים והשותפים והשפעה על קבלת החלטות</li>
-              <li>השתתפות באריונות מאחורי הקלעים ומפגש עם מרואיינים אף דה קוד</li>
+              <li>השתתפות בראיונות מאחורי הקלעים ומפגש עם מרואיינים אף דה קוד</li>
             </ul>
             <a href="https://www.peach-in.com/cmp/roIbvgwn8?ref=EzJ12che&lang=he" target="_blank" rel="noreferrer">
               <button>בחירה</button>
@@ -99,23 +87,10 @@ const Supporters = () => {
           <button>הפכו לתורמים מובילים</button>
         </a>
       </div>
-      <div className="social-links">
-  <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
-    <img src="/icons/x.svg" alt="X" />
-  </a>
-  <a href="https://www.instagram.com/tamirdortal/" target="_blank" rel="noreferrer">
-    <img src="/icons/instagram.svg" alt="Instagram" />
-  </a>
-  <a href="https://www.youtube.com/@alhamashmaut" target="_blank" rel="noreferrer">
-    <img src="/icons/youtube.svg" alt="YouTube" />
-  </a>
-  <a href="#" title="ספוטיפיי (בקרוב)">
-    <img src="/icons/spotify.svg" alt="Spotify" />
-  </a>
-</div>
+
     </div>
-    
-    
+
+
   );
 };
 
