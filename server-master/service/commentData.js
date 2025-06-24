@@ -7,12 +7,14 @@ export const getComments = async (episodeId) => {
     console.log('Getting comments for episodeId:', episodeId);
 
     const [rows] = await pool.query(
-      `SELECT c.*, u.userName 
-       FROM comments c
-       JOIN Users u ON c.userId = u.id
-       WHERE c.episodeId = ?`,
-      [episodeId]
-    );
+  `SELECT c.*, u.userName, ut.type AS userType
+   FROM comments c
+   JOIN Users u ON c.userId = u.id
+   JOIN UserTypes ut ON u.userType = ut.id
+   WHERE c.episodeId = ?`,
+  [episodeId]
+);
+
 
     return rows;
   } catch (error) {
@@ -127,13 +129,15 @@ export const getCommentsByConnectId = async (connectId) => {
    try {
     console.log('Getting comments for connectId:', connectId);
 
-    const [rows] = await pool.query(
-      `SELECT c.*, u.userName
-       FROM comments c
-       JOIN Users u ON c.userId = u.id
-       WHERE c.connectId = ?`,
-      [connectId]
-    );
+   const [rows] = await pool.query(
+  `SELECT c.*, u.userName, ut.type AS userType
+   FROM comments c
+   JOIN Users u ON c.userId = u.id
+   JOIN UserTypes ut ON u.userType = ut.id
+   WHERE c.connectId = ?`,
+  [connectId]
+);
+
 
     return rows;
   } catch (error) {

@@ -45,7 +45,7 @@ function App() {
           } />
 
         {/* דפים עם פריסת Framework */}
-        <Route path="/:user?/:id?" element={<Framework />}>
+        <Route path="/" element={<Framework />}>
           <Route index element={<Home />} />
 
           <Route path="episodes" element={<Episodes showFuture={false} />} />
