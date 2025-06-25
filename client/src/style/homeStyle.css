@@ -1,4 +1,4 @@
-.main-container {
+/* .main-container {
   direction: rtl;
   padding: 2rem;
 }
@@ -82,4 +82,102 @@ button {
 
 .social-links img:hover {
   transform: scale(1.1);
+} */
+ /* home.css */
+.home-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background: url("https://mashma.net/wp-content/uploads/2023/06/banner_01.jpg") no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  animation: fadeInUp 1.5s ease forwards;
+  max-width: 700px;
+}
+
+.home-title {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.home-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  line-height: 1.8;
+}
+
+.home-button {
+  background: linear-gradient(to right, #ff4081, #e73370);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.3rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.home-button:hover {
+  background: linear-gradient(to right, #e73370, #ff4081);
+  transform: scale(1.05);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
+  }
+  to {
+    text-shadow: 0 0 20px #ff4081, 0 0 30px #e73370;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2.8rem;
+  }
+
+  .home-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .home-button {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
+
