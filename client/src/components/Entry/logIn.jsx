@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login ,getCurrentUser} from "../../db-api";
-
+import { login } from "../../db-api"; // לא צריך getCurrentUser כאן
 import '../../style/logInStyle.css';
 
 const Login = () => {
@@ -9,26 +8,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // קריאה לפונקציה שבודקת אם המשתמש קיים לפי אימייל
-    try{
-  var islogin = await login("users/login",{email:email, password:password});
-    if (islogin) {
-      const user=getCurrentUser();
-      navigate("/");
-    } else {
+    try {
+      // login מחזיר true אם ההתחברות הצליחה, אחרת זורק שגיאה
+      const isLogin = await login("users/login", { email, password });
+
+      if (isLogin) {
+        navigate("/"); // מעבר לדף הראשי
+      }
+    } catch (err) {
+      console.error("Login error:", err);
       setError("אימייל או סיסמה שגויים!");
     }
-    }catch(error)
-    {
-      console.log(error); 
-    }
-   
   };
 
   const handleRegisterClick = () => {
