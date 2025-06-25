@@ -10,6 +10,8 @@ import {
 } from '../service/userData.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import pool from '../service/database.js';
+
 
 /**
  * בדיקת תקינות שדות משתמש
@@ -54,15 +56,48 @@ export class user {
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12;
-      const users = await getUsersPaged(page, limit);
-      res.status(200).json(users);
+      const offset = (page - 1) * limit;
+      const search = req.query.search?.trim() || '';
+
+      let usersQuery = `
+      SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
+      FROM Users u
+      JOIN UserTypes ut ON u.userType = ut.id
+    `;
+      const values = [];
+
+      if (search) {
+        usersQuery += ` WHERE u.userName LIKE ? OR u.email LIKE ?`;
+        values.push(`%${search}%`, `%${search}%`);
+      }
+
+      usersQuery += ` ORDER BY u.id LIMIT ? OFFSET ?`;
+      values.push(limit, offset);
+
+      const [users] = await pool.query(usersQuery, values);
+
+      // שאילתה לספירת סך הכול
+      let totalQuery = `SELECT COUNT(*) AS total FROM Users`;
+      let totalValues = [];
+
+      if (search) {
+        totalQuery += ` WHERE userName LIKE ? OR email LIKE ?`;
+        totalValues.push(`%${search}%`, `%${search}%`);
+      }
+
+      const [[{ total }]] = await pool.query(totalQuery, totalValues);
+
+      res.status(200).json({ users, total });
     } catch (error) {
+      console.error('getAllUsers error:', error.message);
       res.status(500).json({ message: "שגיאה בעת שליפת המשתמשים" });
     }
   };
-getUserDetailes=async (req,res)=>{
-  const { id } = req.params;
-  console.log('in getUserDetailes id is:',id)
+
+
+  getUserDetailes = async (req, res) => {
+    const { id } = req.params;
+    console.log('in getUserDetailes id is:', id)
 
     try {
       const user = await getUserById(id);
@@ -70,8 +105,8 @@ getUserDetailes=async (req,res)=>{
     } catch (error) {
       res.status(500).json("שגיאה בשליפת פרטי המשתמש");
     }
-}
-  
+  }
+
   login = async (req, res) => {
     try {
       const { email, password } = req.body;

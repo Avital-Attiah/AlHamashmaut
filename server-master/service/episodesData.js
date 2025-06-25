@@ -105,9 +105,12 @@ import pool from './database.js';
  * 📥 Query: { isFutureInterview: boolean }
  * 📤 Response: Array of episode objects
  */
-export const getAll = async (isFutureInterview) => {
+export const getAll = async (isFutureInterview, limit = 10, offset = 0) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM episodes WHERE isFutureInterview = ?', [isFutureInterview]);
+    const [rows] = await pool.query(
+      'SELECT * FROM episodes WHERE isFutureInterview = ? ORDER BY id DESC LIMIT ? OFFSET ?',
+      [isFutureInterview, Number(limit), Number(offset)]
+    );
     return rows;
   } catch (error) {
     throw new Error('שגיאה בשאילתת נתונים');
@@ -199,5 +202,17 @@ export const deleteEpisode = async (id) => {
     return result.affectedRows > 0;
   } catch (error) {
     throw new Error('שגיאה במחיקת נתונים');
+  }
+};
+
+export const countEpisodes = async (isFutureInterview) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT COUNT(*) AS total FROM episodes WHERE isFutureInterview = ?',
+      [isFutureInterview]
+    );
+    return rows[0].total;
+  } catch (error) {
+    throw new Error('שגיאה בספירת הפרקים');
   }
 };

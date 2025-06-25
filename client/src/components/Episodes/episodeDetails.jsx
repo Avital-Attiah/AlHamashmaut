@@ -144,8 +144,9 @@ export default function EpisodeDetails({ id, showComments }) {
 
   const loadAllEpisodes = async () => {
     try {
-      const episodes = await getData(`episodes?isFutureInterview=${!showComments}`);
-      setAllEpisodes(episodes);
+      const response = await getData(`episodes?isFutureInterview=${!showComments}`);
+      const episodes = Array.isArray(response) ? response : response.episodes; // 👈 תמיכה בשתי תצורות
+      setAllEpisodes(episodes || []);
     } catch (err) {
       console.error('Error loading episodes list:', err);
     }
@@ -163,7 +164,7 @@ export default function EpisodeDetails({ id, showComments }) {
     const success = await deleteData(`episodes/${episode.id}`);
     if (success) {
       alert("הפרק נמחק בהצלחה");
-      navigate('/admin'); // שימי לב לנתיב חזרה לעמוד הניהול
+      navigate('/admin');
     } else {
       alert("שגיאה במחיקת הפרק");
     }
@@ -175,11 +176,12 @@ export default function EpisodeDetails({ id, showComments }) {
         <div className="episode-sidebar">
           <h4>{episode && episode.isFutureInterview ? "ראיונות עתידיים נוספים" : "פרקים נוספים"}</h4>
           <div className="episode-list">
-            {allEpisodes
-              .filter(ep => String(ep.id) !== String(episodeId))
-              .map(ep => (
-                <Episode key={ep.id} episode={ep} />
-              ))}
+            {Array.isArray(allEpisodes) &&
+              allEpisodes
+                .filter(ep => String(ep.id) !== String(episodeId))
+                .map(ep => (
+                  <Episode key={ep.id} episode={ep} />
+                ))}
           </div>
         </div>
       )}
@@ -223,3 +225,4 @@ export default function EpisodeDetails({ id, showComments }) {
     </div>
   );
 }
+

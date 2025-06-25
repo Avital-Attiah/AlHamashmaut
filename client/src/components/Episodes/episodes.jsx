@@ -40,40 +40,64 @@
 // }
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Episode from './episode.jsx';
 import { getData } from '../../db-api';
 
 export default function Episodes({ showFuture }) {
   const [episodes, setEpisodes] = useState([]);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const limit = 3;
 
   useEffect(() => {
-    const fetchEpisodes = async () => {
-      try {
-        const data = await getData(`episodes?isFutureInterview=${showFuture}`);
-        setEpisodes(data);
-        setError(null);
-      } catch (err) {
-        setError('שגיאה בטעינת הפרקים');
-      }
-    };
-
-    fetchEpisodes();
+    setEpisodes([]);
+    setPage(0);
+    setTotal(0);
+    fetchMoreEpisodes(0);
   }, [showFuture]);
 
-  // const handleAddEpisode = () => {
-  //  navigate(`/episode/new`, { state: {  } });// הנתיב שאליו מוביל כפתור ההוספה
-  // };
+  const fetchMoreEpisodes = async (pageNum) => {
+    try {
+      const offset = pageNum * limit;
+      const res = await getData(`episodes?isFutureInterview=${showFuture}&limit=${limit}&offset=${offset}`);
+      const newEpisodes = res.episodes || [];
+      const totalCount = res.total || 0;
+
+      if (newEpisodes.length > 0) {
+        setEpisodes((prev) => [...prev, ...newEpisodes]);
+        setPage(pageNum);
+        setTotal(totalCount);
+      }
+    } catch (err) {
+      setError('שגיאה בטעינת הפרקים');
+    }
+  };
+
+  const handleLoadMore = () => {
+    fetchMoreEpisodes(page + 1);
+  };
 
   return (
     <div className="podcasts-page" dir="rtl" style={{ padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
-        {/* <button
-          onClick={handleAddEpisode}
+      <h2>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {!error && episodes.length === 0 && (
+        <p style={{ color: 'gray' }}>לא נמצאו פרקים להצגה</p>
+      )}
+
+      <div className="episode-list">
+        {episodes.map((ep) => (
+          <Episode key={ep.id} episode={ep} />
+        ))}
+      </div>
+
+      {episodes.length < total && (
+        <button
+          onClick={handleLoadMore}
           style={{
+            marginTop: '1rem',
             padding: '0.5rem 1rem',
             backgroundColor: '#0077cc',
             color: 'white',
@@ -82,19 +106,10 @@ export default function Episodes({ showFuture }) {
             cursor: 'pointer'
           }}
         >
-          ➕ הוסף פרק
-        </button> */}
-      </div>
-
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!error && episodes.length === 0 && (
-        <p style={{ color: 'gray' }}>לא נמצאו פרקים להצגה</p>
+          הצג עוד
+        </button>
       )}
-      <div className="episode-list">
-        {episodes.map((ep) => (
-          <Episode key={ep.id} episode={ep} />
-        ))}
-      </div>
     </div>
   );
 }
+

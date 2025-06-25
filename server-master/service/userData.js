@@ -173,8 +173,8 @@
 
 // export const addPassword = async (userId, plainPassword) => {
 //   try {
-    
-  
+
+
 
 //     const [result] = await pool.query(
 //       'INSERT INTO Passwords (userId, passwordHash) VALUES (?, ?)', // התאמה לשמות בטבלה
@@ -227,17 +227,15 @@ import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
-export const getUsersPaged = async (page = 1, limit = 12) => {
-  const offset = (page - 1) * limit;
-
+export const getUsersPaged = async (limit = 12, offset = 0) => {
   try {
     const [rows] = await pool.query(`
-      SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
-      FROM Users u
-      JOIN UserTypes ut ON u.userType = ut.id
-      ORDER BY u.id
-      LIMIT ? OFFSET ?
-    `, [limit, offset]);
+    SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
+    FROM Users u
+    JOIN UserTypes ut ON u.userType = ut.id
+    ORDER BY u.id
+    LIMIT ? OFFSET ?
+  `, [limit, offset]);
 
     return rows;
   } catch (error) {
@@ -389,8 +387,8 @@ export const deleteUser = async (id) => {
     throw new Error('Failed to delete user');
   }
 };
-export const getUserById=async(id)=>{
-    try {
+export const getUserById = async (id) => {
+  try {
     const [rows] = await pool.query(
       `
       SELECT 
@@ -457,4 +455,4 @@ export const getUserByUserName = async (userName) => {
   const [rows] = await pool.query('SELECT * FROM Users WHERE userName = ?', [userName]);
   return rows[0];
 };
-//jfej
+

@@ -5,7 +5,8 @@ import {
   addEpisode as addEpisodesToDB,
   updateEpisode as updateEpisodesInDB,
   deleteEpisode as deleteEpisodesFromDB,
-  getEpisodesById
+  getEpisodesById,
+  countEpisodes
 } from "../service/episodesData.js";
 
 // ולידציה לפרק
@@ -25,12 +26,18 @@ export class episode {
   getAll = async (req, res) => {
     try {
       const isFutureInterview = req.query.isFutureInterview === 'true';
-      const episodes = await getAll(isFutureInterview);
-      res.status(200).json(episodes);
+      const limit = parseInt(req.query.limit) || 10;
+      const offset = parseInt(req.query.offset) || 0;
+
+      const episodes = await getAll(isFutureInterview, limit, offset);
+      const total = await countEpisodes(isFutureInterview);
+
+      res.status(200).json({ episodes, total });
     } catch (error) {
       res.status(500).json({ message: "שגיאה בשליפת הפוסטים" });
     }
   };
+
 
   /**
    * 📥 Body: { title, body, picture (optional), isFutureInterview (optional) }

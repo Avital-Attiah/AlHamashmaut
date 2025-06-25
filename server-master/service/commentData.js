@@ -2,26 +2,38 @@ import pool from './database.js';
 import { insertMessage } from './messageData.js';
 
 // שליפת תגובות
-export const getComments = async (episodeId) => {
-   try {
-    console.log('Getting comments for episodeId:', episodeId);
-
+export const getComments = async (episodeId, limit = 7, offset = 0) => {
+  try {
     const [rows] = await pool.query(
-  `SELECT c.*, u.userName, ut.type AS userType
-   FROM comments c
-   JOIN Users u ON c.userId = u.id
-   JOIN UserTypes ut ON u.userType = ut.id
-   WHERE c.episodeId = ?`,
-  [episodeId]
-);
-
-
+      `SELECT c.*, u.userName, ut.type AS userType
+       FROM comments c
+       JOIN Users u ON c.userId = u.id
+       JOIN UserTypes ut ON u.userType = ut.id
+       WHERE c.episodeId = ?
+       ORDER BY c.id ASC
+       LIMIT ? OFFSET ?`,
+      [episodeId, Number(limit), Number(offset)]
+    );
     return rows;
   } catch (error) {
     console.error('SQL Error:', error);
     throw new Error('שגיאה בשאילתת תגובות');
   }
 };
+
+export const countComments = async (episodeId) => {
+  try {
+    const [[row]] = await pool.query(
+      `SELECT COUNT(*) AS total FROM comments WHERE episodeId = ?`,
+      [episodeId]
+    );
+    return row.total;
+  } catch (error) {
+    console.error('SQL Error:', error);
+    throw new Error('שגיאה בספירת תגובות');
+  }
+};
+
 
 // הוספת תגובה
 //  const saveCommentToDb = async (comment) => {

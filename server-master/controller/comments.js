@@ -4,7 +4,8 @@ import {
   updateComment,
   getComments,
   getCommentById,
-  getCommentsByConnectId
+  getCommentsByConnectId,
+  countComments
 } from '../service/commentData.js';
 
 import { getEpisodesById } from '../service/episodesData.js';
@@ -36,18 +37,24 @@ export class CommentController {
   // }
 
   getAll = async (req, res) => {
-  const episodeId = req.params.episodeId;
-  try {
-    if (!episodeId) {
-      return res.status(400).json('חסר episodeId בשאילתא');
+    const episodeId = req.params.episodeId;
+    const limit = parseInt(req.query.limit) || 7;
+    const offset = parseInt(req.query.offset) || 0;
+
+    try {
+      if (!episodeId) {
+        return res.status(400).json('חסר episodeId בשאילתא');
+      }
+
+      const comments = await getComments(episodeId, limit, offset); // ← עם limit/offset
+      const total = await countComments(episodeId);
+
+      return res.json({ comments, total });
+    } catch (err) {
+      console.error('Error in getAll:', err);
+      return res.status(500).json(err.message);
     }
-    const response = await getComments(episodeId);
-    return res.json(response);
-  } catch (err) {
-    console.error('Error in getAll:', err);
-    return res.status(500).json(err.message);
-  }
-}
+  };
 
 
   getByConnectId = async (req, res) => {
@@ -99,31 +106,31 @@ export class CommentController {
   //     return res.status(500).json(error.message);
   //   }
   // };
-add = async (req, res) => {
-  try {
-    const newComment = req.body;
+  add = async (req, res) => {
+    try {
+      const newComment = req.body;
 
-    if (!newComment || !newComment.episodeId || !newComment.body || !req.user?.id) {
-      return res.status(400).json('נתוני תגובה חסרים או שגויים');
+      if (!newComment || !newComment.episodeId || !newComment.body || !req.user?.id) {
+        return res.status(400).json('נתוני תגובה חסרים או שגויים');
+      }
+
+      // הוספת המשתמש מתוך הטוקן
+      const fullComment = {
+        ...newComment,
+        userId: req.user.id
+      };
+
+      const commentId = await addComment(fullComment);
+
+      // ❗ נשלוף את התגובה מהמסד כדי לכלול createdAt
+      const created = await getCommentById(commentId);
+      return res.status(201).json(created);
+
+    } catch (error) {
+      console.error('Error in add:', error.message);
+      return res.status(500).json(error.message);
     }
-
-    // הוספת המשתמש מתוך הטוקן
-    const fullComment = {
-      ...newComment,
-      userId: req.user.id
-    };
-
-    const commentId = await addComment(fullComment);
-
-    // ❗ נשלוף את התגובה מהמסד כדי לכלול createdAt
-    const created = await getCommentById(commentId);
-    return res.status(201).json(created);
-
-  } catch (error) {
-    console.error('Error in add:', error.message);
-    return res.status(500).json(error.message);
-  }
-};
+  };
 
   /**
    * 📥 Params: { id: number }
@@ -165,35 +172,35 @@ add = async (req, res) => {
    * 🛡️ רק ה־admin של הפרק רשאי למחוק תגובה
    */
   delete = async (req, res) => {
-  try {
-    const commentId = req.params.id;
+    try {
+      const commentId = req.params.id;
 
-    const commentObj = await getCommentById(commentId);
-    if (!commentObj) {
-      return res.status(404).json('התגובה לא נמצאה');
+      const commentObj = await getCommentById(commentId);
+      if (!commentObj) {
+        return res.status(404).json('התגובה לא נמצאה');
+      }
+
+      const episode = await getEpisodesById(commentObj.episodeId); // ✅
+      if (!episode) {
+        return res.status(404).json('הפרק לא נמצא');
+      }
+
+      if (episode.adminId !== req.user.id && commentObj.userId !== req.user.id) {
+        return res.status(403).json('אין הרשאה למחוק תגובה זו');
+      }
+
+      const wasDeleted = await deleteComment(commentId);
+      if (wasDeleted) {
+        return res.status(200).json('התגובה נמחקה בהצלחה');
+      } else {
+        return res.status(404).json('התגובה לא נמצאה');
+      }
+
+    } catch (error) {
+      console.error('Error in delete:', error);
+      return res.status(500).json(error.message);
     }
-
-    const episode = await getEpisodesById(commentObj.episodeId); // ✅
-    if (!episode) {
-      return res.status(404).json('הפרק לא נמצא');
-    }
-
-    if (episode.adminId !== req.user.id && commentObj.userId !== req.user.id) {
-      return res.status(403).json('אין הרשאה למחוק תגובה זו');
-    }
-
-    const wasDeleted = await deleteComment(commentId);
-    if (wasDeleted) {
-      return res.status(200).json('התגובה נמחקה בהצלחה');
-    } else {
-      return res.status(404).json('התגובה לא נמצאה');
-    }
-
-  } catch (error) {
-    console.error('Error in delete:', error);
-    return res.status(500).json(error.message);
   }
-}
 }
 
 /**
