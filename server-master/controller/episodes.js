@@ -98,11 +98,11 @@ export class episode {
    */
   deleteEpisode = async (req, res) => {
     const { id } = req.params;
-    const episode = await getEpisodesById(id);
+    // const episode = await getEpisodesById(id);
 
-    if (req.adminId !== episode.adminId) {
-      return res.status(403).json("אין הרשאה");
-    }
+    // if (req.user.id !== episode.adminId) {
+    //   return res.status(403).json("אין הרשאה");
+    // }
 
     try {
       const success = await deleteEpisodesFromDB(id);
@@ -114,6 +114,7 @@ export class episode {
     } catch (error) {
       res.status(500).json("שגיאה במחיקת הפוסט");
     }
+
   };
 }
 
