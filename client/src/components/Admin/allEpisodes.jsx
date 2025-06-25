@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getData } from "../../db-api";
 import { useNavigate } from "react-router-dom";
 import EpisodeDetails from "../Episodes/episodeDetails";
+import "../../style/allEpisodesStyle.css"; // ייבוא קובץ CSS מותאם אישית
+import '../../style/global.css'
 
 export default function AllEpisodes() {
   const [posts, setPosts] = useState([]);

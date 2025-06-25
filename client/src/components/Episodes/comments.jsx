@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getCurrentUser, getData, addData, updateData, deleteData } from "../../db-api";
 import Comment from "./comment.jsx";
+import '../../style/global.css'
+
 
 export default function Comments({ episodeId, isInterview = false }) {
   const currentUser = getCurrentUser();

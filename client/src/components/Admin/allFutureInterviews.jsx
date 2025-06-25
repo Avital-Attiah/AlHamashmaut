@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getData } from "../../db-api";
 import { useNavigate } from "react-router-dom";
 import EpisodeDetails from "../Episodes/episodeDetails";
+import "../../style/allEpisodesStyle.css";
+import '../../style/global.css'
 
 export default function AllFutureInterviews() {
   const [interviews, setInterviews] = useState([]);

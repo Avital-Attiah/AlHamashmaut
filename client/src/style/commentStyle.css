@@ -1,99 +1,37 @@
-/* commentStyle.css */
-
 .comment-box {
-  border-bottom: 1px solid #ddd;
-  padding: 12px 16px;
-  background-color: #fff;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  color: #0f0f0f;
-  transition: background-color 0.2s;
-}
-
-.comment-box:hover {
-  background-color: #f9f9f9;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
-  color: #606060;
-  margin-bottom: 6px;
-}
-
-.comment-body {
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-
-.comment-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-.comment-actions button {
-  background: none;
-  border: none;
-  color: #065fd4;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 2px 6px;
-  transition: color 0.2s;
-}
-
-.comment-actions button:hover {
-  color: #0f0f0f;
-  text-decoration: underline;
-}
-
-.reply-box textarea,
-.comment-textarea {
-  width: 100%;
-  min-height: 60px;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
-}
-
-.reply-box button {
-  margin-top: 6px;
-  background-color: #065fd4;
-  color: white;
-  padding: 6px 12px;
-  font-size: 13px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.reply-box button:hover {
-  background-color: #0b4db8;
-}
-
-.reply-list {
-  margin-top: 10px;
-  border-left: 2px solid #ddd;
-  padding-left: 12px;
-  margin-left: 10px;
-}
-
-.reply-item {
-  font-size: 13px;
-  padding: 4px 0;
-  color: #0f0f0f;
-}
-
-.comment-error {
-  color: red;
-  margin-top: 4px;
+  font-weight: bold;
+  color: #2e3b4e;
 }
 
 .comment-date {
-  font-size: 12px;
-  color: #999;
+  font-size: 0.85rem;
+  color: #757575;
+}
+
+.comment-body {
+  margin: 0.7rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.comment-actions button,
+.reply-box button {
+  background-color: #1a237e;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  margin-left: 0.5rem;
+  cursor: pointer;
 }

@@ -1,82 +1,42 @@
 .episode-form {
   max-width: 600px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.6s ease-out;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  border-radius: 16px;
   direction: rtl;
 }
 
 .episode-form h2 {
   text-align: center;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  color: #1a237e;
+  margin-bottom: 1.5rem;
 }
 
 .episode-form label {
   display: block;
-  margin: 0.5rem 0 0.25rem;
-  font-weight: 500;
+  font-weight: bold;
+  margin-top: 1rem;
 }
 
 .episode-form input[type="text"],
-.episode-form textarea,
-.episode-form input[type="file"] {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
 .episode-form textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.episode-form img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1rem;
-}
-
-.episode-form .error {
-  color: #e63946;
-  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  font-family: inherit;
 }
 
 .episode-form button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #0077cc;
+  margin-top: 1.5rem;
+  background-color: #0d47a1;
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-weight: bold;
-  font-size: 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.episode-form button:hover {
-  background-color: #005fa3;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  width: 100%;
 }

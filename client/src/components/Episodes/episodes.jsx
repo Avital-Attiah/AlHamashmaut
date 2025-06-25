@@ -65,7 +65,14 @@ export default function Episodes({ showFuture }) {
       const totalCount = res.total || 0;
 
       if (newEpisodes.length > 0) {
-        setEpisodes((prev) => [...prev, ...newEpisodes]);
+        if (pageNum === 0) {
+          // טעינה ראשונה – מאפס את הרשימה
+          setEpisodes(newEpisodes);
+        } else {
+          // טעינה נוספת – מצרף לרשימה
+          setEpisodes((prev) => [...prev, ...newEpisodes]);
+        }
+
         setPage(pageNum);
         setTotal(totalCount);
       }
@@ -73,6 +80,7 @@ export default function Episodes({ showFuture }) {
       setError('שגיאה בטעינת הפרקים');
     }
   };
+
 
   const handleLoadMore = () => {
     fetchMoreEpisodes(page + 1);

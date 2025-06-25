@@ -1,0 +1,36 @@
+.admin-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  direction: rtl;
+}
+
+.admin-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #1a237e;
+}
+
+.admin-section button {
+  background-color: #004d40;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.admin-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-section ul li button {
+  background: none;
+  border: none;
+  text-align: right;
+  color: #0d47a1;
+  font-size: 1rem;
+  cursor: pointer;
+}
