@@ -1,11 +1,10 @@
-
-.main-container {
+/* .main-container {
   font-family: 'Varela Round', sans-serif;
   color: white;
-  background: url("https://mashma.net/wp-content/uploads/2023/06/banner_01.jpg") no-repeat center center/cover;
+  background: #121212;
   min-height: 100vh;
   margin: 0;
-  padding: 0;
+  padding-top: 80px; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,17 +18,15 @@
   justify-content: space-between;
   width: 100%;
   padding: 0.5rem 1rem;
-  background-color: rgba(0, 0, 0, 0.3);
-  position: sticky;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
   top: 0;
   z-index: 9999;
-  gap: 1rem;
 }
 
 .logo-header {
   height: 60px;
   filter: drop-shadow(0 0 6px white);
-  margin-left: 1rem;
 }
 
 .main-nav {
@@ -109,7 +106,6 @@
   margin-top: auto;
   display: flex;
   gap: 1rem;
-  z-index: 2;
   padding: 1rem;
 }
 
@@ -169,3 +165,172 @@
     margin: 0;
   }
 }
+ */
+ .main-container {
+  font-family: 'Varela Round', sans-serif;
+  color: white;
+  background: #121212;
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 80px; /* חשוב! שיהיה רווח מהתפריט העליון */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
+.logo-header {
+  height: 60px;
+  filter: drop-shadow(0 0 6px white);
+}
+
+.main-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  z-index: 9999;
+}
+
+.home-nav button,
+.dropdown button,
+.top-bar button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.home-nav button:hover,
+.dropdown button:hover,
+.top-bar button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.profile-menu-container {
+  display: flex;
+  align-items: center;
+}
+
+.profile-menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.profile-name {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.dropdown {
+  position: absolute;
+  top: 60px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 0.5rem;
+  display: none;
+  flex-direction: column;
+  z-index: 10000;
+  right: 0;
+}
+
+.profile-menu.open .dropdown {
+  display: flex;
+}
+
+.social-links {
+  margin-top: auto;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.social-links img {
+  width: 30px;
+  height: 30px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s;
+}
+
+.social-links img:hover {
+  transform: scale(1.1);
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+  z-index: 10001;
+}
+
+.menu-toggle span {
+  height: 3px;
+  width: 25px;
+  background: white;
+  border-radius: 2px;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 220px;
+  padding: 1rem;
+  border-radius: 10px 0 0 10px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-nav.show {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .main-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .logo-header {
+    margin: 0;
+  }
+}
+

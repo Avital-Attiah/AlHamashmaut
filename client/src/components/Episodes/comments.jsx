@@ -19,20 +19,40 @@ export default function Comments({ episodeId, isInterview = false }) {
     fetchMoreComments(0);
   }, [episodeId]);
 
-  const fetchMoreComments = async (pageNum) => {
-    try {
-      const offset = pageNum * limit;
-      const res = await getData(`comments/${episodeId}?limit=${limit}&offset=${offset}`);
-      const newComments = res.comments || [];
-      const totalCount = res.total || 0;
+  // const fetchMoreComments = async (pageNum) => {
+  //   try {
+  //     const offset = pageNum * limit;
+  //     const res = await getData(`comments/${episodeId}?limit=${limit}&offset=${offset}`);
+  //     const newComments = res.comments || [];
+  //     const totalCount = res.total || 0;
 
-      setComments((prev) => [...prev, ...newComments]);
-      setPage(pageNum);
-      setTotal(totalCount);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  //     setComments((prev) => [...prev, ...newComments]);
+  //     setPage(pageNum);
+  //     setTotal(totalCount);
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
+
+  const fetchMoreComments = async (pageNum) => {
+  try {
+    const offset = pageNum * limit;
+    const res = await getData(`comments/${episodeId}?limit=${limit}&offset=${offset}`);
+    const newComments = res.comments || [];
+    const totalCount = res.total || 0;
+
+    setComments((prev) => {
+      const existingIds = new Set(prev.map(c => c.id));
+      const uniqueNew = newComments.filter(c => !existingIds.has(c.id));
+      return [...prev, ...uniqueNew];
+    });
+    
+    setPage(pageNum);
+    setTotal(totalCount);
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
   const handleAddComment = async () => {
     const content = newContent.trim();

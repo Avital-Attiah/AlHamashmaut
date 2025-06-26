@@ -1,6 +1,6 @@
 
 import {
-  getUsersPaged,
+  getUsersFromDB,
   addUser,
   deleteUser,
   updateUser,
@@ -52,48 +52,63 @@ function validateUserData(data, options = { email: true, password: true, userNam
 
 export class user {
 
-  getAllUsers = async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 12;
-      const offset = (page - 1) * limit;
-      const search = req.query.search?.trim() || '';
+  // getAllUsers = async (req, res) => {
+  //   try {
+  //     const page = parseInt(req.query.page) || 1;
+  //     const limit = parseInt(req.query.limit) || 12;
+  //     const offset = (page - 1) * limit;
+  //     const search = req.query.search?.trim() || '';
 
-      let usersQuery = `
-      SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
-      FROM Users u
-      JOIN UserTypes ut ON u.userType = ut.id
-    `;
-      const values = [];
+  //     let usersQuery = `
+  //     SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
+  //     FROM Users u
+  //     JOIN UserTypes ut ON u.userType = ut.id
+  //   `;
+  //     const values = [];
 
-      if (search) {
-        usersQuery += ` WHERE u.userName LIKE ? OR u.email LIKE ?`;
-        values.push(`%${search}%`, `%${search}%`);
-      }
+  //     if (search) {
+  //       usersQuery += ` WHERE u.userName LIKE ? OR u.email LIKE ?`;
+  //       values.push(`%${search}%`, `%${search}%`);
+  //     }
 
-      usersQuery += ` ORDER BY u.id LIMIT ? OFFSET ?`;
-      values.push(limit, offset);
+  //     usersQuery += ` ORDER BY u.id LIMIT ? OFFSET ?`;
+  //     values.push(limit, offset);
 
-      const [users] = await pool.query(usersQuery, values);
+  //     const [users] = await pool.query(usersQuery, values);
 
-      // שאילתה לספירת סך הכול
-      let totalQuery = `SELECT COUNT(*) AS total FROM Users`;
-      let totalValues = [];
+  //     // שאילתה לספירת סך הכול
+  //     let totalQuery = `SELECT COUNT(*) AS total FROM Users`;
+  //     let totalValues = [];
 
-      if (search) {
-        totalQuery += ` WHERE userName LIKE ? OR email LIKE ?`;
-        totalValues.push(`%${search}%`, `%${search}%`);
-      }
+  //     if (search) {
+  //       totalQuery += ` WHERE userName LIKE ? OR email LIKE ?`;
+  //       totalValues.push(`%${search}%`, `%${search}%`);
+  //     }
 
-      const [[{ total }]] = await pool.query(totalQuery, totalValues);
+  //     const [[{ total }]] = await pool.query(totalQuery, totalValues);
 
-      res.status(200).json({ users, total });
-    } catch (error) {
-      console.error('getAllUsers error:', error.message);
-      res.status(500).json({ message: "שגיאה בעת שליפת המשתמשים" });
-    }
-  };
+  //     res.status(200).json({ users, total });
+  //   } catch (error) {
+  //     console.error('getAllUsers error:', error.message);
+  //     res.status(500).json({ message: "שגיאה בעת שליפת המשתמשים" });
+  //   }
+  // };
 
+    getAllUsers = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const offset = (page - 1) * limit;
+    const search = req.query.search?.trim() || '';
+
+    const { users, total } = await getUsersFromDB({ search, limit, offset });
+
+    res.status(200).json({ users, total });
+  } catch (error) {
+    console.error('getAllUsers error:', error.message);
+    res.status(500).json({ message: "שגיאה בעת שליפת המשתמשים" });
+  }
+};
 
   getUserDetailes = async (req, res) => {
     const { id } = req.params;

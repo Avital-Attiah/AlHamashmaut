@@ -51,6 +51,19 @@ app.get('/users/image/:filename', (req, res) => {
     res.sendFile(filePath);
   });
 });
+app.get('/pic/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'pic',  req.params.filename);
+
+  // בדיקה אם הקובץ קיים לפני שליחה
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.log(filePath,'התמונה לא נמצאה');
+      return res.status(404).send('התמונה לא נמצאה');
+    }
+console.log("succses pic ");
+    res.sendFile(filePath);
+  });
+});
 app.listen(port, () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });

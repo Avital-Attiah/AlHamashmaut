@@ -41,7 +41,7 @@ const Supporters = () => {
   return (
     <div className="supporters-container">
       <h1 className="title">תומכים מובילים</h1>
-
+    <section id="space2" ></section>
       <div className="supporters-list">
         {supportersData.map((s, index) => (
           <div

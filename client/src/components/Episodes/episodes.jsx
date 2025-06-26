@@ -1,123 +1,109 @@
 
-// import { useState, useEffect } from 'react';
-// import Episode from './episode.jsx';
-// import { getData } from '../../db-api';
-
-// export default function Episodes({ showFuture }) {
-//   const [episodes, setEpisodes] = useState([]);
-//   // const [showFuture, setShowFuture] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchEpisodes = async () => {
-//       try {
-//         const data = await getData(`episodes?isFutureInterview=${showFuture}`);
-//         setEpisodes(data);
-//         setError(null);
-//       } catch (err) {
-//         setError('שגיאה בטעינת הפרקים');
-//       }
-//     };
-
-//     fetchEpisodes();
-//   }, [showFuture]);
-
-//   return (
-//     <div className="podcasts-page">
-
-
-//       {error && <p style={{ color: 'red' }}>{error}</p>}
-//       {!error && episodes.length === 0 && (
-//         <p style={{ color: 'gray' }}>לא נמצאו פרקים להצגה</p>
-//       )}
-//       <div className="episode-list">
-//         {episodes.map((ep) => (
-//           <Episode key={ep.id} episode={ep} />
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Episode from './episode.jsx';
+import EpisodeDetails from './episodeDetails.jsx';
 import { getData } from '../../db-api';
+import '../../style/allEpisodesStyle.css';
 
-export default function Episodes({ showFuture }) {
+export default function EpisodesPage({ showFuture = false }) {
   const [episodes, setEpisodes] = useState([]);
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const limit = 3;
+  const limit = 6;
 
   useEffect(() => {
+    // אתחול מחדש בכל שינוי במצב עתידי
     setEpisodes([]);
     setPage(0);
     setTotal(0);
-    fetchMoreEpisodes(0);
+    fetchEpisodes(0);
   }, [showFuture]);
 
-  const fetchMoreEpisodes = async (pageNum) => {
+  const fetchEpisodes = async (pageNum) => {
     try {
       const offset = pageNum * limit;
       const res = await getData(`episodes?isFutureInterview=${showFuture}&limit=${limit}&offset=${offset}`);
       const newEpisodes = res.episodes || [];
       const totalCount = res.total || 0;
 
-      if (newEpisodes.length > 0) {
-        if (pageNum === 0) {
-          // טעינה ראשונה – מאפס את הרשימה
-          setEpisodes(newEpisodes);
-        } else {
-          // טעינה נוספת – מצרף לרשימה
-          setEpisodes((prev) => [...prev, ...newEpisodes]);
-        }
-
-        setPage(pageNum);
-        setTotal(totalCount);
+      if (pageNum === 0) {
+        setEpisodes(newEpisodes);
+      } else {
+        setEpisodes((prev) => [...prev, ...newEpisodes]);
       }
+
+      setPage(pageNum);
+      setTotal(totalCount);
     } catch (err) {
-      setError('שגיאה בטעינת הפרקים');
+      setError("שגיאה בטעינת הפרקים");
     }
   };
 
-
   const handleLoadMore = () => {
-    fetchMoreEpisodes(page + 1);
+    fetchEpisodes(page + 1);
   };
 
-  return (
-    <div className="podcasts-page" dir="rtl" style={{ padding: '1rem' }}>
-      <h2>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
+  const handleSelectEpisode = (ep) => {
+    setSelectedEpisode(ep);
+  };
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!error && episodes.length === 0 && (
-        <p style={{ color: 'gray' }}>לא נמצאו פרקים להצגה</p>
+  const closeDetails = () => {
+    setSelectedEpisode(null);
+  };
+
+  // const filteredEpisodes = episodes.filter((ep) =>
+  //   ep.title?.toLowerCase().includes(search.toLowerCase())
+  // );
+  const filteredEpisodes = episodes.filter((ep) =>
+  (ep.title && ep.title.toLowerCase().includes(search.toLowerCase())) ||
+  (ep.body && ep.body.toLowerCase().includes(search.toLowerCase()))
+);
+
+
+  return (
+    <div className={`podcasts-page ${selectedEpisode ? "show-single" : ""}`} dir="rtl">
+      {!selectedEpisode && (
+        <>
+          <h2 style={{ textAlign: "center" }}>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
+          <input
+            className="search-bar"
+            placeholder="חפש"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </>
       )}
 
-      <div className="episode-list">
-        {episodes.map((ep) => (
-          <Episode key={ep.id} episode={ep} />
-        ))}
-      </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {episodes.length < total && (
-        <button
-          onClick={handleLoadMore}
-          style={{
-            marginTop: '1rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: '#0077cc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer'
-          }}
-        >
-          הצג עוד
-        </button>
+      {selectedEpisode ? (
+        <>
+          <div className="episode-main">
+            <EpisodeDetails episode={selectedEpisode} onClose={closeDetails} />
+          </div>
+          <div className="episode-list episode-sidebar">
+            {episodes.map((ep) => (
+              <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="episode-list">
+            {filteredEpisodes.map((ep) => (
+              <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
+            ))}
+          </div>
+          {filteredEpisodes.length < total && (
+            <button className="load-more" onClick={handleLoadMore}>
+              הצג עוד
+            </button>
+          )}
+        </>
       )}
     </div>
   );
 }
-

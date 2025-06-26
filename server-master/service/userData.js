@@ -226,6 +226,37 @@ import pool from './database.js';
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
+export async function getUsersFromDB({ search, limit, offset }) {
+  const values = [];
+  let usersQuery = `
+    SELECT u.id, u.userName, u.email, u.profilePic, ut.type AS userType
+    FROM Users u
+    JOIN UserTypes ut ON u.userType = ut.id
+  `;
+
+  if (search) {
+    usersQuery += ` WHERE u.userName LIKE ? OR u.email LIKE ?`;
+    values.push(`%${search}%`, `%${search}%`);
+  }
+
+  usersQuery += ` ORDER BY u.id LIMIT ? OFFSET ?`;
+  values.push(limit, offset);
+
+  const [users] = await pool.query(usersQuery, values);
+
+  // ספירת כמות כוללת
+  let totalQuery = `SELECT COUNT(*) AS total FROM Users`;
+  const totalValues = [];
+
+  if (search) {
+    totalQuery += ` WHERE userName LIKE ? OR email LIKE ?`;
+    totalValues.push(`%${search}%`, `%${search}%`);
+  }
+
+  const [[{ total }]] = await pool.query(totalQuery, totalValues);
+
+  return { users, total };
+}
 
 export const getUsersPaged = async (limit = 12, offset = 0) => {
   try {
