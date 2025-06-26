@@ -422,7 +422,7 @@ export const addPassword = async (userId, plainPassword) => {
   }
 };
 
-const updatePassword = async (userId, passwordHash) => {
+export const updatePassword = async (userId, passwordHash) => {
   try {
     const [result] = await pool.query(
       'UPDATE Passwords SET passwordHash = ? WHERE userId = ?',

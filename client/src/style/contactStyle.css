@@ -1,73 +1,83 @@
-/* contactStyle.css */
-
 .contact-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+  font-family: inherit;
   direction: rtl;
-  text-align: center;
-  max-width: 900px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f0f9ff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 100, 200, 0.1);
+  color: #1a237e;
 }
 
 .contact-title {
-  color: #285e9d;
-  font-size: 2em;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1a237e;
 }
 
 .contact-form {
+  background: #f4f7fb;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
+  transition: box-shadow 0.3s ease;
 }
 
-.contact-row {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 10px;
-  flex-wrap: wrap;
+.contact-form:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ✅ רווחים בין כל שדה בתוך .contact-row */
+.contact-row > input {
+  margin-bottom: 1.2rem;
 }
 
 .contact-form input,
 .contact-form textarea {
-  flex: 1;
-  padding: 12px;
-  font-size: 1em;
-  border: 1px solid #b3d7f2;
-  border-radius: 6px;
-  background-color: #e6f4fb;
-  color: #03396c;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  text-align: right;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-  color: #555;
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #1a237e;
+  box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.15);
 }
 
 .contact-form textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 220px;
 }
 
 .contact-form button {
-  background-color: #207cca;
+  align-self: flex-start;
+  background: linear-gradient(90deg, #1a237e, #0d47a1);
   color: white;
   border: none;
-  padding: 12px;
-  font-size: 1.2em;
-  border-radius: 6px;
+  padding: 0.9rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background 0.4s ease, transform 0.2s ease;
 }
 
 .contact-form button:hover {
-  background-color: #155d99;
+  background: linear-gradient(90deg, #0d47a1, #1a237e);
+  transform: scale(1.04);
 }
 
 .contact-status {
-  margin-top: 15px;
+  margin-top: 1.5rem;
+  color: #1a237e;
   font-weight: bold;
-  color: #155d99;
+  text-align: center;
 }

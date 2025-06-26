@@ -1,49 +1,6 @@
-// import { useEffect, useState } from 'react';
-// import { getData, updateData, addData, getCurrentUser } from '../../db-api.jsx';
-
-// export default function MessagesPage() {
-//   const [messages, setMessages] = useState([]);
-//   const [body, setBody] = useState("");
-//   const [recipientId, setRecipientId] = useState("");
-//   const user = getCurrentUser();
-
-//   useEffect(() => {
-//     getData("messages").then(setMessages);
-//   }, []);
-
-//   const markRead = async id => {
-//     await updateData(`messages/${id}/read`, {});
-//     setMessages(m => m.map(msg => msg.id === id ? { ...msg, isRead: true } : msg));
-//   };
-
-//   const sendMessage = async () => {
-//     if (!body) return;
-//     await addData("messages", { recipientId, body });
-//     setBody("");
-//     alert("הודעה נשלחה");
-//   };
-
-//   return (
-//     <div>
-//       <h2>ההודעות שלי</h2>
-//       {messages.map(m => (
-//         <div key={m.id} style={{ border: '1px solid', margin: 5, padding: 10, background: m.isRead ? '#eee' : '#ddf' }}>
-//           <div><b>מאת:</b> {m.senderName || "מערכת"}</div>
-//           <div>{m.body}</div>
-//           {!m.isRead && <button onClick={() => markRead(m.id)}>סמן כנקרא</button>}
-//         </div>
-//       ))}
-
-//       <hr />
-//       <h3>שליחת הודעה</h3>
-//       <input placeholder="מזהה נמען (ID)" value={recipientId} onChange={e => setRecipientId(e.target.value)} />
-//       <textarea value={body} onChange={e => setBody(e.target.value)} />
-//       <button onClick={sendMessage}>שלח הודעה</button>
-//     </div>
-//   );
-// }
 import { useEffect, useState } from 'react';
 import { getData, updateData, addData, getCurrentUser } from '../../db-api.jsx';
+import '../../style/messagesPageStyle.css';
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
@@ -72,7 +29,7 @@ export default function MessagesPage() {
     }
 
     await addData("messages", {
-      recipientId: recipientId || null, // null = הודעה גלובלית
+      recipientId: recipientId || null,
       body
     });
 
@@ -83,54 +40,46 @@ export default function MessagesPage() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto', padding: 20 }}>
-      <h2 style={{ textAlign: 'center' }}>📩 ההודעות שלי</h2>
-      <button onClick={fetchMessages}>🔄 רענון</button>
+    <div className="messages-page">
+      <h2>📩 ההודעות שלי</h2>
+      <button className="refresh-btn" onClick={fetchMessages}>🔄 רענון</button>
 
-      {messages.length === 0 && <p>אין הודעות להצגה</p>}
+      <div className="message-list">
+        {messages.length === 0 && <p>אין הודעות להצגה</p>}
 
-      {messages.map(m => (
-        <div
-          key={m.id}
-          style={{
-            border: '1px solid #ccc',
-            margin: '10px 0',
-            padding: 10,
-            borderRadius: 8,
-            background: m.isRead ? '#f5f5f5' : '#e0f0ff'
-          }}
-        >
-          <div><b>מאת:</b> {m.senderName || "מערכת"}</div>
-          <div style={{ marginTop: 6 }}>{m.body}</div>
-          <small style={{ display: 'block', marginTop: 8, color: '#666' }}>
-            {new Date(m.createdAt).toLocaleString()}
-          </small>
-          {!m.isRead && (
-            <button onClick={() => markRead(m.id)} style={{ marginTop: 5 }}>
-              סמן כנקראה
-            </button>
-          )}
-        </div>
-      ))}
+        {messages.map(m => (
+          <div
+            key={m.id}
+            className={`message-item ${m.isRead ? "read" : ""}`}
+          >
+            <div><b>מאת:</b> {m.senderName || "מערכת"}</div>
+            <div className="message-body">{m.body}</div>
+            <small>{new Date(m.createdAt).toLocaleString()}</small>
+            {!m.isRead && (
+              <button onClick={() => markRead(m.id)}>סמן כנקראה</button>
+            )}
+          </div>
+        ))}
+      </div>
 
       <hr />
-      <h3>✉️ שליחת הודעה חדשה</h3>
-      {user.userType === 1 && (
-        <input
-          placeholder="מזהה נמען (ID) או השאר ריק לשליחת הודעה לכל המשתמשים"
-          value={recipientId}
-          onChange={e => setRecipientId(e.target.value)}
-          style={{ width: '100%', marginBottom: 10 }}
+      <div className="message-form">
+        <h3>✉️ שליחת הודעה חדשה</h3>
+        {user.userType === 1 && (
+          <input
+            placeholder="מזהה נמען (ID) או השאר ריק לשליחת הודעה לכל המשתמשים"
+            value={recipientId}
+            onChange={e => setRecipientId(e.target.value)}
+          />
+        )}
+        <textarea
+          placeholder="תוכן ההודעה"
+          value={body}
+          onChange={e => setBody(e.target.value)}
+          rows={3}
         />
-      )}
-      <textarea
-        placeholder="תוכן ההודעה"
-        value={body}
-        onChange={e => setBody(e.target.value)}
-        rows={3}
-        style={{ width: '100%', marginBottom: 10 }}
-      />
-      <button onClick={sendMessage}>📤 שלח הודעה</button>
+        <button onClick={sendMessage}>📤 שלח הודעה</button>
+      </div>
     </div>
   );
 }

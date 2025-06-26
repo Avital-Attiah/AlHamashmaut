@@ -1,8 +1,6 @@
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { newUser ,getCurrentUser} from "../../db-api";
+import { newUser, getCurrentUser } from "../../db-api";
 import "../../style/registerStyle.css";
 
 const Register = () => {
@@ -10,6 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [userNameError, setUserNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -86,57 +85,72 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
+    <div className="register-container fade-in">
       <h1 className="register-title">רישום</h1>
       <form onSubmit={handleRegister} className="register-form">
 
-        <input
-          type="text"
-          placeholder="שם משתמש"
-          value={userName}
-          onChange={(e) => {
-            setUserName(e.target.value);
-            validateUserName(e.target.value);
-          }}
-          className="input-field"
-        />
+        <div className="input-icon-group">
+          <span className="icon">👤</span>
+          <input
+            type="text"
+            placeholder="שם משתמש"
+            value={userName}
+            onChange={(e) => {
+              setUserName(e.target.value);
+              validateUserName(e.target.value);
+            }}
+            className="input-field"
+          />
+        </div>
         {userNameError && <div className="error-message">{userNameError}</div>}
 
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            validateEmail(e.target.value);
-          }}
-          className="input-field"
-        />
+        <div className="input-icon-group">
+          <span className="icon">📧</span>
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              validateEmail(e.target.value);
+            }}
+            className="input-field"
+          />
+        </div>
         {emailError && <div className="error-message">{emailError}</div>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            validatePassword(e.target.value);
-            validateVerifyPassword(verifyPassword); // כי סיסמה השתנתה
-          }}
-          className="input-field"
-        />
+        <div className="input-icon-group">
+          <span className="icon">🔒</span>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              validatePassword(e.target.value);
+              validateVerifyPassword(verifyPassword);
+            }}
+            className="input-field"
+          />
+          <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? "🙈" : "👁️"}
+          </span>
+        </div>
         {passwordError && <div className="error-message">{passwordError}</div>}
 
-        <input
-          type="password"
-          placeholder="Verify Password"
-          value={verifyPassword}
-          onChange={(e) => {
-            setVerifyPassword(e.target.value);
-            validateVerifyPassword(e.target.value);
-          }}
-          className="input-field"
-        />
+        <div className="input-icon-group">
+          <span className="icon">🔒</span>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Verify Password"
+            value={verifyPassword}
+            onChange={(e) => {
+              setVerifyPassword(e.target.value);
+              validateVerifyPassword(e.target.value);
+            }}
+            className="input-field"
+          />
+        </div>
         {verifyError && <div className="error-message">{verifyError}</div>}
 
         <button type="submit" className="submit-button">רשום</button>
