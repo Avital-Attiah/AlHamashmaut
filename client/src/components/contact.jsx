@@ -75,7 +75,10 @@ export default function Contact() {
                     rows="5"
                     required
                 ></textarea>
-                <button type="submit">שליחה</button>
+                <button type="submit">
+                    ✉️ שליחה
+                </button>
+
                 {status && <div className="contact-status">{status}</div>}
             </form>
         </div>

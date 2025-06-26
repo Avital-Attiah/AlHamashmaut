@@ -1,5 +1,7 @@
 import React from "react";
 import {Outlet, useNavigate } from "react-router-dom";
+import "../../style/adminStyle.css";
+
 
 
 export default function AdminPage() {
