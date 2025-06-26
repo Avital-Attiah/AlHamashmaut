@@ -1,8 +1,31 @@
+// import { useNavigate } from "react-router-dom";
+
+// const Episode = ({ episode }) => {
+//   const navigate = useNavigate();
+ 
+//   const { id, title, body, picture, isFutureInterview } = episode;
+
+//   return (
+//     <div className="episode-card" onClick={() => {
+//       if (isFutureInterview)
+//         navigate(`/episode/${id}/qustion`);
+//       else
+//         navigate(`/episode/${id}/comment`);
+//       // navigate(`/episodes/${id}`);
+//     }
+//     }>
+//       {picture && <img src={picture} alt={title} className="episode-thumbnail" />}
+//       <h3>{title}</h3>
+//       <p>{body.slice(0, 100)}...</p>
+//     </div>
+//   );
+// };
+
+// export default Episode;
 
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../db-api.jsx"; // עדכן לפי מיקום הקובץ שלך
 import '../../style/episodeStyle.css'
-import '../../style/global.css'
 
 const Episode = ({ episode }) => {
   const navigate = useNavigate();
