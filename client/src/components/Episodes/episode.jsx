@@ -35,6 +35,8 @@ const Episode = ({ episode }) => {
 
   // לחיצה על הקלף תעביר לעמוד תגובות או שאלות לפי סוג הפרק
   const handleCardClick = () => {
+    
+
     if (isFutureInterview)
       navigate(`/episode/${id}/qustion`);
     else

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Episode from './episode.jsx';
 import EpisodeDetails from './episodeDetails.jsx';
@@ -15,7 +14,7 @@ export default function EpisodesPage({ showFuture = false }) {
   const limit = 6;
 
   useEffect(() => {
-    // אתחול מחדש בכל שינוי במצב עתידי
+    // אתחול רשימה במעבר בין פרקי עבר לעתיד
     setEpisodes([]);
     setPage(0);
     setTotal(0);
@@ -29,12 +28,7 @@ export default function EpisodesPage({ showFuture = false }) {
       const newEpisodes = res.episodes || [];
       const totalCount = res.total || 0;
 
-      if (pageNum === 0) {
-        setEpisodes(newEpisodes);
-      } else {
-        setEpisodes((prev) => [...prev, ...newEpisodes]);
-      }
-
+      setEpisodes((prev) => pageNum === 0 ? newEpisodes : [...prev, ...newEpisodes]);
       setPage(pageNum);
       setTotal(totalCount);
     } catch (err) {
@@ -54,14 +48,10 @@ export default function EpisodesPage({ showFuture = false }) {
     setSelectedEpisode(null);
   };
 
-  // const filteredEpisodes = episodes.filter((ep) =>
-  //   ep.title?.toLowerCase().includes(search.toLowerCase())
-  // );
   const filteredEpisodes = episodes.filter((ep) =>
-  (ep.title && ep.title.toLowerCase().includes(search.toLowerCase())) ||
-  (ep.body && ep.body.toLowerCase().includes(search.toLowerCase()))
-);
-
+    (ep.title && ep.title.toLowerCase().includes(search.toLowerCase())) ||
+    (ep.body && ep.body.toLowerCase().includes(search.toLowerCase()))
+  );
 
   return (
     <div className={`podcasts-page ${selectedEpisode ? "show-single" : ""}`} dir="rtl">
@@ -93,11 +83,17 @@ export default function EpisodesPage({ showFuture = false }) {
       ) : (
         <>
           <div className="episode-list">
-            {filteredEpisodes.map((ep) => (
-              <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
-            ))}
+            {filteredEpisodes.length > 0 ? (
+              filteredEpisodes.map((ep) => (
+                <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
+              ))
+            ) : (
+              <p style={{ textAlign: "center", marginTop: "2rem" }}>
+                לא נמצאו תוצאות לחיפוש "{search}"
+              </p>
+            )}
           </div>
-          {filteredEpisodes.length < total && (
+          {episodes.length < total && (
             <button className="load-more" onClick={handleLoadMore}>
               הצג עוד
             </button>

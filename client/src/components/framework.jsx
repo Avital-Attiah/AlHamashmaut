@@ -1,16 +1,251 @@
 
 
 
+// // // import { Outlet, useNavigate } from "react-router-dom";
+// // // import "../style/frameStyle.css";
+// // // import { useEffect, useState } from "react";
+// // // import { getCurrentUser } from "../db-api";
+
+// // // export default function Framework() {
+// // //   const navigate = useNavigate();
+// // //   const [user, setUser] = useState(null);
+// // //   const [dropdownOpen, setDropdownOpen] = useState(false);
+// // //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+// // //   useEffect(() => {
+// // //     const currUser = getCurrentUser();
+// // //     setUser(currUser);
+// // //   }, []);
+
+// // //   const handleLogout = () => {
+// // //     localStorage.removeItem("currentUser");
+// // //     localStorage.removeItem("token");
+// // //     setUser(null);
+// // //     navigate("/");
+// // //   };
+
+// // //   const toggleDropdown = () => {
+// // //     setDropdownOpen(!dropdownOpen);
+// // //   };
+
+// // //   return (
+// // //     <div className="main-container">
+// // //       <div className="header-bar">
+// // //         <img
+// // //           src="/images/לוגו-סופי-לבן-2048x901.png"
+// // //           alt="על המשמעות"
+// // //           className="logo-header"
+// // //         />
+
+// // //         <div className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+// // //           <span></span>
+// // //           <span></span>
+// // //           <span></span>
+// // //         </div>
+
+// // //         <nav className="main-nav home-nav">
+// // //           <button onClick={() => navigate("/")}>אודות</button>
+// // //           <button onClick={() => navigate("/")}>חזון</button>
+// // //           <button onClick={() => navigate("/contact")}>צור קשר</button>
+// // //           <button onClick={() => navigate("/supporters")}>תומכים מובילים</button>
+// // //           <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
+// // //           <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
+// // //           {user?.userType === "מנהל" && (
+// // //             <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+// // //           )}
+// // //         </nav>
+
+// // //         <div className="profile-menu-container">
+// // //           {user ? (
+// // //             <div className={`profile-menu ${dropdownOpen ? "open" : ""}`}>
+// // //               <img
+// // //                 src={`http://localhost:8080/users/image/${user.profilePic}`}
+// // //                 alt="פרופיל"
+// // //                 className="profile-pic"
+// // //                 onClick={toggleDropdown}
+// // //               />
+// // //               <span className="profile-name">{user.userName}</span>
+// // //               <div className="dropdown">
+// // //                 <button onClick={() => navigate("/messages")}>🔔 הודעות</button>
+// // //                 <button onClick={() => navigate("/profile")}>🧍 פרופיל אישי</button>
+// // //                 <button onClick={handleLogout}>🔓 התנתקות</button>
+// // //               </div>
+// // //             </div>
+// // //           ) : (
+// // //             <div className="profile-menu">
+// // //               <img
+// // //                 src="/images/profile-placeholder.png"
+// // //                 alt="התחבר"
+// // //                 className="profile-pic"
+// // //                 onClick={() => navigate("/login")}
+// // //               />
+// // //               <span className="profile-name">התחברות</span>
+// // //             </div>
+// // //           )}
+// // //         </div>
+// // //       </div>
+
+// // //       {/* תפריט במובייל */}
+// // //       <div className={`mobile-nav ${mobileMenuOpen ? "show" : ""}`}>
+// // //         <button onClick={() => navigate("/")}>אודות</button>
+// // //         <button onClick={() => navigate("/")}>חזון</button>
+// // //         <button onClick={() => navigate("/contact")}>צור קשר</button>
+// // //         <button onClick={() => navigate("/supporters")}>תומכים מובילים</button>
+// // //         <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
+// // //         <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
+// // //         {user?.userType === "מנהל" && (
+// // //           <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+// // //         )}
+// // //       </div>
+// // //         <div className="page-content"></div>
+
+// // //       <Outlet />
+
+// // //       <div className="social-links">
+// // //         <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
+// // //           <img src="/icons/x.png" alt="X" />
+// // //         </a>
+// // //         <a href="https://www.instagram.com/tamirdortal/" target="_blank" rel="noreferrer">
+// // //           <img src="/icons/instagram.png" alt="Instagram" />
+// // //         </a>
+// // //         <a href="https://www.youtube.com/@alhamashmaut" target="_blank" rel="noreferrer">
+// // //           <img src="/icons/youtube.png" alt="YouTube" />
+// // //         </a>
+// // //         <a href="#" title="ספוטיפיי (בקרוב)">
+// // //           <img src="/icons/spotify.png" alt="Spotify" />
+// // //         </a>
+// // //       </div>
+// // //     </div>
+// // //   );
+// // // }
+// // import { Outlet, useNavigate } from "react-router-dom";
+// // import "../style/frameStyle.css";
+// // import Login from "./Entry/logIn.jsx";
+
+// // import { useEffect, useState } from "react";
+// // import { getCurrentUser } from "../db-api";
+// // import { useModal } from "../AppContext.jsx";
+// // export default function Framework() {
+// //   const navigate = useNavigate();
+// //   const [user, setUser] = useState(null);
+// //   const [dropdownOpen, setDropdownOpen] = useState(false);
+// //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+// // //  const { modalContent, closeModal } = useModal();
+// // const { modalContent, openModal, closeModal } = useModal();
+
+// //   useEffect(() => {
+// //     const currUser = getCurrentUser();
+// //     setUser(currUser);
+// //   }, []);
+
+// //   const handleLogout = () => {
+// //     localStorage.removeItem("currentUser");
+// //     localStorage.removeItem("token");
+// //     setUser(null);
+// //     navigate("/");
+// //   };
+
+// //   return (
+// //     <div className="main-container">
+// //       <div className="header-bar">
+// //         <img src="/images/לוגו-סופי-לבן-2048x901.png" alt="על המשמעות" className="logo-header" />
+// //         <div className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+// //           <span></span><span></span><span></span>
+// //         </div>
+// //         <nav className="main-nav home-nav">
+// //           <button onClick={() => navigate("/")}>אודות</button>
+// //           <button onClick={() => navigate("/")}>חזון</button>
+// //           <button onClick={() => navigate("/contact")}>צור קשר</button>
+// //           <button onClick={() => navigate("/supporters")}>תומכים</button>
+// //           <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
+// //           <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
+// //           {user?.userType === "מנהל" && <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>}
+// //         </nav>
+
+// //         <div className="profile-menu-container">
+// //           {user ? (
+// //             <div className={`profile-menu ${dropdownOpen ? "open" : ""}`}>
+// //               <img
+// //                 src={`http://localhost:8080/users/image/${user.profilePic}`}
+// //                 alt="פרופיל"
+// //                 className="profile-pic"
+// //                 onClick={() => setDropdownOpen(!dropdownOpen)}
+// //               />
+// //               <span className="profile-name">{user.userName}</span>
+// //               <div className="dropdown">
+// //                 <button onClick={() => navigate("/messages")}>🔔 הודעות</button>
+// //                 <button onClick={() => navigate("/profile")}>🧍 פרופיל</button>
+// //                 <button onClick={handleLogout}>🔓 התנתקות</button>
+// //               </div>
+// //             </div>
+// //           ) : (
+// //             <div className="profile-menu">
+// //               <img
+// //                 src="/images/profile-placeholder.png"
+// //                 alt="התחבר"
+// //                 className="profile-pic"
+// //                 onClick={() => navigate("/login")}
+// //               />
+// //               <span className="profile-name">התחברות</span>
+// //             </div>
+// //           )}
+// //         </div>
+// //       </div>
+
+// //       {/* תפריט מובייל */}
+// //       <div className={`mobile-nav ${mobileMenuOpen ? "show" : ""}`}>
+// //         <button onClick={() => navigate("/")}>אודות</button>
+// //         <button onClick={() => navigate("/")}>חזון</button>
+// //         {/* <button onClick={() => navigate("/contact")}>צור קשר</button> */}
+// //         <button onClick={() =>navigate("/contact")}>צור קשר</button>
+
+// //         <button onClick={() => navigate("/supporters")}>תומכים</button>
+// //         <button onClick={() => navigate("/interviews")}>ראיונות</button>
+// //         <button onClick={() => navigate("/episodes")}>פרקים</button>
+// //         {user?.userType === "מנהל" && <button onClick={() => navigate("/admin")}>🔐 ניהול</button>}
+// //       </div>
+
+// //       <div className="page-content">
+// //         <Outlet />
+// //       </div>
+// //  {/* {modalContent && (
+// //         <div className="modal-overlay" onClick={closeModal}>
+// //           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+// //             {modalContent}
+// //           </div>
+// //         </div>
+// //       )} */}
+// //       <div className="social-links">
+// //         <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
+// //           <img src="/icons/x.png" alt="X" />
+// //         </a>
+// //         <a href="https://www.instagram.com/tamirdortal/" target="_blank" rel="noreferrer">
+// //           <img src="/icons/instagram.png" alt="Instagram" />
+// //         </a>
+// //         <a href="https://www.youtube.com/@alhamashmaut" target="_blank" rel="noreferrer">
+// //           <img src="/icons/youtube.png" alt="YouTube" />
+// //         </a>
+// //         <a href="#" title="ספוטיפיי (בקרוב)">
+// //           <img src="/icons/spotify.png" alt="Spotify" />
+// //         </a>
+// //       </div>
+      
+// //     </div>
+// //   );
+// // }
 // import { Outlet, useNavigate } from "react-router-dom";
 // import "../style/frameStyle.css";
+// import Login from "./Entry/logIn.jsx";
 // import { useEffect, useState } from "react";
 // import { getCurrentUser } from "../db-api";
+// import { useModal } from "../AppContext.jsx";
 
 // export default function Framework() {
 //   const navigate = useNavigate();
 //   const [user, setUser] = useState(null);
 //   const [dropdownOpen, setDropdownOpen] = useState(false);
 //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+//   const { modalContent, openModal, closeModal } = useModal();
 
 //   useEffect(() => {
 //     const currUser = getCurrentUser();
@@ -24,30 +259,21 @@
 //     navigate("/");
 //   };
 
-//   const toggleDropdown = () => {
-//     setDropdownOpen(!dropdownOpen);
-//   };
-
 //   return (
 //     <div className="main-container">
+//       {/* --- Header --- */}
 //       <div className="header-bar">
-//         <img
-//           src="/images/לוגו-סופי-לבן-2048x901.png"
-//           alt="על המשמעות"
-//           className="logo-header"
-//         />
+//         <img src="/images/לוגו-סופי-לבן-2048x901.png" alt="על המשמעות" className="logo-header" />
 
 //         <div className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-//           <span></span>
-//           <span></span>
-//           <span></span>
+//           <span></span><span></span><span></span>
 //         </div>
 
 //         <nav className="main-nav home-nav">
 //           <button onClick={() => navigate("/")}>אודות</button>
 //           <button onClick={() => navigate("/")}>חזון</button>
 //           <button onClick={() => navigate("/contact")}>צור קשר</button>
-//           <button onClick={() => navigate("/supporters")}>תומכים מובילים</button>
+//           <button onClick={() => navigate("/supporters")}>תומכים</button>
 //           <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
 //           <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
 //           {user?.userType === "מנהל" && (
@@ -62,12 +288,12 @@
 //                 src={`http://localhost:8080/users/image/${user.profilePic}`}
 //                 alt="פרופיל"
 //                 className="profile-pic"
-//                 onClick={toggleDropdown}
+//                 onClick={() => setDropdownOpen(!dropdownOpen)}
 //               />
 //               <span className="profile-name">{user.userName}</span>
 //               <div className="dropdown">
 //                 <button onClick={() => navigate("/messages")}>🔔 הודעות</button>
-//                 <button onClick={() => navigate("/profile")}>🧍 פרופיל אישי</button>
+//                 <button onClick={() => navigate("/profile")}>🧍 פרופיל</button>
 //                 <button onClick={handleLogout}>🔓 התנתקות</button>
 //               </div>
 //             </div>
@@ -77,7 +303,7 @@
 //                 src="/images/profile-placeholder.png"
 //                 alt="התחבר"
 //                 className="profile-pic"
-//                 onClick={() => navigate("/login")}
+//                 onClick={() => openModal(<Login />, "/login")}
 //               />
 //               <span className="profile-name">התחברות</span>
 //             </div>
@@ -85,22 +311,35 @@
 //         </div>
 //       </div>
 
-//       {/* תפריט במובייל */}
+//       {/* --- Mobile Menu --- */}
 //       <div className={`mobile-nav ${mobileMenuOpen ? "show" : ""}`}>
 //         <button onClick={() => navigate("/")}>אודות</button>
 //         <button onClick={() => navigate("/")}>חזון</button>
 //         <button onClick={() => navigate("/contact")}>צור קשר</button>
-//         <button onClick={() => navigate("/supporters")}>תומכים מובילים</button>
-//         <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
-//         <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
+//         <button onClick={() => navigate("/supporters")}>תומכים</button>
+//         <button onClick={() => navigate("/interviews")}>ראיונות</button>
+//         <button onClick={() => navigate("/episodes")}>פרקים</button>
 //         {user?.userType === "מנהל" && (
-//           <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+//           <button onClick={() => navigate("/admin")}>🔐 ניהול</button>
 //         )}
 //       </div>
-//         <div className="page-content"></div>
 
-//       <Outlet />
+//       {/* --- תוכן הדף --- */}
+//       <div className="page-content">
+//         <Outlet />
+//       </div>
 
+//       {/* --- מודאל --- */}
+//       {/* {modalContent && (
+//         <div className="modal-overlay" onClick={closeModal}>
+//           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+//             <button className="close-button" onClick={closeModal}>❌</button>
+//             {modalContent}
+//           </div>
+//         </div>
+//       )} */}
+
+//       {/* --- רשתות חברתיות --- */}
 //       <div className="social-links">
 //         <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
 //           <img src="/icons/x.png" alt="X" />
@@ -120,14 +359,17 @@
 // }
 import { Outlet, useNavigate } from "react-router-dom";
 import "../style/frameStyle.css";
+import Login from "./Entry/logIn.jsx";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../db-api";
+import { useModal } from "../AppContext.jsx";
 
 export default function Framework() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { openModal } = useModal();
 
   useEffect(() => {
     const currUser = getCurrentUser();
@@ -143,11 +385,18 @@ export default function Framework() {
 
   return (
     <div className="main-container">
+      {/* === Header === */}
       <div className="header-bar">
-        <img src="/images/לוגו-סופי-לבן-2048x901.png" alt="על המשמעות" className="logo-header" />
+        <img
+          src="/images/לוגו-סופי-לבן-2048x901.png"
+          alt="על המשמעות"
+          className="logo-header"
+        />
+
         <div className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
           <span></span><span></span><span></span>
         </div>
+
         <nav className="main-nav home-nav">
           <button onClick={() => navigate("/")}>אודות</button>
           <button onClick={() => navigate("/")}>חזון</button>
@@ -155,7 +404,9 @@ export default function Framework() {
           <button onClick={() => navigate("/supporters")}>תומכים</button>
           <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>
           <button onClick={() => navigate("/episodes")}>פרקי הפודקאסט</button>
-          {user?.userType === "מנהל" && <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>}
+          {user?.userType === "מנהל" && (
+            <button onClick={() => navigate("/admin")}>🔐 ממשק ניהול</button>
+          )}
         </nav>
 
         <div className="profile-menu-container">
@@ -180,7 +431,7 @@ export default function Framework() {
                 src="/images/profile-placeholder.png"
                 alt="התחבר"
                 className="profile-pic"
-                onClick={() => navigate("/login")}
+                onClick={() => openModal(<Login />, "/login")}
               />
               <span className="profile-name">התחברות</span>
             </div>
@@ -188,7 +439,7 @@ export default function Framework() {
         </div>
       </div>
 
-      {/* תפריט מובייל */}
+      {/* === Mobile Navigation === */}
       <div className={`mobile-nav ${mobileMenuOpen ? "show" : ""}`}>
         <button onClick={() => navigate("/")}>אודות</button>
         <button onClick={() => navigate("/")}>חזון</button>
@@ -196,13 +447,17 @@ export default function Framework() {
         <button onClick={() => navigate("/supporters")}>תומכים</button>
         <button onClick={() => navigate("/interviews")}>ראיונות</button>
         <button onClick={() => navigate("/episodes")}>פרקים</button>
-        {user?.userType === "מנהל" && <button onClick={() => navigate("/admin")}>🔐 ניהול</button>}
+        {user?.userType === "מנהל" && (
+          <button onClick={() => navigate("/admin")}>🔐 ניהול</button>
+        )}
       </div>
 
+      {/* === תוכן עמוד פנימי === */}
       <div className="page-content">
         <Outlet />
       </div>
 
+      {/* === רשתות חברתיות === */}
       <div className="social-links">
         <a href="https://x.com/al_hamashmaut" target="_blank" rel="noreferrer">
           <img src="/icons/x.png" alt="X" />

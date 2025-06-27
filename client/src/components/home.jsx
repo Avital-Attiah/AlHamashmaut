@@ -56,9 +56,9 @@ export default function Home() {
   return (
     <div className="home-container">
       {/* HERO section */}
-     <section id="space" className="section">
+     {/* <section id="space" className="section">
       
-      </section>
+      </section> */}
       <section className="hero-section">
         <img src={`http://localhost:8080/pic/${heroImages[bgIndex]}`} alt="background" className="hero-background" />
         <div className="hero-overlay">
