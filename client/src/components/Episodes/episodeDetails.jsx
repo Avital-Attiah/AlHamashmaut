@@ -52,58 +52,58 @@ export default function EpisodeDetails({ id, showComments }) {
   };
 
   return (
-    
     <div className="episode-container">
-       <section id="space2" ></section>
-       
-      {!isAdminPage && (
-        <div className="episode-sidebar">
-          <h4>{episode && episode.isFutureInterview ? "ראיונות עתידיים נוספים" : "פרקים נוספים"}</h4>
-          <div className="episode-list">
-            {Array.isArray(allEpisodes) &&
-              allEpisodes
-                .filter(ep => String(ep.id) !== String(episodeId))
-                .map(ep => (
-                  <Episode key={ep.id} episode={ep} />
-                ))}
-          </div>
-        </div>
-      )}
+      <div className="episode-layout-container">
 
-      <div className="episode-main">
-        {episode ? (
-          <>
-            <img
-              src={`http://localhost:8080/episodes/image/${episode.picture}`}
-              alt={episode.title}
-              className="episode-image"
-            />
-            <h2>{episode.title}</h2>
-            <p>{episode.body}</p>
+        <div className="episode-main">
+          {episode ? (
+            <>
+              <img
+                src={`http://localhost:8080/episodes/image/${episode.picture}`}
+                alt={episode.title}
+                className="episode-image"
+              />
+              <h2>{episode.title}</h2>
+              <p>{episode.body}</p>
 
-            <div className="episode-platforms">
-              {episode.spotifyLink && <a href={episode.spotifyLink} target="_blank" rel="noreferrer">🎧 Spotify</a>}
-              {episode.appleLink && <a href={episode.appleLink} target="_blank" rel="noreferrer">🍏 Apple</a>}
-              {episode.soundcloudLink && <a href={episode.soundcloudLink} target="_blank" rel="noreferrer">☁️ SoundCloud</a>}
-            </div>
-
-            <div className="episode-comments">
-              <Comments episodeId={Number(episodeId)} isInterview={episode.isFutureInterview} />
-            </div>
-
-            {isAdminPage && (
-              <div style={{ marginTop: '1rem' }}>
-                <button onClick={() => navigate(`/episode/${id}/update`, { state: { episode } })}>
-                  עדכן פרק
-                </button>
-                <button onClick={handleDelete} style={{ marginRight: '10px', color: 'red' }}>
-                  🗑 מחק פרק
-                </button>
+              <div className="episode-platforms">
+                {episode.spotifyLink && <a href={episode.spotifyLink} target="_blank" rel="noreferrer">🎧 Spotify</a>}
+                {episode.appleLink && <a href={episode.appleLink} target="_blank" rel="noreferrer">🍏 Apple</a>}
+                {episode.soundcloudLink && <a href={episode.soundcloudLink} target="_blank" rel="noreferrer">☁️ SoundCloud</a>}
               </div>
-            )}
-          </>
-        ) : (
-          <p>טוען פרק...</p>
+
+              <div className="episode-comments">
+                <Comments episodeId={Number(episodeId)} isInterview={episode.isFutureInterview} />
+              </div>
+
+              {isAdminPage && (
+                <div style={{ marginTop: '1rem' }}>
+                  <button onClick={() => navigate(`/episode/${id}/update`, { state: { episode } })}>
+                    עדכן פרק
+                  </button>
+                  <button onClick={handleDelete} style={{ marginRight: '10px', color: 'red' }}>
+                    🗑 מחק פרק
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <p>טוען פרק...</p>
+          )}
+        </div>
+
+        {!isAdminPage && (
+          <div className="episode-sidebar">
+            <h4>{episode && episode.isFutureInterview ? "ראיונות עתידיים נוספים" : "פרקים נוספים"}</h4>
+            <div className="episode-list">
+              {Array.isArray(allEpisodes) &&
+                allEpisodes
+                  .filter(ep => String(ep.id) !== String(episodeId))
+                  .map(ep => (
+                    <Episode key={ep.id} episode={ep} />
+                  ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

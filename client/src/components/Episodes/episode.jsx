@@ -1,27 +1,4 @@
-// import { useNavigate } from "react-router-dom";
 
-// const Episode = ({ episode }) => {
-//   const navigate = useNavigate();
- 
-//   const { id, title, body, picture, isFutureInterview } = episode;
-
-//   return (
-//     <div className="episode-card" onClick={() => {
-//       if (isFutureInterview)
-//         navigate(`/episode/${id}/qustion`);
-//       else
-//         navigate(`/episode/${id}/comment`);
-//       // navigate(`/episodes/${id}`);
-//     }
-//     }>
-//       {picture && <img src={picture} alt={title} className="episode-thumbnail" />}
-//       <h3>{title}</h3>
-//       <p>{body.slice(0, 100)}...</p>
-//     </div>
-//   );
-// };
-
-// export default Episode;
 
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "../../db-api.jsx"; // עדכן לפי מיקום הקובץ שלך
@@ -72,28 +49,13 @@ const Episode = ({ episode }) => {
   };
 
   return (
+     <div className="page-container">
     <div className="episode-card" onClick={handleCardClick}>
       {picture && <img src={`http://localhost:8080/episodes/image/${episode.picture}`} alt={title} className="episode-thumbnail" />}
       <h3>{title}</h3>
       <p>{body.slice(0, 100)}...</p>
 
-      {/* {user?.userType === "admin" && ( */}
-        {/* <button
-          onClick={handleUpdateClick}
-          className="update-button"
-          style={{
-            marginTop: "10px",
-            padding: "5px 10px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer"
-          }}
-        >
-          עדכן
-        </button> */}
-      {/* )} */}
+    
 
       {/* --- NEW: כפתור מחיקה מוצג רק למנהלים */}
       {user?.userType === "admin" && (
@@ -113,6 +75,7 @@ const Episode = ({ episode }) => {
           מחק
         </button>
       )}
+    </div>
     </div>
   );
 };

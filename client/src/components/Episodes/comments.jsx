@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getCurrentUser, getData, addData, updateData, deleteData } from "../../db-api";
 import Comment from "./comment.jsx";
-import '../../style/global.css'
+// import '../../style/global.css'
 
 
 export default function Comments({ episodeId, isInterview = false }) {
@@ -19,21 +19,7 @@ export default function Comments({ episodeId, isInterview = false }) {
     fetchMoreComments(0);
   }, [episodeId]);
 
-  // const fetchMoreComments = async (pageNum) => {
-  //   try {
-  //     const offset = pageNum * limit;
-  //     const res = await getData(`comments/${episodeId}?limit=${limit}&offset=${offset}`);
-  //     const newComments = res.comments || [];
-  //     const totalCount = res.total || 0;
-
-  //     setComments((prev) => [...prev, ...newComments]);
-  //     setPage(pageNum);
-  //     setTotal(totalCount);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
-
+  
   const fetchMoreComments = async (pageNum) => {
   try {
     const offset = pageNum * limit;
@@ -92,6 +78,7 @@ export default function Comments({ episodeId, isInterview = false }) {
 
   return (
     <div>
+       <div className="page-container">
       <h3>{isInterview ? "שאלות" : "תגובות"}</h3>
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
@@ -141,6 +128,7 @@ export default function Comments({ episodeId, isInterview = false }) {
           <strong>התחבר כדי להשתתף בדיון!</strong>
         </p>
       )}
+    </div>
     </div>
   );
 }

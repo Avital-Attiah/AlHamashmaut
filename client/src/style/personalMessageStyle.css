@@ -1,0 +1,183 @@
+.messages-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Heebo", sans-serif;
+  direction: rtl;
+  color: white;
+}
+
+.messages-sidebar {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+
+.messages-sidebar button {
+  background-color: transparent;
+  border: 2px solid #6a1b9a;
+  border-radius: 12px;
+  padding: 0.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.messages-sidebar button.active,
+.messages-sidebar button:hover {
+  background-color: #6a1b9a;
+}
+
+.messages-main {
+  flex: 1;
+}
+
+.message-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #9c27b0;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  box-shadow: 0 0 12px rgba(106, 27, 154, 0.2);
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.sender-name {
+  font-weight: bold;
+}
+
+.admin-tag {
+  background-color: #d32f2f;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  margin-right: 0.5rem;
+}
+
+.message-body {
+  margin: 0.5rem 0;
+}
+
+.action-button {
+  background-color: #8e24aa;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+/* now */
+.messages-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Heebo", sans-serif;
+  direction: rtl;
+  color: white;
+}
+
+.messages-sidebar {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+
+.messages-sidebar button {
+  background-color: transparent;
+  border: 2px solid #6a1b9a;
+  border-radius: 12px;
+  padding: 0.7rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.messages-sidebar button.active,
+.messages-sidebar button:hover {
+  background-color: #6a1b9a;
+}
+
+.messages-main {
+  flex: 1;
+}
+
+.message-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #9c27b0;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  box-shadow: 0 0 12px rgba(106, 27, 154, 0.2);
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.sender-name {
+  font-weight: bold;
+}
+
+.admin-tag {
+  background-color: #d32f2f;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  margin-right: 0.5rem;
+}
+
+.message-body {
+  margin: 0.5rem 0;
+}
+
+.action-button {
+  background-color: #8e24aa;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}

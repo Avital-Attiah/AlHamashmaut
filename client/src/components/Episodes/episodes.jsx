@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import Episode from './episode.jsx';
-import EpisodeDetails from './episodeDetails.jsx';
-import { getData } from '../../db-api';
-import '../../style/allEpisodesStyle.css';
+import React, { useEffect, useState } from "react";
+import Episode from "./episode.jsx";
+import EpisodeDetails from "./episodeDetails.jsx";
+import { getData } from "../../db-api";
+import "../../style/allEpisodesStyle.css";
 
 export default function EpisodesPage({ showFuture = false }) {
   const [episodes, setEpisodes] = useState([]);
@@ -11,10 +11,9 @@ export default function EpisodesPage({ showFuture = false }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const limit = 6;
+  const limit = 3;
 
   useEffect(() => {
-    // אתחול רשימה במעבר בין פרקי עבר לעתיד
     setEpisodes([]);
     setPage(0);
     setTotal(0);
@@ -54,7 +53,7 @@ export default function EpisodesPage({ showFuture = false }) {
   );
 
   return (
-    <div className={`podcasts-page ${selectedEpisode ? "show-single" : ""}`} dir="rtl">
+    <div className="podcasts-page" dir="rtl">
       {!selectedEpisode && (
         <>
           <h2 style={{ textAlign: "center" }}>{showFuture ? "ראיונות עתידיים" : "פרקים שפורסמו"}</h2>
@@ -69,37 +68,35 @@ export default function EpisodesPage({ showFuture = false }) {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {selectedEpisode ? (
-        <>
+      <div className={`episode-layout ${selectedEpisode ? "split" : ""}`}>
+        {selectedEpisode && (
           <div className="episode-main">
             <EpisodeDetails episode={selectedEpisode} onClose={closeDetails} />
           </div>
-          <div className="episode-list episode-sidebar">
-            {episodes.map((ep) => (
+        )}
+
+        <div className={`episode-grid ${selectedEpisode ? "sidebar" : ""}`}>
+
+
+
+          {filteredEpisodes.length > 0 ? (
+            filteredEpisodes.map((ep) => (
               <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
-            ))}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="episode-list">
-            {filteredEpisodes.length > 0 ? (
-              filteredEpisodes.map((ep) => (
-                <Episode key={ep.id} episode={ep} onClick={() => handleSelectEpisode(ep)} />
-              ))
-            ) : (
-              <p style={{ textAlign: "center", marginTop: "2rem" }}>
-                לא נמצאו תוצאות לחיפוש "{search}"
-              </p>
-            )}
-          </div>
-          {episodes.length < total && (
-            <button className="load-more" onClick={handleLoadMore}>
-              הצג עוד
-            </button>
+            ))
+          ) : (
+            <p style={{ textAlign: "center", marginTop: "2rem" }}>
+              לא נמצאו תוצאות לחיפוש "{search}"
+            </p>
           )}
-        </>
-      )}
+
+
+        </div>
+        {episodes.length < total && (
+          <button className="load-more" onClick={handleLoadMore}>
+            הצג עוד
+          </button>
+        )}
+      </div>
     </div>
   );
 }

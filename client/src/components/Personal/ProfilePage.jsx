@@ -348,6 +348,7 @@ export default function ProfilePage() {
 
   return (
     <div>
+       <div className="page-container">
       <h2>הפרופיל שלי</h2>
       <img src={previewUrl || '/default-avatar.png'} alt="avatar" width={120} />
       {isEditing && <input type="file" onChange={handlePictureChange} />}
@@ -378,6 +379,7 @@ export default function ProfilePage() {
           <button onClick={() => setIsEditing(true)}>ערוך</button>
         </div>
       )}
+    </div>
     </div>
   );
 }

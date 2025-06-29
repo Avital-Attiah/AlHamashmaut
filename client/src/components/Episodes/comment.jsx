@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { getCurrentUser, updateData, deleteData, addData, getData } from '../../db-api';
 import '../../style/commentStyle.css';
-import '../../style/global.css'
+// import '../../style/global.css'
 
 export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
   const currentUser = getCurrentUser();
@@ -82,6 +82,7 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
 
   return (
     <div className="comment-box">
+       <div className="page-container">
       <div className="comment-header">
         <strong>
           {comment.userType === "מנהל" ? "🤴🏼 " : ""}
@@ -158,6 +159,7 @@ export default function Comment({ comment, onUpdate, onDelete, isInterview }) {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

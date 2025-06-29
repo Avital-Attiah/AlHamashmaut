@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getData } from "../../db-api";
 import { useNavigate } from "react-router-dom";
 import EpisodeDetails from "../Episodes/episodeDetails";
-import "../../style/allEpisodesStyle.css";
-import '../../style/global.css'
+import "../../style/allEpisodesAdminStyle.css"; // מתבסס על אותו עיצוב
 
 export default function AllFutureInterviews() {
   const [interviews, setInterviews] = useState([]);
@@ -11,7 +10,7 @@ export default function AllFutureInterviews() {
   const [error, setError] = useState("");
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const limit = 5;
+  const limit = 3;
 
   const navigate = useNavigate();
 
@@ -22,7 +21,7 @@ export default function AllFutureInterviews() {
       const episodes = response.episodes || [];
       const totalCount = response.total ?? 0;
 
-      if (pageNumber === 0) setInterviews(episodes); // אתחול
+      if (pageNumber === 0) setInterviews(episodes);
       else setInterviews((prev) => [...prev, ...episodes]);
 
       setTotal(totalCount);
@@ -33,7 +32,7 @@ export default function AllFutureInterviews() {
   };
 
   useEffect(() => {
-    fetchInterviews(0); // רק קריאה אחת – בלי reset ידני
+    fetchInterviews(0);
   }, []);
 
   const handleLoadMore = () => {
@@ -42,29 +41,31 @@ export default function AllFutureInterviews() {
 
   return (
     <div className="admin-section">
-      <h2>ראיונות עתידיים</h2>
-      <button onClick={() => navigate("/admin/interview/new")}>➕ הוסף ראיון עתידי</button>
-      {error && <p className="error">{error}</p>}
+      <div className="page-container">
+        <h2>ראיונות עתידיים</h2>
+        <button className="add-button" onClick={() => navigate("/admin/allFutureInterviews/interview/new")}>➕ הוסף ראיון עתידי</button>
+        {error && <p className="error">{error}</p>}
 
-      <div style={{ display: "flex" }}>
-        <ul style={{ flex: 1 }}>
-          {interviews.map((interview) => (
-            <li key={interview.id}>
-              <button onClick={() => setSelectedInterview(interview)}>{interview.title}</button>
-            </li>
-          ))}
-          {interviews.length < total && (
-            <li style={{ marginTop: '1rem' }}>
-              <button onClick={handleLoadMore}>טען עוד ראיונות</button>
-            </li>
+        <div className="episodes-layout">
+          <ul className="episodes-list">
+            {interviews.map((interview) => (
+              <li key={interview.id}>
+                <button className="episode-title" onClick={() => setSelectedInterview(interview)}>{interview.title}</button>
+              </li>
+            ))}
+            {interviews.length < total && (
+              <li>
+                <button className="load-more" onClick={handleLoadMore}>טען עוד ראיונות</button>
+              </li>
+            )}
+          </ul>
+
+          {selectedInterview && (
+            <div className="episode-details-container">
+              <EpisodeDetails id={selectedInterview.id} showComments={false} />
+            </div>
           )}
-        </ul>
-
-        {selectedInterview && (
-          <div style={{ flex: 2, marginRight: "2rem" }}>
-            <EpisodeDetails id={selectedInterview.id} showComments={false} />
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getData } from "../../db-api";
 import { useNavigate } from "react-router-dom";
 import EpisodeDetails from "../Episodes/episodeDetails";
-import "../../style/allEpisodesStyle.css"; // ייבוא קובץ CSS מותאם אישית
-import '../../style/global.css'
+ import "../../style/allEpisodesAdminStyle.css"; // ייבוא קובץ CSS מותאם אישית
 
 export default function AllEpisodes() {
   const [posts, setPosts] = useState([]);
@@ -41,31 +40,43 @@ export default function AllEpisodes() {
   };
 
   return (
-    <div className="admin-section">
+  <div className="admin-section">
+    <div className="page-container">
       <h2>כל הפרקים</h2>
-      <button onClick={() => navigate("episode/new")}>➕ הוסף פרק</button>
+
+      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <button className="add-button" onClick={() => navigate("episode/new")}>
+          ➕ הוסף פרק
+        </button>
+      </div>
+
       {error && <p className="error">{error}</p>}
 
-      <div style={{ display: "flex" }}>
-        <ul style={{ flex: 1 }}>
+      <div className="episodes-layout">
+        <ul className="episodes-list">
           {posts.map((p) => (
             <li key={p.id}>
-              <button onClick={() => setSelectedPost(p)}>{p.title}</button>
+              <button className="episode-title" onClick={() => setSelectedPost(p)}>
+                {p.title}
+              </button>
             </li>
           ))}
           {posts.length < total && (
-            <li style={{ marginTop: '1rem' }}>
-              <button onClick={handleLoadMore}>טען עוד פרקים</button>
+            <li>
+              <button className="load-more" onClick={handleLoadMore}>
+                טען עוד פרקים
+              </button>
             </li>
           )}
         </ul>
 
         {selectedPost && (
-          <div style={{ flex: 2, marginRight: "2rem" }}>
+          <div className="episode-details-container">
             <EpisodeDetails id={selectedPost.id} showComments={true} />
           </div>
         )}
       </div>
     </div>
-  );
+  </div>
+);
 }

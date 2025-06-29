@@ -5,6 +5,37 @@
   direction: rtl;
   text-align: center;
   font-family: inherit;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* מרכז אופקית */
+}
+
+#space2{
+ height:100px;
+}
+
+
+.title {
+  font-size: 2rem;
+  color: #1a237e;
+  margin-bottom: 2rem;
+   text-align: center; 
+}
+
+/* .supporters-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+} */
+ .supporters-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  direction: rtl;
+  text-align: center;
+  font-family: inherit;
 }
 #space2{
  height:100px;
@@ -30,6 +61,158 @@
   perspective: 1000px;
   cursor: pointer;
 }
+
+.supporter-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
+}
+
+.supporter-flip-card.flipped .supporter-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.supporter-front,
+.supporter-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  padding: 1rem;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.supporter-front img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 0.7rem;
+}
+
+.supporter-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #1a237e;
+}
+
+.supporter-back {
+  transform: rotateY(180deg);
+  color: #333;
+  text-align: center;
+}
+
+.supporter-back h3 {
+  color: #1a237e;
+  margin-bottom: 0.5rem;
+}
+
+.membership-description {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 3rem;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.04);
+}
+
+.membership-description h2 {
+  color: #1a237e;
+  margin-bottom: 1rem;
+}
+
+.membership-plans {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.plan {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  width: 300px;
+  text-align: right;
+}
+
+.plan h3 {
+  color: #004d40;
+  margin-bottom: 1rem;
+}
+
+.plan ul {
+  padding-right: 1.2rem;
+  list-style: disc;
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.plan button {
+  margin-top: 1rem;
+  background-color: #1a237e;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.leading-supporters-description {
+  margin: 2rem 0;
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.8;
+  padding: 0 1rem;
+}
+
+.action-buttons {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.action-buttons button {
+  background: linear-gradient(90deg, #004d40, #00695c, #004d40);
+  background-size: 300% 300%;
+  animation: glowButton 3s ease infinite;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
+}
+
+@keyframes glowButton {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.supporter-flip-card {
+  background: transparent;
+  perspective: 1000px;
+  cursor: pointer;
+  flex: 0 0 220px;
+  max-width: 220px;
+}
+.supporters-container .supporters-list {
+  width: 100%;
+}
+
+
 
 .supporter-flip-inner {
   position: relative;

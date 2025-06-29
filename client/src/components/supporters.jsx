@@ -40,6 +40,7 @@ const Supporters = () => {
 
   return (
     <div className="supporters-container">
+       <div className="page-container">
       <h1 className="title">תומכים מובילים</h1>
     <section id="space2" ></section>
       <div className="supporters-list">
@@ -106,6 +107,7 @@ const Supporters = () => {
           <button>הפכו לתורמים מובילים</button>
         </a>
       </div>
+    </div>
     </div>
   );
 };

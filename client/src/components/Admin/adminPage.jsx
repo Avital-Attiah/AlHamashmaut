@@ -9,6 +9,7 @@ export default function AdminPage() {
 
     return (
         <div className="admin-dashboard">
+             <div className="page-container">
             <h1>ברוך הבא לממשק הניהול</h1>
 
             <div className="admin-buttons">
@@ -19,6 +20,6 @@ export default function AdminPage() {
             </div>
                <Outlet />
         </div>
-        
+    </div>
     );
 }

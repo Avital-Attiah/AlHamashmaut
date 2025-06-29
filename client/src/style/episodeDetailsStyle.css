@@ -1,143 +1,100 @@
-/* .episode-container {
+/* === עימוד דף פרק === */
+.episode-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  max-width: 1200px;
-  margin: auto;
-  padding: 2rem;
-  direction: rtl;
+  justify-content: center;
+  padding-top: 2rem;
+  width: 100%;
 }
 
+/* העימוד הראשי של העמוד */
+.episode-layout-container {
+  display: flex;
+  flex-direction: row-reverse; /* פרק בצד שמאל, רשימת פרקים בצד ימין */
+  align-items: flex-start;
+  max-width: 1400px;
+  width: 100%;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* === פרק ראשי === */
 .episode-main {
-  flex: 3;
-  background: #fafafa;
+  flex: 2;
+  width: 100%;
+  max-width: 100%;
+  background: #f4f4f4;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #000;
+  box-sizing: border-box;
 }
 
 .episode-image {
   width: 100%;
-  max-height: 400px;
+  height: auto;
+  max-height: 350px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 1rem;
 }
 
-.episode-main h2 {
-  font-size: 1.6rem;
-  color: #212121;
-  margin-bottom: 0.5rem;
-}
-
-.episode-main p {
-  color: #424242;
-  line-height: 1.7;
-  font-size: 1.05rem;
+.episode-platforms {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .episode-platforms a {
-  display: inline-block;
-  margin-left: 1rem;
-  color: #0d47a1;
-  font-weight: bold;
+  background: #3f51b5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   text-decoration: none;
-} */
-.podcasts-page {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 2rem;
-  padding: 6rem 2rem 2rem;
-  height: calc(100vh - 6rem);
-  box-sizing: border-box;
-  overflow: hidden;
+  transition: background 0.3s ease;
 }
 
-.episode-list {
+.episode-platforms a:hover {
+  background: #303f9f;
+}
+
+.episode-comments {
+  margin-top: 2rem;
+}
+
+/* === צד ימין – רשימת פרקים נוספים === */
+.episode-sidebar {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow-y: auto;
-  max-height: 100%;
-  padding-left: 1rem;
-  border-left: 1px solid #ccc;
+  max-height: none;
+  overflow: visible;
 }
 
-.episode-main {
-  flex: 2;
-  background: #fafafa;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 100%;
-}
-
-.episode-image {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-
-.episode-main h2 {
-  font-size: 1.6rem;
-  color: #212121;
+.episode-sidebar h4 {
   margin-bottom: 0.5rem;
+  text-align: center;
+  color: #fff;
 }
 
-.episode-main p {
-  color: #424242;
-  line-height: 1.7;
-  font-size: 1.05rem;
-}
 .episode-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.episode-platforms a {
-  display: inline-block;
-  margin-left: 1rem;
-  color: #0d47a1;
-  font-weight: bold;
-  text-decoration: none;
-}
-.episode-card {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: auto;
-  min-height: 320px;
-  padding-bottom: 1rem;
+  gap: 1rem;
 }
 
-.episode-thumbnail {
-  height: 200px;
-  object-fit: cover;
-  width: 100%;
-  display: block;
-}
+/* === רספונסיביות לניידים === */
+@media (max-width: 1024px) {
+  .episode-layout-container {
+    flex-direction: column;
+  }
 
-.episode-card-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 0.5rem 1rem 0 1rem;
-  color: #111;
-  text-align: center;
-  line-height: 1.3;
-}
-
-.episode-card p {
-  margin: 0.3rem 1rem;
-  font-size: 0.9rem;
-  color: #444;
-  flex-grow: 1;
+  .episode-main,
+  .episode-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
 }

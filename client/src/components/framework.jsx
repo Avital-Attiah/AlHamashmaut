@@ -399,7 +399,6 @@ export default function Framework() {
 
         <nav className="main-nav home-nav">
           <button onClick={() => navigate("/")}>אודות</button>
-          <button onClick={() => navigate("/")}>חזון</button>
           <button onClick={() => navigate("/contact")}>צור קשר</button>
           <button onClick={() => navigate("/supporters")}>תומכים</button>
           <button onClick={() => navigate("/interviews")}>ראיונות עתידיים</button>

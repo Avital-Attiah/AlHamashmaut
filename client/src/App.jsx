@@ -1,161 +1,9 @@
 
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import Login from "./components/Entry/logIn.jsx";
-// import Register from "./components/Entry/register.jsx";
-// import Home from "./components/home.jsx";
-// import Episodes from "./components/Episodes/episodes.JSX";
-// import EpisodeDetails from "./components/Episodes/episodeDetails.jsx";
-// import Supporters from "./components/supporters.jsx";
-// import Framework from "./components/framework.jsx"; // ✅ חדש
-// import EpisodeForm from "./components/Episodes/EpisodeForm.jsx";
-// import Contact from "./components/contact.jsx"; // ✅ חדש
-// import AdminPage from "./components/Admin/adminPage.jsx";
-// import AllUsers from "./components/Admin/allUsers.jsx";
-// import AllEpisodes from "./components/Admin/allEpisodes.jsx";
-// import AllFutureInterviews from "./components/Admin/allFutureInterviews.jsx"; // ✅ חדש
-// import ProfilePage from "./components/Personal/ProfilePage.jsx";
-// import MessagesPage from "./components/Personal/MessagesPage.jsx";
-
-// import { ModalProvider } from "./AppContext.jsx";
-
-// function App() {
-
-//   return (
-    
-//     <BrowserRouter>
-//       <ModalProvider>
-//       <Routes>
-//         {/* דפים ללא פריסה (login/register) */}
-//         <Route path="/register" element={<Register />} />
-//         {/* <Route path="/login" element={<Login></Login>} /> */}
-
-
-//         {/* <Route path="/admin" element={<AdminPage />} />
-//         <Route path="/admin/allUsers" element={<AllUsers />} />
-//         <Route path="/admin/allEpisodes" element={<AllEpisodes />} />
-//         <Route path="/admin/allFutureInterviews" element={<AllFutureInterviews />} /> */}
-//         {/* <Route path="/episode/new" element={<AddEditEpisode />} />
-//         <Route path="/episode/form" element={<AddEditEpisode />} />
-//         <Route path="/episode/form/future" element={<AddEditEpisode />} />
-//         <Route path="/episode/form/:id" element={<AddEditEpisode />} /> */}
-
-//     <Route path="/admin/episode/new" element={
-//             <EpisodeForm newInterview={false}  />
-//           } />
-
-//  <Route path="/admin/interview/new" element={
-//             <EpisodeForm newInterview={true}/>
-//           } />
-
-//         {/* דפים עם פריסת Framework */}
-//         <Route path="/" element={<Framework />}>
-//           <Route index element={<Home />} />
-       
-//         {/* <Route path="login" element={<Login></Login>} /> */}
-
-//           <Route path="episodes" element={<Episodes showFuture={false} />} />
-//           {/* <Route path="home" index element={<Home />} /> */}
-//   <Route path="admin" element={<AdminPage />} >
-//    <Route path="allUsers" element={<AllUsers />} />
-//         <Route path="allEpisodes" element={<AllEpisodes />} />
-//         <Route path="allFutureInterviews" element={<AllFutureInterviews />} />
-//         <Route path="allEpisodes/episode/new" element={
-//             <EpisodeForm newInterview={false}  />
-//           } />
-
-//  <Route path="allFutureInterviews/interview/new" element={
-//             <EpisodeForm newInterview={true}/>
-//           } />
-//           </Route>
-//           <Route path="episodes" element={<Episodes showFuture={false} />} />
-    
-//           <Route path="episode/:id/update" element={
-//             <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
-//           } />
-
-//           <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
-
-//           <Route path="episode/:id/update" element={
-//             <EpisodeForm onSuccess={() => alert(`/episodes}`)} />
-//           } />
-      
-//           <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
-//           <Route path="episode/:id/comment" element={<EpisodeDetails showComments={true} />} />
-//           <Route path="interviews" element={<Episodes showFuture={true} />} />
-//           <Route path="supporters" element={<Supporters />} />
-//           <Route path="contact" element={<Contact />} />
-//           {/* אפשר להוסיף כאן גם contact בעתיד */}
-//            <Route path="profile" element={<ProfilePage />} />
-//   <Route path="messages" element={<MessagesPage />} />
-//         </Route>
-
-//         {/* דף שגיאה */}
-//         <Route path="*" element={<div>Page Not Found</div>} />
-//       </Routes>
-//        </ModalProvider>
-//     </BrowserRouter>
-   
-//   );
-// }
-
-// export default App;
-
-// // import { BrowserRouter, Routes, Route } from "react-router-dom";
-// // import Framework from "./components/framework.jsx";
-// // import Home from "./components/home.jsx";
-// // import Episodes from "./components/Episodes/episodes.jsx";
-// // import EpisodeDetails from "./components/Episodes/episodeDetails.jsx";
-// // import Supporters from "./components/supporters.jsx";
-// // import Contact from "./components/contact.jsx";
-// // import ProfilePage from "./components/Personal/ProfilePage.jsx";
-// // import MessagesPage from "./components/Personal/MessagesPage.jsx";
-// // import AdminPage from "./components/Admin/adminPage.jsx";
-// // import AllUsers from "./components/Admin/allUsers.jsx";
-// // import AllEpisodes from "./components/Admin/allEpisodes.jsx";
-// // import AllFutureInterviews from "./components/Admin/allFutureInterviews.jsx";
-// // import EpisodeForm from "./components/Episodes/EpisodeForm.jsx";
-// // import { ModalProvider } from "./AppContext.jsx";
-
-// // function App() {
-// //   return (
-// //     <BrowserRouter>
-// //       <ModalProvider>
-// //         <Routes>
-// //           <Route path="/" element={<Framework />}>
-// //             <Route index element={<Home />} />
-// //             <Route path="episodes" element={<Episodes showFuture={false} />} />
-// //             <Route path="interviews" element={<Episodes showFuture={true} />} />
-// //             <Route path="episode/:id/comment" element={<EpisodeDetails showComments={true} />} />
-// //             <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
-// //             <Route path="supporters" element={<Supporters />} />
-// //             <Route path="contact" element={<Contact />} />
-// //             <Route path="profile" element={<ProfilePage />} />
-// //             <Route path="messages" element={<MessagesPage />} />
-
-// //             {/* ניהול */}
-// //             <Route path="admin" element={<AdminPage />}>
-// //               <Route path="allUsers" element={<AllUsers />} />
-// //               <Route path="allEpisodes" element={<AllEpisodes />} />
-// //               <Route path="allFutureInterviews" element={<AllFutureInterviews />} />
-// //               <Route path="allEpisodes/episode/new" element={<EpisodeForm newInterview={false} />} />
-// //               <Route path="allFutureInterviews/interview/new" element={<EpisodeForm newInterview={true} />} />
-// //             </Route>
-// //           </Route>
-
-// //           {/* דף שגיאה */}
-// //           <Route path="*" element={<div>Page Not Found</div>} />
-// //         </Routes>
-// //       </ModalProvider>
-// //     </BrowserRouter>
-// //   );
-// // }
-
-// // export default App;
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Entry/logIn.jsx";
 import Register from "./components/Entry/register.jsx";
 import Home from "./components/home.jsx";
-import Episodes from "./components/Episodes/episodes.jsx";
+import EpisodesPage from "./components/Episodes/episodes.jsx";
 import EpisodeDetails from "./components/Episodes/episodeDetails.jsx";
 import Supporters from "./components/supporters.jsx";
 import Framework from "./components/framework.jsx";
@@ -166,6 +14,8 @@ import AllUsers from "./components/Admin/allUsers.jsx";
 import AllEpisodes from "./components/Admin/allEpisodes.jsx";
 import AllFutureInterviews from "./components/Admin/allFutureInterviews.jsx";
 import ProfilePage from "./components/Personal/ProfilePage.jsx";
+import "./style/globalStyle.css"; // ייבוא קובץ CSS גלובלי
+
 // import MessagesPage from "./components/Personal/MessagesPage.jsx";
 
 import { ModalProvider } from "./AppContext.jsx";
@@ -182,8 +32,8 @@ function App() {
           {/* דפים עם תבנית Framework */}
           <Route path="/" element={<Framework />}>
             <Route index element={<Home />} />
-            <Route path="episodes" element={<Episodes showFuture={false} />} />
-            <Route path="interviews" element={<Episodes showFuture={true} />} />
+            <Route path="episodes" element={<EpisodesPage showFuture={false} />} />
+            <Route path="interviews" element={<EpisodesPage showFuture={true} />} />
             <Route path="episode/:id/comment" element={<EpisodeDetails showComments={true} />} />
             <Route path="episode/:id/qustion" element={<EpisodeDetails showComments={false} />} />
             <Route path="episode/:id/update" element={<EpisodeForm onSuccess={() => alert("/episodes")} />} />
