@@ -6,7 +6,7 @@ body {
 
 .admin-section {
   background-color: rgba(255, 255, 255, 0.05);
-  color: #1a237e;
+  color: #ffffff;
   font-family: 'Heebo', sans-serif;
   padding: 2rem;
   border-radius: 16px;
@@ -18,7 +18,7 @@ body {
 .admin-section h2,
 .admin-section h3 {
   text-align: center;
-  color: #3f51b5;
+  color: #de0bf1;
   margin-bottom: 1.5rem;
 }
 
@@ -52,7 +52,7 @@ body {
 }
 
 .admin-section th {
-  background-color: #3f51b5;
+  background-color:#540673;
   color: white;
   font-weight: bold;
 }
@@ -61,7 +61,7 @@ body {
   margin: 0.3rem 0;
   padding: 0.5rem 1rem;
   border: none;
-  background-color: #1a237e;
+  background-color: #540673;
   color: white;
   border-radius: 8px;
   font-weight: bold;
@@ -95,7 +95,7 @@ body {
 }
 
 .admin-section .message-box button {
-  background-color: #1a237e;
+  background-color: #b339e4;
   color: white;
   border: none;
   padding: 0.6rem;
@@ -106,7 +106,7 @@ body {
 }
 
 .admin-section .message-box button:hover {
-  background-color: #0d1b5c;
+  background-color: #540673;
 }
 
 .admin-section hr {
@@ -136,7 +136,7 @@ body {
 }
 
 button.load-more {
-  background-color: #1a237e;
+  background-color:#540673;
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -162,7 +162,7 @@ button.load-more {
 כ
 
 .load{
-    background-color: #0d1b5c;
+    background-color:#540673;
 }
 .admin-section td {
   color: #000; /* טקסט שחור כדי שיופיע על רקע לבן */

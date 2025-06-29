@@ -53,7 +53,7 @@ const Episode = ({ episode }) => {
     <div className="episode-card" onClick={handleCardClick}>
       {picture && <img src={`http://localhost:8080/episodes/image/${episode.picture}`} alt={title} className="episode-thumbnail" />}
       <h3>{title}</h3>
-      <p>{body.slice(0, 100)}...</p>
+      <p>{body.slice(0, 10)}...</p>
 
     
 

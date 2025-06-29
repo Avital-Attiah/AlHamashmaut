@@ -8,10 +8,12 @@
   max-width: 1200px;
   margin: 0 auto;
 }
-
+h2{
+    color: #a41bda;
+}
 .admin-section h2 {
   text-align: center;
-  color: #3f51b5;
+  color:  #540673;
   margin-bottom: 1.5rem;
 }
 
@@ -32,7 +34,7 @@
 }
 
 .episode-title {
-  background-color: #1a237e;
+  background-color:#540673;
   color: white;
   border: none;
   padding: 0.6rem 1rem;
@@ -45,7 +47,7 @@
 }
 
 .episode-title:hover {
-  background-color: #0d1b5c;
+  background-color:#39024e;
 }
 
 .episode-details-container {
@@ -55,7 +57,7 @@
 
 .add-button,
 .load-more {
-  background-color: #1a237e;
+  background-color:  #b339e4;
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;
