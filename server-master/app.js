@@ -83,12 +83,12 @@ import imageRoutes from './routs/imageRoutes.js';
 
 // אתחול מסד הנתונים
 import { initializeDatabase } from './setup/initDatabase.js'; // 🆕
+await initializeDatabase(); // 🟢 חשובה!
 
 const port = process.env.PORT || 8080;
 const app = express();
 
 // הפעלת יצירת טבלאות והכנסת נתוני ברירת מחדל
-await initializeDatabase(); // 🟢 חשובה!
 
 app.use(cors());
 app.use(express.json());

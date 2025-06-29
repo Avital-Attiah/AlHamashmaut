@@ -1,3 +1,4 @@
+
 import express from 'express';
 import { MessageController } from '../controller/messages.js';
 import { authenticateToken } from '../service/authMiddleware.js';
@@ -13,5 +14,7 @@ router.post('/', authenticateToken, controller.sendMessage);
 
 // סימון הודעה כנקראה
 router.put('/:id/read', authenticateToken, controller.markAsRead);
+
+router.get('/unread-count', authenticateToken,controller.countUnreadMessage);
 
 export default router;

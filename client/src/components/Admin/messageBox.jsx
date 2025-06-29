@@ -1,5 +1,5 @@
 import React from "react";
-// import "../../style/messageBox.css";
+// import "../../style/messageBoxStyle.css";
 
 
 export default function MessageBox({ value, onChange, onSend, placeholder = "הקלד הודעה...", buttonText = "שלח הודעה" }) {

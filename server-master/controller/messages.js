@@ -1,4 +1,5 @@
-import { getMessagesForUser, markMessageAsRead, insertMessage } from '../service/messageData.js';
+
+import { getMessagesForUser, markMessageAsRead, insertMessage ,countUnreadMessageData} from '../service/messageData.js';
 
 export class MessageController {
   // שליפת הודעות למשתמש
@@ -37,7 +38,18 @@ export class MessageController {
       res.json({ success: true });
     } catch (err) {
       console.error('Error in markAsRead:', err.message);
-      res.status(500).json('שגיאה בסימון הודעה כנקראה');
+      res.status(500).json('Error');
+    }
+  }
+  // now
+  async countUnreadMessage(req ,res){
+    try{
+      const userId = req.user.id;
+       const count=await countUnreadMessageData(userId);
+        res.json({ count });
+    }catch(err){
+      console.error('Error in markAsRead:', err.message);
+      res.status(500).json('Error');
     }
   }
 }
